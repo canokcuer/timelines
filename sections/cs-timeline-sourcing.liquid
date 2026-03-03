@@ -1,0 +1,981 @@
+{%- doc -%}
+  Renders the "From Source to Soul" ingredient sourcing journey.
+
+  A horizontal card carousel with 3D flip cards (desktop) or accordion
+  expand pattern (mobile). 6 journey stages trace each ingredient from
+  origin to delivery, with a scroll-synced progress bar.
+
+  @param {string} section.settings.kicker - Kicker text above title
+  @param {string} section.settings.title - Section title
+  @param {string} section.settings.subtitle - Subtitle description
+  @param {string} section.settings.cta_text - CTA button label
+  @param {string} section.settings.cta_url - CTA button URL
+  @param {block[]} section.blocks - Stage blocks (type: stage)
+{%- enddoc -%}
+
+{%- assign kicker = section.settings.kicker | default: 'KAYNAK YOLCULUĞU' -%}
+{%- assign title = section.settings.title | default: 'Kaynaktan Ruha' -%}
+{%- assign subtitle = section.settings.subtitle | default: 'Her bir bileşenin yolculuğunu, kaynağından sizin hayatınıza ulaşana kadar takip edin.' -%}
+{%- assign cta_text = section.settings.cta_text | default: 'Ürünleri Keşfedin' -%}
+{%- assign cta_url = section.settings.cta_url | default: '/collections/all' -%}
+
+<cs-sourcing-carousel class="cs-timeline cs-sourcing" id="section-{{ section.id }}" aria-label="{{ title }}">
+  <div class="cs-timeline__container">
+    {%- comment -%} Section Header {%- endcomment -%}
+    <header class="cs-timeline__header cs-timeline__reveal">
+      <span class="cs-timeline__kicker cs-sourcing__kicker">{{ kicker }}</span>
+      <h2 class="cs-timeline__title cs-sourcing__title">{{ title }}</h2>
+      <p class="cs-timeline__subtitle cs-sourcing__subtitle">{{ subtitle }}</p>
+    </header>
+
+    {%- comment -%} Desktop: Horizontal card carousel {%- endcomment -%}
+    <div class="cs-sourcing__carousel cs-timeline--hide-mobile" role="region" aria-label="Kaynak aşamaları" tabindex="0">
+      <div class="cs-sourcing__track">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'stage' -%}
+            {%- assign stage_num = forloop.index -%}
+            {%- assign stage_title = block.settings.stage_title -%}
+            {%- assign location = block.settings.location -%}
+            {%- assign description = block.settings.description -%}
+            {%- assign data_badge = block.settings.data_badge -%}
+            {%- assign detail_1 = block.settings.detail_1 -%}
+            {%- assign detail_2 = block.settings.detail_2 -%}
+            {%- assign detail_3 = block.settings.detail_3 -%}
+
+            <div class="cs-sourcing__card-wrapper cs-timeline__stagger"
+                 {{ block.shopify_attributes }}>
+              <button class="cs-sourcing__card"
+                      type="button"
+                      aria-expanded="false"
+                      aria-label="{{ stage_title }} — kartı çevirmek için tıklayın"
+                      data-stage="{{ stage_num }}">
+                {%- comment -%} Card Front {%- endcomment -%}
+                <div class="cs-sourcing__card-face cs-sourcing__card-front" aria-hidden="false">
+                  <div class="cs-sourcing__card-image">
+                    {%- if block.settings.image != blank -%}
+                      {{ block.settings.image | image_url: width: 760 | image_tag:
+                        class: 'cs-sourcing__card-img',
+                        loading: 'lazy',
+                        widths: '380, 760',
+                        sizes: '380px',
+                        alt: stage_title
+                      }}
+                    {%- else -%}
+                      <div class="cs-sourcing__card-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
+                          <rect width="48" height="48" rx="8" fill="rgba(23,23,23,0.06)"/>
+                          <path d="M16 32l6-8 4 5 6-8 6 11H10z" fill="rgba(23,23,23,0.12)"/>
+                          <circle cx="18" cy="20" r="3" fill="rgba(23,23,23,0.12)"/>
+                        </svg>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <div class="cs-sourcing__card-overlay">
+                    <span class="cs-sourcing__card-number">{{ stage_num }}</span>
+                    <h3 class="cs-sourcing__card-title">{{ stage_title }}</h3>
+                    {%- if location != blank -%}
+                      <span class="cs-timeline__tag cs-sourcing__card-location">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
+                          <path d="M6 1C4.067 1 2.5 2.567 2.5 4.5 2.5 7.25 6 11 6 11s3.5-3.75 3.5-6.5C9.5 2.567 7.933 1 6 1z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                          <circle cx="6" cy="4.5" r="1" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                        {{ location }}
+                      </span>
+                    {%- endif -%}
+                  </div>
+                </div>
+
+                {%- comment -%} Card Back {%- endcomment -%}
+                <div class="cs-sourcing__card-face cs-sourcing__card-back" aria-hidden="true">
+                  <div class="cs-sourcing__card-back-content">
+                    <span class="cs-sourcing__card-number cs-sourcing__card-number--back">{{ stage_num }}</span>
+                    <h3 class="cs-sourcing__card-back-title">{{ stage_title }}</h3>
+                    {%- if data_badge != blank -%}
+                      <span class="cs-timeline__tag cs-timeline__tag--teal cs-sourcing__data-badge">{{ data_badge }}</span>
+                    {%- endif -%}
+                    {%- if description != blank -%}
+                      <p class="cs-sourcing__card-desc">{{ description }}</p>
+                    {%- endif -%}
+                    <ul class="cs-sourcing__card-details" role="list">
+                      {%- if detail_1 != blank -%}
+                        <li class="cs-sourcing__card-detail">{{ detail_1 }}</li>
+                      {%- endif -%}
+                      {%- if detail_2 != blank -%}
+                        <li class="cs-sourcing__card-detail">{{ detail_2 }}</li>
+                      {%- endif -%}
+                      {%- if detail_3 != blank -%}
+                        <li class="cs-sourcing__card-detail">{{ detail_3 }}</li>
+                      {%- endif -%}
+                    </ul>
+                  </div>
+                </div>
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Progress bar (desktop) {%- endcomment -%}
+    <div class="cs-sourcing__progress-wrap cs-timeline--hide-mobile" aria-hidden="true">
+      <div class="cs-timeline__progress">
+        <div class="cs-timeline__progress-fill cs-sourcing__progress-fill"></div>
+      </div>
+      <div class="cs-sourcing__progress-label">
+        <span class="cs-sourcing__progress-current">1</span> / <span class="cs-sourcing__progress-total">{{ section.blocks.size }}</span>
+      </div>
+    </div>
+
+    {%- comment -%} Mobile: Accordion pattern {%- endcomment -%}
+    <div class="cs-sourcing__accordion cs-timeline--hide-desktop" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'stage' -%}
+          {%- assign stage_num = forloop.index -%}
+          {%- assign stage_title = block.settings.stage_title -%}
+          {%- assign location = block.settings.location -%}
+          {%- assign description = block.settings.description -%}
+          {%- assign data_badge = block.settings.data_badge -%}
+          {%- assign detail_1 = block.settings.detail_1 -%}
+          {%- assign detail_2 = block.settings.detail_2 -%}
+          {%- assign detail_3 = block.settings.detail_3 -%}
+
+          <div class="cs-sourcing__accordion-item cs-timeline__reveal" role="listitem" {{ block.shopify_attributes }}>
+            <button class="cs-sourcing__accordion-trigger"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="sourcing-panel-{{ section.id }}-{{ stage_num }}"
+                    id="sourcing-trigger-{{ section.id }}-{{ stage_num }}">
+              <span class="cs-sourcing__accordion-number">{{ stage_num }}</span>
+              <span class="cs-sourcing__accordion-title">{{ stage_title }}</span>
+              {%- if location != blank -%}
+                <span class="cs-sourcing__accordion-location">{{ location }}</span>
+              {%- endif -%}
+              <svg class="cs-sourcing__accordion-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+                <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="cs-sourcing__accordion-panel"
+                 id="sourcing-panel-{{ section.id }}-{{ stage_num }}"
+                 role="region"
+                 aria-labelledby="sourcing-trigger-{{ section.id }}-{{ stage_num }}"
+                 hidden>
+              <div class="cs-sourcing__accordion-content">
+                {%- if block.settings.image != blank -%}
+                  <div class="cs-sourcing__accordion-image">
+                    {{ block.settings.image | image_url: width: 600 | image_tag:
+                      class: 'cs-sourcing__accordion-img',
+                      loading: 'lazy',
+                      widths: '300, 600',
+                      sizes: '(max-width: 749px) calc(100vw - 2rem), 600px',
+                      alt: stage_title
+                    }}
+                  </div>
+                {%- endif -%}
+                {%- if data_badge != blank -%}
+                  <span class="cs-timeline__tag cs-timeline__tag--teal cs-sourcing__data-badge">{{ data_badge }}</span>
+                {%- endif -%}
+                {%- if description != blank -%}
+                  <p class="cs-sourcing__accordion-desc">{{ description }}</p>
+                {%- endif -%}
+                <ul class="cs-sourcing__accordion-details" role="list">
+                  {%- if detail_1 != blank -%}
+                    <li>{{ detail_1 }}</li>
+                  {%- endif -%}
+                  {%- if detail_2 != blank -%}
+                    <li>{{ detail_2 }}</li>
+                  {%- endif -%}
+                  {%- if detail_3 != blank -%}
+                    <li>{{ detail_3 }}</li>
+                  {%- endif -%}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} CTA {%- endcomment -%}
+    <div class="cs-sourcing__cta-wrap cs-timeline__reveal">
+      {%- render 'cs-timeline-cta', text: cta_text, url: cta_url, style: 'gold', icon: 'arrow', aria_label: cta_text -%}
+    </div>
+  </div>
+</cs-sourcing-carousel>
+
+{% stylesheet %}
+/* ==========================================================================
+   CS Sourcing — From Source to Soul
+   ========================================================================== */
+
+/* --- Section --- */
+.cs-sourcing {
+  --_sourcing-bg: var(--cs-bg-warm);
+  --_sourcing-card-w: 380px;
+  --_sourcing-card-h: 480px;
+
+  background: var(--_sourcing-bg);
+  color: var(--cs-text-dark);
+  padding-block: var(--cs-space-3xl);
+}
+
+/* --- Header --- */
+.cs-sourcing__kicker {
+  color: var(--cs-teal);
+}
+
+.cs-sourcing__title {
+  color: var(--cs-text-dark);
+}
+
+.cs-sourcing__subtitle {
+  color: var(--cs-text-dark-muted);
+}
+
+/* --- Carousel (desktop) --- */
+.cs-sourcing__carousel {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  outline: none;
+  margin-inline: calc(-1 * var(--cs-space-md));
+  padding-inline: var(--cs-space-md);
+}
+
+.cs-sourcing__carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.cs-sourcing__carousel:focus-visible {
+  outline: 2px solid var(--cs-teal);
+  outline-offset: 2px;
+  border-radius: var(--cs-radius-md);
+}
+
+.cs-sourcing__track {
+  display: flex;
+  gap: var(--cs-space-lg);
+  padding-block: var(--cs-space-sm);
+}
+
+/* --- Card wrapper --- */
+.cs-sourcing__card-wrapper {
+  flex: 0 0 var(--_sourcing-card-w);
+  scroll-snap-align: center;
+  perspective: 1000px;
+}
+
+/* --- Card (flip container) --- */
+.cs-sourcing__card {
+  position: relative;
+  width: var(--_sourcing-card-w);
+  height: var(--_sourcing-card-h);
+  transform-style: preserve-3d;
+  transition: transform var(--cs-duration-slow) var(--cs-ease-in-out);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: var(--cs-font-family);
+  text-align: left;
+  color: inherit;
+  outline: none;
+  border-radius: var(--cs-radius-xl);
+}
+
+.cs-sourcing__card:focus-visible {
+  outline: 2px solid var(--cs-teal);
+  outline-offset: 4px;
+  border-radius: var(--cs-radius-xl);
+}
+
+.cs-sourcing__card[aria-expanded="true"] {
+  transform: rotateY(180deg);
+}
+
+/* --- Card faces --- */
+.cs-sourcing__card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--cs-radius-xl);
+  overflow: hidden;
+}
+
+.cs-sourcing__card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--cs-bg-white);
+  box-shadow: var(--cs-shadow-md);
+}
+
+.cs-sourcing__card-back {
+  transform: rotateY(180deg);
+  background: var(--cs-bg-white);
+  box-shadow: var(--cs-shadow-md);
+  display: flex;
+  align-items: flex-start;
+}
+
+/* --- Card front content --- */
+.cs-sourcing__card-image {
+  position: absolute;
+  inset: 0;
+}
+
+.cs-sourcing__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cs-sourcing__card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(16, 132, 116, 0.06), rgba(255, 223, 0, 0.06));
+}
+
+.cs-sourcing__card-overlay {
+  position: relative;
+  z-index: var(--cs-z-above);
+  padding: var(--cs-space-lg);
+  background: linear-gradient(to top, rgba(23, 23, 23, 0.7) 0%, transparent 100%);
+  color: var(--cs-text-white);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-xs);
+}
+
+.cs-sourcing__card-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--cs-radius-full);
+  background: var(--cs-teal);
+  color: var(--cs-text-white);
+  font-size: var(--cs-font-size-sm);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cs-sourcing__card-title {
+  font-size: var(--cs-font-size-xl);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cs-sourcing__card-location {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--cs-text-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- Card back content --- */
+.cs-sourcing__card-back-content {
+  padding: var(--cs-space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-sm);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.cs-sourcing__card-number--back {
+  background: var(--cs-teal-soft);
+  color: var(--cs-teal);
+}
+
+.cs-sourcing__card-back-title {
+  font-size: var(--cs-font-size-lg);
+  font-weight: 700;
+  margin: 0;
+  color: var(--cs-text-dark);
+  line-height: 1.2;
+}
+
+.cs-sourcing__data-badge {
+  align-self: flex-start;
+}
+
+.cs-sourcing__card-desc {
+  font-size: var(--cs-font-size-base);
+  color: var(--cs-text-dark-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cs-sourcing__card-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-xs);
+}
+
+.cs-sourcing__card-detail {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-dark-muted);
+  padding-inline-start: var(--cs-space-md);
+  position: relative;
+}
+
+.cs-sourcing__card-detail::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--cs-radius-full);
+  background: var(--cs-teal);
+}
+
+/* --- Progress bar --- */
+.cs-sourcing__progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--cs-space-md);
+  margin-block-start: var(--cs-space-lg);
+}
+
+.cs-sourcing__progress-wrap .cs-timeline__progress {
+  flex: 1;
+}
+
+.cs-sourcing__progress-label {
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  color: var(--cs-text-dark-subtle);
+  white-space: nowrap;
+}
+
+/* --- Accordion (mobile) --- */
+.cs-sourcing__accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-sm);
+}
+
+.cs-sourcing__accordion-item {
+  background: var(--cs-bg-white);
+  border-radius: var(--cs-radius-lg);
+  box-shadow: var(--cs-shadow-sm);
+  overflow: hidden;
+}
+
+.cs-sourcing__accordion-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--cs-space-sm);
+  width: 100%;
+  padding: var(--cs-space-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--cs-font-family);
+  text-align: left;
+  color: var(--cs-text-dark);
+  min-height: 44px;
+}
+
+.cs-sourcing__accordion-trigger:focus-visible {
+  outline: 2px solid var(--cs-teal);
+  outline-offset: -2px;
+  border-radius: var(--cs-radius-lg);
+}
+
+.cs-sourcing__accordion-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--cs-radius-full);
+  background: var(--cs-teal-soft);
+  color: var(--cs-teal);
+  font-size: var(--cs-font-size-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cs-sourcing__accordion-title {
+  font-size: var(--cs-font-size-base);
+  font-weight: 600;
+  flex: 1;
+}
+
+.cs-sourcing__accordion-location {
+  font-size: var(--cs-font-size-xs);
+  color: var(--cs-text-dark-subtle);
+  display: none;
+}
+
+@media screen and (min-width: 400px) {
+  .cs-sourcing__accordion-location {
+    display: inline;
+  }
+}
+
+.cs-sourcing__accordion-icon {
+  flex-shrink: 0;
+  color: var(--cs-text-dark-subtle);
+  transition: transform var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-sourcing__accordion-trigger[aria-expanded="true"] .cs-sourcing__accordion-icon {
+  transform: rotate(180deg);
+}
+
+.cs-sourcing__accordion-panel {
+  overflow: hidden;
+}
+
+.cs-sourcing__accordion-panel[hidden] {
+  display: none;
+}
+
+.cs-sourcing__accordion-content {
+  padding: 0 var(--cs-space-md) var(--cs-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-sm);
+}
+
+.cs-sourcing__accordion-image {
+  border-radius: var(--cs-radius-md);
+  overflow: hidden;
+}
+
+.cs-sourcing__accordion-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.cs-sourcing__accordion-desc {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-dark-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cs-sourcing__accordion-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-xs);
+}
+
+.cs-sourcing__accordion-details li {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-dark-muted);
+  padding-inline-start: var(--cs-space-md);
+  position: relative;
+}
+
+.cs-sourcing__accordion-details li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--cs-radius-full);
+  background: var(--cs-teal);
+}
+
+/* --- CTA wrapper --- */
+.cs-sourcing__cta-wrap {
+  text-align: center;
+  margin-block-start: var(--cs-space-2xl);
+}
+
+/* --- Prefers reduced motion: show both sides stacked --- */
+@media (prefers-reduced-motion: reduce) {
+  .cs-sourcing__card {
+    transform: none !important;
+    transition: none !important;
+    height: auto;
+  }
+
+  .cs-sourcing__card-face {
+    position: relative;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+  }
+
+  .cs-sourcing__card-front {
+    position: relative;
+    height: 280px;
+  }
+
+  .cs-sourcing__card-back {
+    position: relative;
+    transform: none;
+  }
+
+  .cs-sourcing__accordion-icon {
+    transition: none !important;
+  }
+}
+
+/* --- Responsive: small cards on narrower desktop --- */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .cs-sourcing {
+    --_sourcing-card-w: 320px;
+    --_sourcing-card-h: 420px;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .cs-sourcing {
+    --_sourcing-card-w: 380px;
+    --_sourcing-card-h: 480px;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+/* ==========================================================================
+   CS Sourcing Carousel — Web Component
+   ========================================================================== */
+class CsSourcingCarousel extends HTMLElement {
+  constructor() {
+    super();
+    this._onScroll = this._onScroll.bind(this);
+    this._onResize = null;
+    this._cleanupReveal = null;
+  }
+
+  connectedCallback() {
+    this._carousel = this.querySelector('.cs-sourcing__carousel');
+    this._track = this.querySelector('.cs-sourcing__track');
+    this._progressFill = this.querySelector('.cs-sourcing__progress-fill');
+    this._progressCurrent = this.querySelector('.cs-sourcing__progress-current');
+    this._cards = Array.from(this.querySelectorAll('.cs-sourcing__card'));
+    this._accordionTriggers = Array.from(this.querySelectorAll('.cs-sourcing__accordion-trigger'));
+
+    this._initDesktopFlip();
+    this._initCarouselScroll();
+    this._initAccordion();
+    this._initRevealAnimations();
+    this._initKeyboard();
+  }
+
+  disconnectedCallback() {
+    if (this._carousel) {
+      this._carousel.removeEventListener('scroll', this._onScroll);
+    }
+    if (this._onResize) {
+      window.removeEventListener('resize', this._onResize);
+    }
+  }
+
+  /* --- Desktop card flip --- */
+  _initDesktopFlip() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    this._cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const isFlipped = card.getAttribute('aria-expanded') === 'true';
+        card.setAttribute('aria-expanded', String(!isFlipped));
+
+        const front = card.querySelector('.cs-sourcing__card-front');
+        const back = card.querySelector('.cs-sourcing__card-back');
+        if (front && back) {
+          front.setAttribute('aria-hidden', String(!isFlipped));
+          back.setAttribute('aria-hidden', String(isFlipped));
+        }
+      });
+    });
+  }
+
+  /* --- Carousel scroll progress --- */
+  _initCarouselScroll() {
+    if (!this._carousel) return;
+
+    this._carousel.addEventListener('scroll', this._onScroll, { passive: true });
+    /* Initial update */
+    requestAnimationFrame(() => this._onScroll());
+  }
+
+  _onScroll() {
+    if (!this._carousel || !this._track) return;
+
+    const scrollLeft = this._carousel.scrollLeft;
+    const maxScroll = this._track.scrollWidth - this._carousel.clientWidth;
+
+    if (maxScroll <= 0) {
+      this._updateProgress(0, 0);
+      return;
+    }
+
+    const progress = Math.min(Math.max(scrollLeft / maxScroll, 0), 1);
+
+    /* Determine which card is most centered */
+    const carouselCenter = scrollLeft + this._carousel.clientWidth / 2;
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    const wrappers = Array.from(this.querySelectorAll('.cs-sourcing__card-wrapper'));
+    wrappers.forEach((wrapper, idx) => {
+      const cardCenter = wrapper.offsetLeft + wrapper.offsetWidth / 2;
+      const dist = Math.abs(carouselCenter - cardCenter);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = idx;
+      }
+    });
+
+    this._updateProgress(progress, closestIdx);
+  }
+
+  _updateProgress(progress, activeIndex) {
+    if (this._progressFill) {
+      this._progressFill.style.width = `${(progress * 100).toFixed(1)}%`;
+    }
+    if (this._progressCurrent) {
+      this._progressCurrent.textContent = String(activeIndex + 1);
+    }
+  }
+
+  /* --- Mobile accordion --- */
+  _initAccordion() {
+    this._accordionTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const panelId = trigger.getAttribute('aria-controls');
+        const panel = panelId ? this.querySelector(`#${panelId}`) : null;
+        if (!panel) return;
+
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+        /* Close all others */
+        this._accordionTriggers.forEach((otherTrigger) => {
+          if (otherTrigger !== trigger) {
+            otherTrigger.setAttribute('aria-expanded', 'false');
+            const otherId = otherTrigger.getAttribute('aria-controls');
+            const otherPanel = otherId ? this.querySelector(`#${otherId}`) : null;
+            if (otherPanel) otherPanel.hidden = true;
+          }
+        });
+
+        /* Toggle current */
+        trigger.setAttribute('aria-expanded', String(!isOpen));
+        panel.hidden = isOpen;
+      });
+    });
+  }
+
+  /* --- Reveal animations --- */
+  _initRevealAnimations() {
+    if (typeof csTimelineReveal === 'function') {
+      csTimelineReveal(`#${this.id} .cs-timeline__reveal`);
+    }
+  }
+
+  /* --- Keyboard navigation for carousel --- */
+  _initKeyboard() {
+    if (!this._carousel) return;
+
+    this._carousel.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this._carousel.scrollBy({ left: 400, behavior: 'smooth' });
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this._carousel.scrollBy({ left: -400, behavior: 'smooth' });
+      }
+    });
+  }
+}
+
+if (!customElements.get('cs-sourcing-carousel')) {
+  customElements.define('cs-sourcing-carousel', CsSourcingCarousel);
+}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "CS Sourcing Journey",
+  "tag": "section",
+  "class": "cs-sourcing-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "KAYNAK YOLCULUĞU"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Kaynaktan Ruha"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Her bir bileşenin yolculuğunu, kaynağından sizin hayatınıza ulaşana kadar takip edin."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Ürünleri Keşfedin"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Button URL",
+      "default": "/collections/all"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stage",
+      "name": "Journey Stage",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stage_title",
+          "label": "Stage Title",
+          "info": "e.g. Kaynak, Hasat, Laboratuvar Analizi"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location / Tag",
+          "info": "Shown as location tag on card front"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Stage Image"
+        },
+        {
+          "type": "text",
+          "id": "data_badge",
+          "label": "Data Badge",
+          "info": "e.g. 6 Yıl Olgunlaşma, %99.7 Saflık"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "info": "Descriptive paragraph shown on card back"
+        },
+        {
+          "type": "text",
+          "id": "detail_1",
+          "label": "Detail Point 1"
+        },
+        {
+          "type": "text",
+          "id": "detail_2",
+          "label": "Detail Point 2"
+        },
+        {
+          "type": "text",
+          "id": "detail_3",
+          "label": "Detail Point 3"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CS Sourcing Journey",
+      "blocks": [
+        {
+          "type": "stage",
+          "settings": {
+            "stage_title": "Kaynak",
+            "location": "Geumsan Bölgesi, Güney Kore",
+            "data_badge": "6 Yıl Olgunlaşma",
+            "description": "Dünyanın en zengin mineral havzalarından özenle seçilen hammaddeler, binlerce yıllık geleneksel bilgiyle buluşur.",
+            "detail_1": "Geumsan Bölgesi, Güney Kore",
+            "detail_2": "Akdeniz mineral havzaları",
+            "detail_3": "Organik sertifikalı çiftlikler"
+          }
+        },
+        {
+          "type": "stage",
+          "settings": {
+            "stage_title": "Hasat",
+            "location": "Mevsimsel Hasat",
+            "data_badge": "Yılda 1 Hasat",
+            "description": "Doğanın kendi takvimine uygun olarak, her bileşen en yüksek besin değerine ulaştığı anda hasat edilir.",
+            "detail_1": "Yılda yalnızca 1 hasat",
+            "detail_2": "6 yıllık kök olgunlaşması",
+            "detail_3": "El ile toplama yöntemi"
+          }
+        },
+        {
+          "type": "stage",
+          "settings": {
+            "stage_title": "Laboratuvar Analizi",
+            "location": "Aymed Laboratuvarları",
+            "data_badge": "%99.7 Saflık",
+            "description": "Her parti, uluslararası standartlarda üç aşamalı kalite kontrol sürecinden geçer.",
+            "detail_1": "3 aşamalı kalite kontrol",
+            "detail_2": "1989'dan beri Aymed standartları",
+            "detail_3": "Ağır metal ve mikrobiyolojik testler"
+          }
+        },
+        {
+          "type": "stage",
+          "settings": {
+            "stage_title": "Formülasyon",
+            "location": "Ar-Ge Merkezi",
+            "data_badge": "Sinerjik Formül",
+            "description": "Bilimsel araştırmalarla desteklenen sinerjik kombinasyonlar, biyoyararlanımı maksimize eder.",
+            "detail_1": "Sinerjik bileşen kombinasyonları",
+            "detail_2": "Biyoyararlanım optimizasyonu",
+            "detail_3": "Klinik çalışmalarla desteklenen dozaj"
+          }
+        },
+        {
+          "type": "stage",
+          "settings": {
+            "stage_title": "Kapsülleme",
+            "location": "GMP Tesisi",
+            "data_badge": "Bitki Bazlı Kapsül",
+            "description": "İleri teknoloji üretim süreçleriyle, her kapsül eşit dozda aktif bileşen içerir.",
+            "detail_1": "Bitki bazlı kapsül teknolojisi",
+            "detail_2": "Amber cam UV koruma",
+            "detail_3": "GMP sertifikalı tesis"
+          }
+        },
+        {
+          "type": "stage",
+          "settings": {
+            "stage_title": "Teslimat",
+            "location": "Sizin Evinize",
+            "data_badge": "Kapınıza Kadar",
+            "description": "Özenle paketlenen ürünler, soğuk zincir korumasıyla kapınıza kadar ulaştırılır.",
+            "detail_1": "Serin ve kuru yerde saklayın",
+            "detail_2": "Direkt güneş ışığından koruyun",
+            "detail_3": "Günlük rutininize kolayca ekleyin"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,942 @@
+{%- doc -%}
+  Daily Ritual Clock — Circadian Rhythm Timeline
+  Cyrasoul "Günlük Ritüel" section.
+
+  Displays a 24-hour SVG clock (desktop) or vertical timeline (mobile)
+  mapping five supplement products to optimal biological windows.
+
+  Dependencies:
+    - assets/cs-timeline-base.css  (design tokens, shared utilities)
+    - assets/cs-timeline-base.js   (csTimelineAutoAdvance, csTimelineReveal)
+    - snippets/cs-timeline-cta.liquid
+
+  Schema blocks: time_slot (time_label, product_name, product_handle,
+                 body_state, benefits, accent_color)
+{%- enddoc -%}
+
+{%- comment -%} ── Slot data ─────────────────────────────────────────── {%- endcomment -%}
+{%- assign slots = section.blocks | where: 'type', 'time_slot' -%}
+
+<section
+  id="cs-ritual-{{ section.id }}"
+  class="cs-timeline cs-ritual"
+  aria-label="{{ section.settings.section_title | default: 'Günlük Ritüel' }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="cs-timeline-ritual"
+>
+  <div class="cs-timeline__container">
+    {%- comment -%} ── Header ───────────────────────────────────────── {%- endcomment -%}
+    <header class="cs-timeline__header cs-timeline__reveal">
+      {%- if section.settings.kicker != blank -%}
+        <span class="cs-timeline__kicker cs-ritual__kicker">
+          {{ section.settings.kicker }}
+        </span>
+      {%- endif -%}
+
+      <h2 class="cs-timeline__title cs-ritual__title">
+        {{ section.settings.section_title }}
+      </h2>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="cs-timeline__subtitle cs-ritual__subtitle" style="color: var(--cs-text-dark-muted);">
+          {{ section.settings.subtitle }}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if slots.size > 0 -%}
+      {%- comment -%} ── Desktop: Circular clock ────────────────────── {%- endcomment -%}
+      <cs-ritual-clock
+        class="cs-ritual__clock-wrap cs-timeline--hide-mobile cs-timeline__reveal cs-timeline__reveal--scale"
+        data-slot-count="{{ slots.size }}"
+        role="region"
+        aria-label="Sirkadiyen ritim saati"
+      >
+        <div class="cs-ritual__clock-layout">
+          {%- comment -%} SVG Clock ─────────────────────────────────── {%- endcomment -%}
+          <div class="cs-ritual__clock-ring" aria-hidden="true">
+            <svg
+              class="cs-ritual__svg"
+              viewBox="0 0 560 560"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {%- comment -%} Background circle ──────────────────────── {%- endcomment -%}
+              <circle cx="280" cy="280" r="255" fill="none" stroke="var(--cs-text-dark-subtle)" stroke-width="1" opacity="0.2" />
+
+              {%- comment -%} Hour tick marks ──────────────────────────── {%- endcomment -%}
+              {%- for h in (0..23) -%}
+                {%- assign angle_deg = h | times: 15 | minus: 90 -%}
+                {%- comment -%} Pre-calculated cos/sin approximation via Liquid math {%- endcomment -%}
+                <line
+                  x1="280" y1="280" x2="280" y2="280"
+                  class="cs-ritual__tick"
+                  data-hour="{{ h }}"
+                  transform="rotate({{ angle_deg }} 280 280)"
+                />
+              {%- endfor -%}
+
+              {%- comment -%} Colored arcs per slot ────────────────────── {%- endcomment -%}
+              {%- for block in slots -%}
+                <path
+                  class="cs-ritual__arc"
+                  data-slot-index="{{ forloop.index0 }}"
+                  fill="none"
+                  stroke="{{ block.settings.accent_color }}"
+                  stroke-width="28"
+                  stroke-linecap="round"
+                  opacity="0.25"
+                  d=""
+                />
+              {%- endfor -%}
+
+              {%- comment -%} Cortisol / melatonin rhythm curve ─────────── {%- endcomment -%}
+              <path
+                class="cs-ritual__rhythm-curve"
+                fill="none"
+                stroke="var(--cs-text-dark)"
+                stroke-width="1.5"
+                opacity="0.08"
+                d="M280,60 C350,80 420,170 430,280 C440,390 380,480 280,500 C180,480 120,390 130,280 C140,170 210,80 280,60"
+              />
+            </svg>
+          </div>
+
+          {%- comment -%} Central display ───────────────────────────── {%- endcomment -%}
+          <div class="cs-ritual__center" aria-live="polite">
+            <span class="cs-ritual__center-time">{{ slots[0].settings.time_label }}</span>
+            <span class="cs-ritual__center-state">{{ slots[0].settings.body_state }}</span>
+          </div>
+
+          {%- comment -%} Orbiting product cards ────────────────────── {%- endcomment -%}
+          <div
+            class="cs-ritual__orbit"
+            role="tablist"
+            aria-label="Ürün zaman dilimleri"
+          >
+            {%- for block in slots -%}
+              <button
+                class="cs-ritual__card{% if forloop.first %} cs-ritual__card--active{% endif %}"
+                data-slot-index="{{ forloop.index0 }}"
+                role="tab"
+                id="cs-ritual-tab-{{ section.id }}-{{ forloop.index0 }}"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-controls="cs-ritual-panel-{{ section.id }}-{{ forloop.index0 }}"
+                tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                style="--card-accent: {{ block.settings.accent_color }};"
+                {{ block.shopify_attributes }}
+              >
+                <span class="cs-ritual__card-time">{{ block.settings.time_label }}</span>
+                <span class="cs-ritual__card-name">{{ block.settings.product_name }}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- comment -%} Detail panels ──────────────────────────────── {%- endcomment -%}
+        {%- for block in slots -%}
+          <div
+            class="cs-ritual__panel{% if forloop.first %} cs-ritual__panel--active{% endif %}"
+            data-slot-index="{{ forloop.index0 }}"
+            role="tabpanel"
+            id="cs-ritual-panel-{{ section.id }}-{{ forloop.index0 }}"
+            aria-labelledby="cs-ritual-tab-{{ section.id }}-{{ forloop.index0 }}"
+            {% unless forloop.first %}hidden{% endunless %}
+          >
+            <div class="cs-ritual__panel-inner">
+              <span class="cs-ritual__panel-badge" style="background: {{ block.settings.accent_color }}20; color: {{ block.settings.accent_color }}; border: 1px solid {{ block.settings.accent_color }}40;">
+                {{ block.settings.time_label }}
+              </span>
+              <h3 class="cs-ritual__panel-product">{{ block.settings.product_name }}</h3>
+              <p class="cs-ritual__panel-state">{{ block.settings.body_state }}</p>
+
+              {%- if block.settings.benefits != blank -%}
+                {%- assign benefit_list = block.settings.benefits | split: '|' -%}
+                <ul class="cs-ritual__panel-benefits" role="list">
+                  {%- for b in benefit_list -%}
+                    <li class="cs-ritual__panel-benefit">{{ b | strip }}</li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+              {%- if block.settings.product_handle != blank -%}
+                {%- render 'cs-timeline-cta',
+                  text: 'Ürünü Keşfet',
+                  url: block.settings.product_handle,
+                  style: 'gold',
+                  icon: 'arrow',
+                  extra_classes: 'cs-ritual__panel-cta'
+                -%}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </cs-ritual-clock>
+
+      {%- comment -%} ── Mobile: Vertical timeline ──────────────────── {%- endcomment -%}
+      <div class="cs-ritual__mobile cs-timeline--hide-desktop">
+        {%- for block in slots -%}
+          <div
+            class="cs-ritual__mobile-slot cs-timeline__reveal"
+            style="--slot-accent: {{ block.settings.accent_color }}; transition-delay: {{ forloop.index0 | times: 100 }}ms;"
+            {{ block.shopify_attributes }}
+          >
+            <div class="cs-ritual__mobile-rail" aria-hidden="true">
+              <span class="cs-ritual__mobile-dot" style="border-color: {{ block.settings.accent_color }}; background: {{ block.settings.accent_color }};"></span>
+              {%- unless forloop.last -%}
+                <span class="cs-ritual__mobile-line"></span>
+              {%- endunless -%}
+            </div>
+
+            <div class="cs-ritual__mobile-content">
+              <span class="cs-ritual__mobile-time">{{ block.settings.time_label }}</span>
+              <h3 class="cs-ritual__mobile-name">{{ block.settings.product_name }}</h3>
+              <p class="cs-ritual__mobile-state">{{ block.settings.body_state }}</p>
+
+              {%- if block.settings.benefits != blank -%}
+                {%- assign benefit_list = block.settings.benefits | split: '|' -%}
+                <ul class="cs-ritual__mobile-benefits" role="list">
+                  {%- for b in benefit_list -%}
+                    <li>{{ b | strip }}</li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+              {%- if block.settings.product_handle != blank -%}
+                {%- render 'cs-timeline-cta',
+                  text: 'Ürünü Keşfet',
+                  url: block.settings.product_handle,
+                  style: 'gold',
+                  icon: 'arrow',
+                  extra_classes: 'cs-ritual__mobile-cta'
+                -%}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+/* ==========================================================================
+   CS Ritual — Daily Ritual Clock
+   ========================================================================== */
+
+/* ── Section root ───────────────────────────────────────────────────────── */
+.cs-ritual {
+  background: var(--cs-bg-warm);
+  color: var(--cs-text-dark);
+  padding-block: var(--cs-space-3xl);
+  overflow: hidden;
+}
+
+.cs-ritual__kicker {
+  color: var(--cs-teal);
+}
+
+.cs-ritual__title {
+  color: var(--cs-text-dark);
+}
+
+/* ── Desktop clock layout ──────────────────────────────────────────────── */
+.cs-ritual__clock-wrap {
+  display: block;
+}
+
+.cs-ritual__clock-layout {
+  position: relative;
+  width: 560px;
+  height: 560px;
+  margin-inline: auto;
+}
+
+/* SVG ring container */
+.cs-ritual__clock-ring {
+  position: absolute;
+  inset: 0;
+}
+
+.cs-ritual__svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hour tick marks */
+.cs-ritual__tick {
+  stroke: var(--cs-text-dark);
+  stroke-width: 1;
+  opacity: 0.15;
+}
+
+/* Arcs */
+.cs-ritual__arc {
+  transition: opacity var(--cs-duration-base) var(--cs-ease-out);
+}
+
+.cs-ritual__arc--active {
+  opacity: 0.85;
+}
+
+/* Rhythm curve */
+.cs-ritual__rhythm-curve {
+  pointer-events: none;
+}
+
+/* ── Central display ───────────────────────────────────────────────────── */
+.cs-ritual__center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cs-space-xs);
+  text-align: center;
+  pointer-events: none;
+  z-index: var(--cs-z-above);
+}
+
+.cs-ritual__center-time {
+  font-size: var(--cs-font-size-xl);
+  font-weight: 700;
+  color: var(--cs-text-dark);
+  letter-spacing: -0.02em;
+  transition: opacity var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-ritual__center-state {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-dark-muted);
+  max-width: 180px;
+  line-height: 1.4;
+  transition: opacity var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+/* ── Orbiting cards (tabs) ─────────────────────────────────────────────── */
+.cs-ritual__orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cs-ritual__card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--cs-bg-white);
+  border: 2px solid transparent;
+  border-radius: var(--cs-radius-lg);
+  padding: var(--cs-space-sm) var(--cs-space-md);
+  min-width: 110px;
+  min-height: 44px;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: var(--cs-shadow-sm);
+  transition:
+    transform var(--cs-duration-base) var(--cs-ease-out),
+    border-color var(--cs-duration-base) var(--cs-ease-out),
+    box-shadow var(--cs-duration-base) var(--cs-ease-out);
+  font-family: var(--cs-font-family);
+  z-index: var(--cs-z-above);
+}
+
+.cs-ritual__card:focus-visible {
+  outline: 2px solid var(--cs-teal);
+  outline-offset: 2px;
+}
+
+.cs-ritual__card--active {
+  border-color: var(--card-accent, var(--cs-gold));
+  box-shadow: var(--cs-shadow-md);
+  transform: scale(1.08);
+  z-index: calc(var(--cs-z-above) + 1);
+}
+
+.cs-ritual__card-time {
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  color: var(--cs-text-dark-muted);
+  letter-spacing: 0.05em;
+}
+
+.cs-ritual__card-name {
+  font-size: var(--cs-font-size-sm);
+  font-weight: 700;
+  color: var(--cs-text-dark);
+}
+
+/* Card orbit positions — five slots around the clock */
+.cs-ritual__card[data-slot-index="0"] {
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.cs-ritual__card[data-slot-index="0"].cs-ritual__card--active {
+  transform: translateX(-50%) scale(1.08);
+}
+
+.cs-ritual__card[data-slot-index="1"] {
+  top: 80px;
+  right: -40px;
+}
+.cs-ritual__card[data-slot-index="1"].cs-ritual__card--active {
+  transform: scale(1.08);
+}
+
+.cs-ritual__card[data-slot-index="2"] {
+  bottom: 60px;
+  right: -40px;
+}
+.cs-ritual__card[data-slot-index="2"].cs-ritual__card--active {
+  transform: scale(1.08);
+}
+
+.cs-ritual__card[data-slot-index="3"] {
+  bottom: 60px;
+  left: -40px;
+}
+.cs-ritual__card[data-slot-index="3"].cs-ritual__card--active {
+  transform: scale(1.08);
+}
+
+.cs-ritual__card[data-slot-index="4"] {
+  top: 80px;
+  left: -40px;
+}
+.cs-ritual__card[data-slot-index="4"].cs-ritual__card--active {
+  transform: scale(1.08);
+}
+
+/* ── Detail panels ─────────────────────────────────────────────────────── */
+.cs-ritual__panel {
+  display: none;
+  margin-block-start: var(--cs-space-xl);
+  text-align: center;
+}
+
+.cs-ritual__panel--active {
+  display: block;
+  animation: csRitualFadeIn var(--cs-duration-base) var(--cs-ease-out);
+}
+
+@keyframes csRitualFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cs-ritual__panel-inner {
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.cs-ritual__panel-badge {
+  display: inline-block;
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.3em 0.9em;
+  border-radius: var(--cs-radius-full);
+  margin-block-end: var(--cs-space-sm);
+}
+
+.cs-ritual__panel-product {
+  font-size: var(--cs-font-size-xl);
+  font-weight: 700;
+  margin: 0 0 var(--cs-space-xs);
+  color: var(--cs-text-dark);
+}
+
+.cs-ritual__panel-state {
+  font-size: var(--cs-font-size-base);
+  color: var(--cs-text-dark-muted);
+  margin: 0 0 var(--cs-space-md);
+  line-height: 1.5;
+}
+
+.cs-ritual__panel-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--cs-space-lg);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--cs-space-sm);
+}
+
+.cs-ritual__panel-benefit {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-dark-muted);
+  background: rgba(23, 23, 23, 0.04);
+  padding: 0.35em 0.85em;
+  border-radius: var(--cs-radius-full);
+}
+
+.cs-ritual__panel-cta {
+  margin-block-start: var(--cs-space-sm);
+}
+
+/* ── Mobile vertical timeline ──────────────────────────────────────────── */
+.cs-ritual__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cs-ritual__mobile-slot {
+  display: flex;
+  gap: var(--cs-space-md);
+  position: relative;
+}
+
+.cs-ritual__mobile-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  padding-block-start: 4px;
+}
+
+.cs-ritual__mobile-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--cs-radius-full);
+  border: 2px solid var(--cs-teal);
+  flex-shrink: 0;
+}
+
+.cs-ritual__mobile-line {
+  width: 2px;
+  flex: 1;
+  background: rgba(23, 23, 23, 0.12);
+  margin-block: 4px;
+}
+
+.cs-ritual__mobile-content {
+  flex: 1;
+  padding-block-end: var(--cs-space-xl);
+}
+
+.cs-ritual__mobile-time {
+  display: inline-block;
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--slot-accent, var(--cs-teal));
+  margin-block-end: 2px;
+}
+
+.cs-ritual__mobile-name {
+  font-size: var(--cs-font-size-lg);
+  font-weight: 700;
+  color: var(--cs-text-dark);
+  margin: 0 0 var(--cs-space-xs);
+}
+
+.cs-ritual__mobile-state {
+  font-size: var(--cs-font-size-base);
+  color: var(--cs-text-dark-muted);
+  margin: 0 0 var(--cs-space-sm);
+  line-height: 1.5;
+}
+
+.cs-ritual__mobile-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--cs-space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cs-space-xs);
+}
+
+.cs-ritual__mobile-benefits li {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-dark-muted);
+  background: rgba(23, 23, 23, 0.04);
+  padding: 0.3em 0.75em;
+  border-radius: var(--cs-radius-full);
+}
+
+.cs-ritual__mobile-cta {
+  margin-block-start: var(--cs-space-xs);
+}
+
+/* ── Responsive adjustments ────────────────────────────────────────────── */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .cs-ritual__clock-layout {
+    width: 460px;
+    height: 460px;
+  }
+
+  .cs-ritual__svg {
+    /* SVG scales naturally via viewBox */
+  }
+
+  .cs-ritual__card[data-slot-index="1"],
+  .cs-ritual__card[data-slot-index="2"] {
+    right: -20px;
+  }
+
+  .cs-ritual__card[data-slot-index="3"],
+  .cs-ritual__card[data-slot-index="4"] {
+    left: -20px;
+  }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1199px) {
+  .cs-ritual__clock-layout {
+    width: 520px;
+    height: 520px;
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cs-ritual__card {
+    transition: none;
+  }
+
+  .cs-ritual__arc {
+    transition: none;
+  }
+
+  .cs-ritual__panel--active {
+    animation: none;
+  }
+
+  .cs-ritual__center-time,
+  .cs-ritual__center-state {
+    transition: none;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+/* ==========================================================================
+   CS Ritual Clock — Web Component
+   ========================================================================== */
+class CsRitualClock extends HTMLElement {
+  constructor() {
+    super();
+    this._activeIndex = 0;
+    this._autoAdvance = null;
+    this._destroyed = false;
+  }
+
+  connectedCallback() {
+    this._cards = Array.from(this.querySelectorAll('.cs-ritual__card'));
+    this._panels = Array.from(this.querySelectorAll('.cs-ritual__panel'));
+    this._arcs = Array.from(this.querySelectorAll('.cs-ritual__arc'));
+    this._centerTime = this.querySelector('.cs-ritual__center-time');
+    this._centerState = this.querySelector('.cs-ritual__center-state');
+    this._slotCount = parseInt(this.dataset.slotCount, 10) || 0;
+
+    if (this._slotCount === 0) return;
+
+    this._buildArcs();
+    this._bindEvents();
+    this._activateSlot(0);
+
+    /* Auto-advance via shared utility */
+    if (typeof csTimelineAutoAdvance === 'function') {
+      this._autoAdvance = csTimelineAutoAdvance({
+        count: this._slotCount,
+        interval: 4000,
+        resumeDelay: 8000,
+        onChange: (i) => this._activateSlot(i)
+      });
+    }
+
+    /* Scroll reveal */
+    if (typeof csTimelineReveal === 'function') {
+      const sectionEl = this.closest('.cs-ritual');
+      if (sectionEl) {
+        csTimelineReveal(
+          '#' + sectionEl.id + ' .cs-timeline__reveal',
+          { threshold: 0.1 }
+        );
+      }
+    }
+  }
+
+  disconnectedCallback() {
+    this._destroyed = true;
+    if (this._autoAdvance) this._autoAdvance.destroy();
+  }
+
+  /* ── Arc geometry ────────────────────────────────────────────────── */
+  _buildArcs() {
+    /*
+      Map each slot's time range to an arc on the 24-hour circle.
+      0 hours = top (12 o'clock), rotating clockwise.
+      Radius 255, center 280,280 matching the SVG viewBox.
+    */
+    const cx = 280;
+    const cy = 280;
+    const r = 255;
+
+    /* Parse time labels like "06:00-07:00" into start/end hours */
+    const slotData = [];
+    this._cards.forEach((card) => {
+      const panel = this._panels[parseInt(card.dataset.slotIndex, 10)];
+      const badge = panel ? panel.querySelector('.cs-ritual__panel-badge') : null;
+      const label = badge ? badge.textContent.trim() : card.querySelector('.cs-ritual__card-time').textContent.trim();
+      const match = label.match(/(\d{1,2})[:.:](\d{2})\s*[-–]\s*(\d{1,2})[:.:](\d{2})/);
+      if (match) {
+        const startH = parseInt(match[1], 10) + parseInt(match[2], 10) / 60;
+        const endH = parseInt(match[3], 10) + parseInt(match[4], 10) / 60;
+        slotData.push({ startH, endH });
+      } else {
+        slotData.push({ startH: 0, endH: 1 });
+      }
+    });
+
+    this._arcs.forEach((arc, i) => {
+      if (!slotData[i]) return;
+      const { startH, endH } = slotData[i];
+      /* Convert hours to angles: 0h = -90deg (top), each hour = 15deg */
+      const startAngle = (startH / 24) * 360 - 90;
+      const endAngle = (endH / 24) * 360 - 90;
+      const d = this._describeArc(cx, cy, r, startAngle, endAngle);
+      arc.setAttribute('d', d);
+    });
+  }
+
+  _describeArc(cx, cy, r, startAngle, endAngle) {
+    const rad = Math.PI / 180;
+    const x1 = cx + r * Math.cos(startAngle * rad);
+    const y1 = cy + r * Math.sin(startAngle * rad);
+    const x2 = cx + r * Math.cos(endAngle * rad);
+    const y2 = cy + r * Math.sin(endAngle * rad);
+    const largeArc = (endAngle - startAngle > 180) ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
+  }
+
+  /* ── Slot activation ─────────────────────────────────────────────── */
+  _activateSlot(index) {
+    if (this._destroyed) return;
+    this._activeIndex = index;
+
+    /* Cards */
+    this._cards.forEach((card, i) => {
+      const isActive = i === index;
+      card.classList.toggle('cs-ritual__card--active', isActive);
+      card.setAttribute('aria-selected', String(isActive));
+      card.setAttribute('tabindex', isActive ? '0' : '-1');
+    });
+
+    /* Arcs */
+    this._arcs.forEach((arc, i) => {
+      arc.classList.toggle('cs-ritual__arc--active', i === index);
+      arc.setAttribute('opacity', i === index ? '0.85' : '0.25');
+    });
+
+    /* Panels */
+    this._panels.forEach((panel, i) => {
+      const isActive = i === index;
+      panel.classList.toggle('cs-ritual__panel--active', isActive);
+      if (isActive) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+    });
+
+    /* Center display */
+    if (this._centerTime && this._cards[index]) {
+      const timeEl = this._cards[index].querySelector('.cs-ritual__card-time');
+      const nameEl = this._cards[index].querySelector('.cs-ritual__card-name');
+      if (timeEl) this._centerTime.textContent = timeEl.textContent;
+
+      /* Body state from the panel */
+      const stateEl = this._panels[index] ? this._panels[index].querySelector('.cs-ritual__panel-state') : null;
+      if (stateEl && this._centerState) {
+        this._centerState.textContent = stateEl.textContent;
+      }
+    }
+  }
+
+  /* ── Events ──────────────────────────────────────────────────────── */
+  _bindEvents() {
+    /* Click / tap on cards */
+    this._cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const idx = parseInt(card.dataset.slotIndex, 10);
+        if (this._autoAdvance) this._autoAdvance.goTo(idx);
+        else this._activateSlot(idx);
+      });
+    });
+
+    /* Keyboard navigation (arrow keys within tablist) */
+    this._cards.forEach((card) => {
+      card.addEventListener('keydown', (e) => {
+        let newIndex = this._activeIndex;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          newIndex = (this._activeIndex + 1) % this._slotCount;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          newIndex = (this._activeIndex - 1 + this._slotCount) % this._slotCount;
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          newIndex = 0;
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          newIndex = this._slotCount - 1;
+        } else {
+          return;
+        }
+
+        if (this._autoAdvance) this._autoAdvance.goTo(newIndex);
+        else this._activateSlot(newIndex);
+        this._cards[newIndex].focus();
+      });
+    });
+  }
+}
+
+if (!customElements.get('cs-ritual-clock')) {
+  customElements.define('cs-ritual-clock', CsRitualClock);
+}
+
+/* ── Mobile scroll reveal ────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof csTimelineReveal === 'function') {
+    csTimelineReveal('.cs-ritual__mobile .cs-timeline__reveal', {
+      threshold: 0.1,
+      once: true
+    });
+  }
+});
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "CS · Günlük Ritüel Saati",
+  "tag": "section",
+  "class": "cs-ritual-section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "GÜNLÜK RİTÜEL"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Başlık",
+      "default": "Vücudunuzun Saati, Sizin Ritüeliniz"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Alt başlık",
+      "default": "Her takviye, vücudunuzun biyolojik ritmiyle senkronize çalışır. Doğru zamanda, doğru destek."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "time_slot",
+      "name": "Zaman Dilimi",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time_label",
+          "label": "Saat aralığı",
+          "info": "Örn: 06:00-07:00"
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Ürün adı"
+        },
+        {
+          "type": "url",
+          "id": "product_handle",
+          "label": "Ürün bağlantısı"
+        },
+        {
+          "type": "textarea",
+          "id": "body_state",
+          "label": "Vücut durumu açıklaması"
+        },
+        {
+          "type": "text",
+          "id": "benefits",
+          "label": "Faydalar (| ile ayırın)",
+          "info": "Örn: Enerji desteği | Bağışıklık | Antioksidan"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Vurgu rengi",
+          "default": "#FFDF00"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CS · Günlük Ritüel Saati",
+      "blocks": [
+        {
+          "type": "time_slot",
+          "settings": {
+            "time_label": "06:00-07:00",
+            "product_name": "DailyGlow",
+            "body_state": "Kortizol zirvesiyle uyum — enerji desteği",
+            "benefits": "Kortizol dengesi | Enerji aktivasyonu | Bağışıklık desteği",
+            "accent_color": "#FFDF00"
+          }
+        },
+        {
+          "type": "time_slot",
+          "settings": {
+            "time_label": "07:30-09:00",
+            "product_name": "MindFuel",
+            "body_state": "Prefrontal korteks aktivasyonu — zihinsel netlik",
+            "benefits": "Odaklanma | Bilişsel performans | Nöral enerji",
+            "accent_color": "#FFDF00"
+          }
+        },
+        {
+          "type": "time_slot",
+          "settings": {
+            "time_label": "12:00-14:00",
+            "product_name": "Reset Button",
+            "body_state": "Karaciğer aktif işleme dönemi — detoks desteği",
+            "benefits": "Karaciğer desteği | Detoksifikasyon | Hücresel yenilenme",
+            "accent_color": "#108474"
+          }
+        },
+        {
+          "type": "time_slot",
+          "settings": {
+            "time_label": "17:00-18:00",
+            "product_name": "TheChill",
+            "body_state": "Kortizol düşüş eğrisi — stres yönetimi",
+            "benefits": "Stres azaltma | Kortizol dengeleme | Gevşeme",
+            "accent_color": "#108474"
+          }
+        },
+        {
+          "type": "time_slot",
+          "settings": {
+            "time_label": "21:00-22:00",
+            "product_name": "DreamGlow",
+            "body_state": "Melatonin başlangıcı — kolajen sentez zirvesi",
+            "benefits": "Uyku kalitesi | Kolajen sentezi | Gece onarımı",
+            "accent_color": "#3B3073"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,933 @@
+{%- doc -%}
+  Section: Science of Absorption Timeline
+  Renders a vertical scroll-driven narrative of 5 absorption phases.
+  Deep dark (#0a0a0a) background, central spine gradient gold-to-teal,
+  alternating left/right content with circular illustration placeholders,
+  sticky progress indicator, and data callout pills.
+
+  Depends on:
+    - assets/cs-timeline-base.css  (design tokens, shared classes)
+    - assets/cs-timeline-base.js   (csTimelineReveal, csTimelineScrollProgress)
+    - snippets/cs-timeline-cta.liquid
+{%- enddoc -%}
+
+{{ 'cs-timeline-base.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cs-timeline-base.js' | asset_url }}" defer></script>
+
+<section
+  id="cs-science-{{ section.id }}"
+  class="cs-timeline cs-science"
+  aria-label="{{ section.settings.aria_label | default: 'Emilimin Bilimi' }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="cs-timeline-science"
+>
+  {%- comment -%} Section Header {%- endcomment -%}
+  <div class="cs-timeline__container cs-science__header-wrap">
+    <header class="cs-timeline__header cs-timeline__reveal" data-cs-reveal>
+      <span class="cs-timeline__kicker cs-science__kicker cs-timeline__stagger">
+        {{ section.settings.kicker | default: 'BİLİMSEL SÜREÇ' }}
+      </span>
+      <h2 class="cs-timeline__title cs-science__title cs-timeline__stagger">
+        {{ section.settings.heading | default: 'Emilimin Bilimi' }}
+      </h2>
+      <p class="cs-timeline__subtitle cs-science__subtitle cs-timeline__stagger" style="color: var(--cs-text-white-muted);">
+        {{ section.settings.subtitle | default: 'Bir kapsülü yuttuktan sonra vücudunuzda neler olduğunu adım adım keşfedin.' }}
+      </p>
+    </header>
+  </div>
+
+  {%- comment -%} Sticky Progress Indicator {%- endcomment -%}
+  <div class="cs-science__progress-bar" aria-hidden="true" data-cs-progress-bar>
+    <div class="cs-science__progress-inner">
+      <span class="cs-science__progress-label" data-cs-progress-label>Ad&#305;m 1/{{ section.blocks.size | default: 5 }}</span>
+      <div class="cs-timeline__progress cs-science__progress-track">
+        <div class="cs-timeline__progress-fill cs-science__progress-fill" data-cs-progress-fill style="width: 0%;"></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Timeline Body with Spine {%- endcomment -%}
+  <div class="cs-science__body" data-cs-science-body>
+    {%- comment -%} Central Spine SVG (desktop) {%- endcomment -%}
+    <div class="cs-science__spine" aria-hidden="true">
+      <svg class="cs-science__spine-svg" viewBox="0 0 2 100" preserveAspectRatio="none" fill="none">
+        <defs>
+          <linearGradient id="spineGrad-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--cs-gold)" />
+            <stop offset="100%" stop-color="var(--cs-teal)" />
+          </linearGradient>
+        </defs>
+        <line
+          x1="1" y1="0" x2="1" y2="100"
+          stroke="url(#spineGrad-{{ section.id }})"
+          stroke-width="2"
+          class="cs-timeline__line-draw cs-science__spine-line"
+          data-cs-spine-line
+          style="--line-length: 100;"
+        />
+      </svg>
+    </div>
+
+    {%- comment -%} Phase Panels {%- endcomment -%}
+    {%- assign total_phases = section.blocks.size -%}
+    {%- for block in section.blocks -%}
+      {%- assign phase_index = forloop.index -%}
+      {%- assign is_odd = forloop.index | modulo: 2 -%}
+      {%- assign phase_side = 'left' -%}
+      {%- if is_odd == 0 -%}
+        {%- assign phase_side = 'right' -%}
+      {%- endif -%}
+
+      <div
+        class="cs-science__panel cs-science__panel--{{ phase_side }}"
+        data-cs-phase-index="{{ forloop.index0 }}"
+        data-cs-phase-panel
+        {{ block.shopify_attributes }}
+      >
+        {%- comment -%} Node on spine {%- endcomment -%}
+        <div class="cs-science__node-wrap" aria-hidden="true">
+          <div class="cs-timeline__node cs-timeline__node--large cs-science__node" data-cs-phase-node></div>
+        </div>
+
+        {%- comment -%} Phase Content Card {%- endcomment -%}
+        <div class="cs-science__card cs-timeline__card-frost cs-timeline__reveal cs-timeline__reveal--{{ phase_side }}" data-cs-reveal>
+          {%- comment -%} Phase number + time badge {%- endcomment -%}
+          <div class="cs-science__card-head cs-timeline__stagger">
+            <span class="cs-science__phase-num">{{ phase_index }}</span>
+            <span class="cs-timeline__tag cs-timeline__tag--gold cs-science__time-tag">
+              {{ block.settings.time_range | default: '0-30 dk' }}
+            </span>
+          </div>
+
+          <h3 class="cs-science__phase-title cs-timeline__stagger">
+            {{ block.settings.phase_title | default: 'Faz Başlığı' }}
+          </h3>
+
+          <p class="cs-science__phase-desc cs-timeline__stagger">
+            {{ block.settings.description | default: 'Bu fazın açıklaması burada yer alacaktır.' }}
+          </p>
+
+          {%- comment -%} Data callout pills {%- endcomment -%}
+          {%- if block.settings.data_point_1 != blank or block.settings.data_point_2 != blank or block.settings.data_point_3 != blank -%}
+            <div class="cs-science__data-pills cs-timeline__stagger">
+              {%- if block.settings.data_point_1 != blank -%}
+                <span class="cs-timeline__tag cs-timeline__tag--teal cs-science__data-pill">
+                  {{ block.settings.data_point_1 }}
+                </span>
+              {%- endif -%}
+              {%- if block.settings.data_point_2 != blank -%}
+                <span class="cs-timeline__tag cs-timeline__tag--teal cs-science__data-pill">
+                  {{ block.settings.data_point_2 }}
+                </span>
+              {%- endif -%}
+              {%- if block.settings.data_point_3 != blank -%}
+                <span class="cs-timeline__tag cs-timeline__tag--teal cs-science__data-pill">
+                  {{ block.settings.data_point_3 }}
+                </span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Circular Illustration Placeholder {%- endcomment -%}
+        <div class="cs-science__illust cs-timeline__reveal cs-timeline__reveal--scale" data-cs-reveal>
+          <div class="cs-science__illust-circle">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 640 }}"
+                alt="{{ block.settings.image_alt | default: block.settings.phase_title }}"
+                width="320"
+                height="320"
+                loading="lazy"
+                class="cs-science__illust-img"
+              />
+            {%- else -%}
+              {%- comment -%} SVG icon placeholder per phase {%- endcomment -%}
+              <svg class="cs-science__illust-icon" viewBox="0 0 80 80" fill="none" aria-hidden="true" focusable="false">
+                {%- case phase_index -%}
+                  {%- when 1 -%}
+                    {%- comment -%} Capsule dissolving {%- endcomment -%}
+                    <circle cx="40" cy="40" r="24" stroke="var(--cs-gold)" stroke-width="1.5" opacity="0.4" class="cs-science__icon-ring" />
+                    <ellipse cx="40" cy="40" rx="12" ry="8" stroke="var(--cs-gold)" stroke-width="1.5" stroke-dasharray="3 2" class="cs-science__icon-dash" />
+                    <circle cx="30" cy="48" r="2" fill="var(--cs-gold)" opacity="0.6" class="cs-science__icon-dot" />
+                    <circle cx="50" cy="34" r="2" fill="var(--cs-gold)" opacity="0.6" class="cs-science__icon-dot" />
+                    <circle cx="44" cy="52" r="1.5" fill="var(--cs-gold)" opacity="0.4" class="cs-science__icon-dot" />
+                  {%- when 2 -%}
+                    {%- comment -%} Release burst {%- endcomment -%}
+                    <circle cx="40" cy="40" r="10" stroke="var(--cs-gold)" stroke-width="1.5" opacity="0.6" class="cs-science__icon-ring" />
+                    <line x1="40" y1="18" x2="40" y2="26" stroke="var(--cs-gold)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-ray" />
+                    <line x1="40" y1="54" x2="40" y2="62" stroke="var(--cs-teal)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-ray" />
+                    <line x1="18" y1="40" x2="26" y2="40" stroke="var(--cs-gold)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-ray" />
+                    <line x1="54" y1="40" x2="62" y2="40" stroke="var(--cs-teal)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-ray" />
+                    <circle cx="40" cy="40" r="4" fill="var(--cs-gold)" opacity="0.3" class="cs-science__icon-core" />
+                  {%- when 3 -%}
+                    {%- comment -%} Absorption waves {%- endcomment -%}
+                    <path d="M16 40 Q28 30, 40 40 Q52 50, 64 40" stroke="var(--cs-teal)" stroke-width="1.5" fill="none" opacity="0.5" class="cs-science__icon-wave" />
+                    <path d="M16 34 Q28 24, 40 34 Q52 44, 64 34" stroke="var(--cs-teal)" stroke-width="1" fill="none" opacity="0.3" class="cs-science__icon-wave" />
+                    <path d="M16 46 Q28 36, 40 46 Q52 56, 64 46" stroke="var(--cs-teal)" stroke-width="1" fill="none" opacity="0.3" class="cs-science__icon-wave" />
+                    <circle cx="40" cy="40" r="5" fill="var(--cs-teal)" opacity="0.4" class="cs-science__icon-core" />
+                  {%- when 4 -%}
+                    {%- comment -%} Cellular network {%- endcomment -%}
+                    <circle cx="40" cy="28" r="6" stroke="var(--cs-teal)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-cell" />
+                    <circle cx="28" cy="48" r="6" stroke="var(--cs-teal)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-cell" />
+                    <circle cx="52" cy="48" r="6" stroke="var(--cs-gold)" stroke-width="1.5" opacity="0.5" class="cs-science__icon-cell" />
+                    <line x1="40" y1="34" x2="28" y2="42" stroke="var(--cs-teal)" stroke-width="1" opacity="0.3" />
+                    <line x1="40" y1="34" x2="52" y2="42" stroke="var(--cs-gold)" stroke-width="1" opacity="0.3" />
+                    <line x1="34" y1="48" x2="46" y2="48" stroke="var(--cs-teal)" stroke-width="1" opacity="0.3" />
+                  {%- when 5 -%}
+                    {%- comment -%} Results / upward arrow {%- endcomment -%}
+                    <circle cx="40" cy="40" r="24" stroke="var(--cs-gold)" stroke-width="1" opacity="0.2" class="cs-science__icon-ring" />
+                    <polyline points="32,46 40,30 48,46" stroke="var(--cs-gold)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="cs-science__icon-arrow" />
+                    <line x1="40" y1="30" x2="40" y2="56" stroke="var(--cs-gold)" stroke-width="2" stroke-linecap="round" class="cs-science__icon-arrow" />
+                {%- endcase -%}
+              </svg>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Bottom CTA {%- endcomment -%}
+  {%- if section.settings.cta_text != blank and section.settings.cta_url != blank -%}
+    <div class="cs-timeline__container cs-science__cta-wrap cs-timeline__reveal" data-cs-reveal>
+      {% render 'cs-timeline-cta',
+        text: section.settings.cta_text,
+        url: section.settings.cta_url,
+        style: section.settings.cta_style,
+        icon: 'arrow',
+        aria_label: section.settings.cta_text
+      %}
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+/* ==========================================================================
+   CS Science of Absorption — Section-specific Styles
+   ========================================================================== */
+
+/* Section root */
+.cs-science {
+  background: var(--cs-bg-deep);
+  color: var(--cs-text-white);
+  padding-block: var(--cs-space-3xl);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header */
+.cs-science__header-wrap {
+  position: relative;
+  z-index: var(--cs-z-above);
+}
+
+.cs-science__kicker {
+  color: var(--cs-gold);
+}
+
+.cs-science__title {
+  color: var(--cs-text-white);
+}
+
+/* --------------------------------------------------------------------------
+   Sticky Progress Indicator
+   -------------------------------------------------------------------------- */
+.cs-science__progress-bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--cs-z-sticky);
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--cs-border-light);
+  padding: var(--cs-space-sm) var(--cs-space-md);
+  opacity: 0;
+  transform: translateY(-100%);
+  transition:
+    opacity var(--cs-duration-base) var(--cs-ease-out),
+    transform var(--cs-duration-base) var(--cs-ease-out);
+}
+
+.cs-science__progress-bar--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cs-science__progress-inner {
+  max-width: var(--cs-content-max);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--cs-space-md);
+}
+
+.cs-science__progress-label {
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  color: var(--cs-gold);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  min-width: 5.5em;
+}
+
+.cs-science__progress-track {
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Timeline Body — central spine layout
+   -------------------------------------------------------------------------- */
+.cs-science__body {
+  position: relative;
+  max-width: var(--cs-content-max);
+  margin-inline: auto;
+  padding-inline: var(--cs-space-md);
+}
+
+/* Spine */
+.cs-science__spine {
+  display: none;
+}
+
+/* Phase Panel */
+.cs-science__panel {
+  position: relative;
+  min-height: 80vh;
+  display: grid;
+  align-items: center;
+  gap: var(--cs-space-lg);
+  padding-block: var(--cs-space-xl);
+}
+
+/* Node on spine — hidden mobile */
+.cs-science__node-wrap {
+  display: none;
+}
+
+/* Card */
+.cs-science__card {
+  position: relative;
+}
+
+.cs-science__card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--cs-space-sm);
+  margin-block-end: var(--cs-space-sm);
+}
+
+.cs-science__phase-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--cs-radius-full);
+  background: var(--cs-gold-soft);
+  color: var(--cs-gold);
+  font-size: var(--cs-font-size-sm);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cs-science__time-tag {
+  font-size: var(--cs-font-size-xs);
+}
+
+.cs-science__phase-title {
+  font-size: var(--cs-font-size-xl);
+  font-weight: 700;
+  color: var(--cs-text-white);
+  margin: 0 0 var(--cs-space-sm);
+  line-height: 1.2;
+}
+
+.cs-science__phase-desc {
+  font-size: var(--cs-font-size-base);
+  color: var(--cs-text-white-muted);
+  line-height: 1.6;
+  margin: 0 0 var(--cs-space-md);
+}
+
+/* Data pills row */
+.cs-science__data-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cs-space-xs);
+}
+
+.cs-science__data-pill {
+  font-size: var(--cs-font-size-xs);
+}
+
+/* Illustration circle */
+.cs-science__illust {
+  display: flex;
+  justify-content: center;
+}
+
+.cs-science__illust-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: var(--cs-radius-full);
+  background: var(--cs-bg-card-frost);
+  border: 1px solid var(--cs-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cs-science__illust-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--cs-radius-full);
+}
+
+.cs-science__illust-icon {
+  width: 64%;
+  height: 64%;
+}
+
+/* SVG icon animations */
+.cs-science__icon-ring {
+  animation: cs-science-pulse 3s ease-in-out infinite;
+}
+
+.cs-science__icon-dash {
+  animation: cs-science-rotate 8s linear infinite;
+  transform-origin: 40px 40px;
+}
+
+.cs-science__icon-dot {
+  animation: cs-science-float 2.5s ease-in-out infinite alternate;
+}
+
+.cs-science__icon-ray {
+  animation: cs-science-pulse 2s ease-in-out infinite alternate;
+}
+
+.cs-science__icon-wave {
+  animation: cs-science-wave 3s ease-in-out infinite;
+}
+
+.cs-science__icon-cell {
+  animation: cs-science-pulse 3.5s ease-in-out infinite;
+}
+
+.cs-science__icon-core {
+  animation: cs-science-pulse 2s ease-in-out infinite alternate;
+}
+
+.cs-science__icon-arrow {
+  animation: cs-science-float 2s ease-in-out infinite alternate;
+}
+
+@keyframes cs-science-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes cs-science-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cs-science-float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+@keyframes cs-science-wave {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+/* CTA wrap */
+.cs-science__cta-wrap {
+  text-align: center;
+  padding-block-start: var(--cs-space-2xl);
+  padding-block-end: var(--cs-space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   Desktop Layout (>= 990px) — alternating spine
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 990px) {
+  .cs-science__spine {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    z-index: var(--cs-z-base);
+  }
+
+  .cs-science__spine-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cs-science__node-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: var(--cs-z-above);
+  }
+
+  .cs-science__panel {
+    grid-template-columns: 1fr 2px 1fr;
+    grid-template-rows: 1fr;
+    gap: var(--cs-space-xl);
+    padding-inline: var(--cs-space-lg);
+  }
+
+  /* Left-aligned content: card left, illustration right */
+  .cs-science__panel--left .cs-science__card {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    max-width: 440px;
+    text-align: right;
+  }
+
+  .cs-science__panel--left .cs-science__card-head {
+    justify-content: flex-end;
+  }
+
+  .cs-science__panel--left .cs-science__data-pills {
+    justify-content: flex-end;
+  }
+
+  .cs-science__panel--left .cs-science__node-wrap {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+  }
+
+  .cs-science__panel--left .cs-science__illust {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  /* Right-aligned content: illustration left, card right */
+  .cs-science__panel--right .cs-science__illust {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .cs-science__panel--right .cs-science__node-wrap {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+  }
+
+  .cs-science__panel--right .cs-science__card {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    max-width: 440px;
+    text-align: left;
+  }
+
+  .cs-science__panel--right .cs-science__card-head {
+    justify-content: flex-start;
+  }
+
+  .cs-science__panel--right .cs-science__data-pills {
+    justify-content: flex-start;
+  }
+
+  /* Larger illustration on desktop */
+  .cs-science__illust-circle {
+    width: 320px;
+    height: 320px;
+  }
+}
+
+/* Tablet (750–989px) */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .cs-science__panel {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--cs-space-lg);
+  }
+
+  .cs-science__illust-circle {
+    width: 240px;
+    height: 240px;
+  }
+
+  .cs-science__panel--left .cs-science__card {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cs-science__panel--left .cs-science__illust {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .cs-science__panel--right .cs-science__illust {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cs-science__panel--right .cs-science__card {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* Mobile (< 750px) — single column */
+@media screen and (max-width: 749px) {
+  .cs-science__panel {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-block: var(--cs-space-xl);
+    gap: var(--cs-space-md);
+  }
+
+  .cs-science__illust {
+    order: -1;
+  }
+
+  .cs-science__card {
+    text-align: center;
+  }
+
+  .cs-science__card-head {
+    justify-content: center;
+  }
+
+  .cs-science__data-pills {
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cs-science__progress-bar {
+    transition-duration: 0.01ms !important;
+  }
+
+  .cs-science__icon-ring,
+  .cs-science__icon-dash,
+  .cs-science__icon-dot,
+  .cs-science__icon-ray,
+  .cs-science__icon-wave,
+  .cs-science__icon-cell,
+  .cs-science__icon-core,
+  .cs-science__icon-arrow {
+    animation: none !important;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+/* ==========================================================================
+   CS Science of Absorption — Web Component
+   ========================================================================== */
+
+class CsScienceTimeline extends HTMLElement {
+  constructor() {
+    super();
+    this._cleanupScroll = null;
+    this._observer = null;
+  }
+
+  connectedCallback() {
+    this._initReveal();
+    this._initScrollProgress();
+    this._initSpineLine();
+  }
+
+  disconnectedCallback() {
+    if (this._cleanupScroll) this._cleanupScroll();
+    if (this._observer) this._observer.disconnect();
+  }
+
+  /* Reveal animations via shared utility */
+  _initReveal() {
+    const sectionId = this.dataset.sectionId;
+    const root = document.getElementById('cs-science-' + sectionId);
+    if (!root) return;
+
+    this._observer = csTimelineReveal(
+      '#cs-science-' + sectionId + ' [data-cs-reveal]',
+      {
+        threshold: 0.12,
+        rootMargin: '0px 0px -80px 0px',
+        once: true,
+        onReveal: function(el) {
+          /* Activate node when its panel is revealed */
+          var panel = el.closest('[data-cs-phase-panel]');
+          if (panel) {
+            var node = panel.querySelector('[data-cs-phase-node]');
+            if (node) node.classList.add('cs-timeline__node--active');
+          }
+        }
+      }
+    );
+  }
+
+  /* Sticky progress bar + step label */
+  _initScrollProgress() {
+    var self = this;
+    var sectionId = this.dataset.sectionId;
+    var root = document.getElementById('cs-science-' + sectionId);
+    if (!root) return;
+
+    var body = root.querySelector('[data-cs-science-body]');
+    var progressBar = root.querySelector('[data-cs-progress-bar]');
+    var progressFill = root.querySelector('[data-cs-progress-fill]');
+    var progressLabel = root.querySelector('[data-cs-progress-label]');
+    var panels = root.querySelectorAll('[data-cs-phase-panel]');
+    var totalPanels = panels.length || 5;
+
+    if (!body || !progressBar || !progressFill || !progressLabel) return;
+
+    this._cleanupScroll = csTimelineScrollProgress(body, function(progress) {
+      /* Show/hide sticky bar */
+      if (progress > 0.02 && progress < 0.98) {
+        progressBar.classList.add('cs-science__progress-bar--visible');
+      } else {
+        progressBar.classList.remove('cs-science__progress-bar--visible');
+      }
+
+      /* Fill width */
+      var pct = Math.round(progress * 100);
+      progressFill.style.width = pct + '%';
+
+      /* Step label */
+      var step = Math.min(Math.floor(progress * totalPanels) + 1, totalPanels);
+      progressLabel.textContent = 'Ad\u0131m ' + step + '/' + totalPanels;
+    });
+  }
+
+  /* Animate spine line when it enters view */
+  _initSpineLine() {
+    var sectionId = this.dataset.sectionId;
+    var root = document.getElementById('cs-science-' + sectionId);
+    if (!root) return;
+
+    var spineLine = root.querySelector('[data-cs-spine-line]');
+    if (!spineLine) return;
+
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      spineLine.classList.add('cs-timeline__line-draw--active');
+      return;
+    }
+
+    var spineObserver = new IntersectionObserver(
+      function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            spineLine.classList.add('cs-timeline__line-draw--active');
+            spineObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+
+    spineObserver.observe(spineLine.closest('.cs-science__spine') || spineLine);
+  }
+}
+
+if (!customElements.get('cs-science-timeline')) {
+  customElements.define('cs-science-timeline', CsScienceTimeline);
+}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Science of Absorption",
+  "tag": "cs-science-timeline",
+  "class": "cs-science-section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker text",
+      "default": "BİLİMSEL SÜREÇ"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Emilimin Bilimi"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section subtitle",
+      "default": "Bir kapsülü yuttuktan sonra vücudunuzda neler olduğunu adım adım keşfedin."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "Ürünleri Keşfet"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA button URL"
+    },
+    {
+      "type": "select",
+      "id": "cta_style",
+      "label": "CTA style",
+      "options": [
+        { "value": "gold", "label": "Gold" },
+        { "value": "ghost", "label": "Ghost" }
+      ],
+      "default": "gold"
+    },
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Section ARIA label",
+      "default": "Emilimin Bilimi"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "phase",
+      "name": "Phase",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "phase_title",
+          "label": "Phase title",
+          "default": "Faz Başlığı"
+        },
+        {
+          "type": "text",
+          "id": "time_range",
+          "label": "Time range",
+          "default": "0-30 dk"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Phase description",
+          "default": "Bu fazın detaylı açıklaması."
+        },
+        {
+          "type": "text",
+          "id": "data_point_1",
+          "label": "Data point 1",
+          "info": "e.g. pH 1.5-3.5"
+        },
+        {
+          "type": "text",
+          "id": "data_point_2",
+          "label": "Data point 2",
+          "info": "e.g. %95 Biyoyararlanım"
+        },
+        {
+          "type": "text",
+          "id": "data_point_3",
+          "label": "Data point 3",
+          "info": "e.g. 200 m² Yüzey Alanı"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Phase illustration"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Science of Absorption",
+      "blocks": [
+        {
+          "type": "phase",
+          "settings": {
+            "phase_title": "Çözülme",
+            "time_range": "0-30 dk",
+            "description": "pH-optimize edilmiş kaplama mide ortamında çözülmeye başlar. Aktif bileşenler koruyucu matris içinde güvenle taşınır.",
+            "data_point_1": "pH 1.5-3.5",
+            "data_point_2": "Enterik Kaplama",
+            "data_point_3": "30 dk Çözülme"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "phase_title": "Salınım",
+            "time_range": "30-60 dk",
+            "description": "Kapsül ince bağırsağa ulaştığında aktif bileşenler kontrollü salınımla serbest bırakılır. Biyoyararlanım oranı maksimize edilir.",
+            "data_point_1": "%95 Biyoyararlanım",
+            "data_point_2": "Kontrollü Salınım",
+            "data_point_3": "pH 6.0-7.4"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "phase_title": "Emilim",
+            "time_range": "1-2 saat",
+            "description": "İnce bağırsağın geniş yüzey alanı sayesinde aktif bileşenler kan dolaşımına emilir. Mikro-villüsler emilim kapasitesini artırır.",
+            "data_point_1": "200 m² Yüzey Alanı",
+            "data_point_2": "Aktif Transport",
+            "data_point_3": "Hızlı Emilim"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "phase_title": "Hücresel Dağılım",
+            "time_range": "2-6 saat",
+            "description": "Kan dolaşımı yoluyla aktif bileşenler hedef hücrelere ulaştırılır. Hücresel alım mekanizmaları ile dokulara dağılım tamamlanır.",
+            "data_point_1": "Hedefli Dağılım",
+            "data_point_2": "Hücresel Alım",
+            "data_point_3": "Doku Penetrasyonu"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "phase_title": "Görünür Sonuçlar",
+            "time_range": "Günler-Haftalar",
+            "description": "Düzenli kullanımla kümülatif etkiler ortaya çıkar. Hücresel yenilenme, enerji artışı ve genel sağlık iyileşmesi gözlemlenir.",
+            "data_point_1": "Kümülatif Etki",
+            "data_point_2": "Düzenli Kullanım",
+            "data_point_3": "Kalıcı Sonuçlar"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

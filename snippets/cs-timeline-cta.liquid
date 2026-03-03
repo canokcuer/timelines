@@ -1,0 +1,31 @@
+{%- doc -%}
+  Renders a CTA button for timeline sections.
+
+  @param {string} text - Button label
+  @param {string} url - Link URL
+  @param {string} [style] - 'gold' (default) or 'ghost'
+  @param {string} [icon] - Optional trailing arrow icon ('arrow')
+  @param {string} [extra_classes] - Additional CSS classes
+  @param {string} [aria_label] - Custom aria-label for accessibility
+{%- enddoc -%}
+
+{%- liquid
+  assign btn_style = style | default: 'gold'
+  assign btn_classes = 'cs-timeline__cta cs-timeline__cta--' | append: btn_style
+  if extra_classes
+    assign btn_classes = btn_classes | append: ' ' | append: extra_classes
+  endif
+-%}
+
+<a
+  href="{{ url }}"
+  class="{{ btn_classes }}"
+  {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
+>
+  {{- text -}}
+  {%- if icon == 'arrow' -%}
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- endif -%}
+</a>

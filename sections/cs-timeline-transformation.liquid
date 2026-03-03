@@ -1,0 +1,616 @@
+{%- doc -%}
+  Renders "Your Transformation Journey" results timeline section.
+
+  A scroll-animated zigzag timeline showing 4 milestones of supplement
+  transformation results across Hafta 1, Ay 1, Ay 2, and Ay 3.
+
+  Dependencies:
+    - assets/cs-timeline-base.css (design tokens, shared classes)
+    - assets/cs-timeline-base.js (csTimelineReveal, csTimelineScrollProgress)
+    - snippets/cs-timeline-cta.liquid (CTA button)
+
+  @param {string} section.settings.kicker - Kicker text above title
+  @param {string} section.settings.title - Section heading
+  @param {string} section.settings.subtitle - Description paragraph
+  @param {string} section.settings.cta_text - CTA button label
+  @param {string} section.settings.cta_url - CTA button URL
+  @param {block[]} section.blocks - Milestone blocks (type: milestone)
+{%- enddoc -%}
+
+{{ 'cs-timeline-base.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cs-timeline-base.js' | asset_url }}" defer="defer"></script>
+
+<section
+  id="cs-transformation-{{ section.id }}"
+  class="cs-timeline cs-transformation"
+  aria-label="{{ section.settings.kicker | default: 'Donusum Sureci' }}"
+  data-cs-transformation
+>
+  <div class="cs-timeline__container">
+    {%- comment -%} Section Header {%- endcomment -%}
+    <header class="cs-timeline__header cs-timeline__reveal">
+      {%- if section.settings.kicker != blank -%}
+        <p class="cs-timeline__kicker cs-transformation__kicker">
+          {{ section.settings.kicker }}
+        </p>
+      {%- endif -%}
+
+      <h2 class="cs-timeline__title cs-transformation__title">
+        {{ section.settings.title }}
+      </h2>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="cs-timeline__subtitle cs-transformation__subtitle">
+          {{ section.settings.subtitle }}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- comment -%} Timeline Track {%- endcomment -%}
+    <div class="cs-transformation__track" role="list" aria-label="Donusum zaman cizelgesi">
+      {%- comment -%} SVG connector lines — desktop {%- endcomment -%}
+      <svg class="cs-transformation__connector cs-timeline--hide-mobile" aria-hidden="true" preserveAspectRatio="none">
+        <line
+          class="cs-timeline__line-draw cs-transformation__line"
+          x1="0" y1="50%" x2="100%" y2="50%"
+          stroke="var(--cs-gold)"
+          stroke-width="2"
+        />
+      </svg>
+
+      {%- comment -%} SVG connector line — mobile {%- endcomment -%}
+      <svg class="cs-transformation__connector cs-transformation__connector--mobile cs-timeline--hide-desktop" aria-hidden="true" preserveAspectRatio="none">
+        <line
+          class="cs-timeline__line-draw cs-transformation__line"
+          x1="50%" y1="0" x2="50%" y2="100%"
+          stroke="var(--cs-gold)"
+          stroke-width="2"
+        />
+      </svg>
+
+      {%- for block in section.blocks -%}
+        {%- assign is_last = false -%}
+        {%- if forloop.last -%}
+          {%- assign is_last = true -%}
+        {%- endif -%}
+        {%- assign delay = forloop.index0 | times: 150 -%}
+
+        <div
+          class="cs-transformation__milestone cs-timeline__reveal"
+          role="listitem"
+          data-milestone-index="{{ forloop.index0 }}"
+          style="transition-delay: {{ delay }}ms;"
+          {{ block.shopify_attributes }}
+        >
+          {%- comment -%} Node {%- endcomment -%}
+          <div class="cs-transformation__node-wrap">
+            <div class="cs-timeline__node cs-timeline__node--large cs-transformation__node" aria-hidden="true"></div>
+            <span class="cs-transformation__time-label cs-timeline__tag cs-timeline__tag--gold">
+              {{ block.settings.time_label }}
+            </span>
+          </div>
+
+          {%- comment -%} Content Card {%- endcomment -%}
+          <div class="cs-timeline__card-frost cs-transformation__card">
+            <h3 class="cs-transformation__card-headline">
+              {{ block.settings.headline }}
+            </h3>
+
+            {%- if block.settings.benefits != blank -%}
+              <div class="cs-transformation__benefits">
+                {{ block.settings.benefits }}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.stat != blank -%}
+              <p class="cs-transformation__stat">
+                {{ block.settings.stat }}
+              </p>
+            {%- endif -%}
+
+            {%- if is_last and section.settings.cta_text != blank -%}
+              <div class="cs-transformation__cta-wrap">
+                {%- render 'cs-timeline-cta',
+                  text: section.settings.cta_text,
+                  url: section.settings.cta_url,
+                  style: 'gold',
+                  icon: 'arrow',
+                  extra_classes: 'cs-transformation__cta',
+                  aria_label: section.settings.cta_text
+                -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+/* ============================================================================
+   CS Transformation Journey — Section Styles
+   ============================================================================ */
+
+/* --------------------------------------------------------------------------
+   Section Root
+   -------------------------------------------------------------------------- */
+.cs-transformation {
+  background: var(--cs-bg-dark);
+  color: var(--cs-text-white);
+  padding-block: var(--cs-space-3xl);
+  overflow: hidden;
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   Header Overrides
+   -------------------------------------------------------------------------- */
+.cs-transformation__kicker {
+  color: var(--cs-gold);
+}
+
+.cs-transformation__title {
+  color: var(--cs-text-white);
+}
+
+.cs-transformation__subtitle {
+  color: var(--cs-text-white-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Track — Desktop Zigzag
+   -------------------------------------------------------------------------- */
+.cs-transformation__track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--cs-space-md);
+  align-items: start;
+}
+
+.cs-transformation__connector {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  z-index: var(--cs-z-base);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Milestone — Desktop
+   -------------------------------------------------------------------------- */
+.cs-transformation__milestone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: var(--cs-z-above);
+}
+
+/* Zigzag: even milestones push card down, odd milestones are default */
+.cs-transformation__milestone:nth-child(odd) .cs-transformation__card {
+  margin-block-start: var(--cs-space-md);
+}
+
+.cs-transformation__milestone:nth-child(even) {
+  margin-block-start: clamp(8rem, 6rem + 8vw, 14rem);
+}
+
+.cs-transformation__milestone:nth-child(even) .cs-transformation__card {
+  order: -1;
+  margin-block-end: var(--cs-space-md);
+}
+
+.cs-transformation__milestone:nth-child(even) .cs-transformation__node-wrap {
+  order: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Node Wrap & Time Label
+   -------------------------------------------------------------------------- */
+.cs-transformation__node-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cs-space-xs);
+}
+
+.cs-transformation__time-label {
+  font-size: var(--cs-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Content Card
+   -------------------------------------------------------------------------- */
+.cs-transformation__card {
+  width: 100%;
+  text-align: center;
+}
+
+.cs-transformation__card-headline {
+  font-size: var(--cs-font-size-lg);
+  font-weight: 700;
+  color: var(--cs-text-white);
+  margin: 0 0 var(--cs-space-sm);
+  line-height: 1.3;
+}
+
+.cs-transformation__benefits {
+  font-size: var(--cs-font-size-sm);
+  color: var(--cs-text-white-muted);
+  line-height: 1.6;
+}
+
+.cs-transformation__benefits p {
+  margin: 0 0 var(--cs-space-xs);
+}
+
+.cs-transformation__benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--cs-space-xs);
+}
+
+.cs-transformation__benefits li {
+  background: var(--cs-teal-soft);
+  color: var(--cs-teal);
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  padding: 0.3em 0.75em;
+  border-radius: var(--cs-radius-full);
+  border: 1px solid var(--cs-border-teal);
+}
+
+/* --------------------------------------------------------------------------
+   Stat
+   -------------------------------------------------------------------------- */
+.cs-transformation__stat {
+  font-size: var(--cs-font-size-xs);
+  color: var(--cs-gold);
+  font-weight: 600;
+  margin: var(--cs-space-sm) 0 0;
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   CTA Wrap
+   -------------------------------------------------------------------------- */
+.cs-transformation__cta-wrap {
+  margin-block-start: var(--cs-space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   Active / Revealed Node State
+   -------------------------------------------------------------------------- */
+.cs-timeline__reveal--visible .cs-transformation__node {
+  background: var(--cs-gold);
+  box-shadow: var(--cs-shadow-gold);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile — Vertical Timeline (< 750px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .cs-transformation__track {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cs-space-xl);
+    padding-inline-start: 40px;
+    position: relative;
+  }
+
+  .cs-transformation__connector--mobile {
+    position: absolute;
+    top: 0;
+    left: 11px;
+    width: 24px;
+    height: 100%;
+    z-index: var(--cs-z-base);
+  }
+
+  .cs-transformation__milestone {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--cs-space-md);
+  }
+
+  /* Reset zigzag for mobile */
+  .cs-transformation__milestone:nth-child(even) {
+    margin-block-start: 0;
+  }
+
+  .cs-transformation__milestone:nth-child(even) .cs-transformation__card {
+    order: unset;
+    margin-block-end: 0;
+    margin-block-start: var(--cs-space-sm);
+  }
+
+  .cs-transformation__milestone:nth-child(even) .cs-transformation__node-wrap {
+    order: unset;
+  }
+
+  .cs-transformation__milestone:nth-child(odd) .cs-transformation__card {
+    margin-block-start: var(--cs-space-sm);
+  }
+
+  .cs-transformation__node-wrap {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cs-transformation__time-label {
+    writing-mode: unset;
+    white-space: nowrap;
+    position: absolute;
+    left: calc(100% + var(--cs-space-xs));
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+  }
+
+  .cs-transformation__card {
+    text-align: left;
+  }
+
+  .cs-transformation__card-headline::before {
+    content: attr(data-time-label);
+    display: block;
+    font-size: var(--cs-font-size-xs);
+    font-weight: 700;
+    color: var(--cs-gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-block-end: var(--cs-space-xs);
+  }
+
+  .cs-transformation__benefits ul {
+    justify-content: flex-start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion — section-specific overrides
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cs-transformation__node {
+    background: var(--cs-gold) !important;
+    box-shadow: var(--cs-shadow-gold) !important;
+  }
+
+  .cs-transformation__line {
+    stroke-dashoffset: 0 !important;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+/* ============================================================================
+   CS Transformation Journey — Web Component
+   ============================================================================ */
+
+class CsTransformationTimeline extends HTMLElement {
+  constructor() {
+    super();
+    this._scrollCleanup = null;
+    this._observer = null;
+  }
+
+  connectedCallback() {
+    this._initReveal();
+    this._initConnectorDraw();
+    this._setMobileTimeLabels();
+  }
+
+  disconnectedCallback() {
+    if (this._scrollCleanup) {
+      this._scrollCleanup();
+      this._scrollCleanup = null;
+    }
+    if (this._observer) {
+      this._observer.disconnect();
+      this._observer = null;
+    }
+  }
+
+  /**
+   * Initialize IntersectionObserver reveal for header + milestones.
+   */
+  _initReveal() {
+    const sectionId = this.querySelector('[data-cs-transformation]')
+      ? this.id || ''
+      : '';
+    const scope = this;
+
+    this._observer = csTimelineReveal(
+      '.cs-transformation .cs-timeline__reveal',
+      {
+        threshold: 0.15,
+        rootMargin: '0px 0px -60px 0px',
+        once: true,
+        onReveal: (el) => {
+          /* Activate the node fill when milestone is revealed */
+          const node = el.querySelector('.cs-transformation__node');
+          if (node) {
+            node.classList.add('cs-timeline__node--active');
+          }
+        }
+      }
+    );
+  }
+
+  /**
+   * Draw the SVG connector line as user scrolls through the section.
+   */
+  _initConnectorDraw() {
+    const track = this.querySelector('.cs-transformation__track');
+    if (!track) return;
+
+    const lines = this.querySelectorAll('.cs-transformation__line');
+    if (!lines.length) return;
+
+    /* Measure SVG line lengths and set dasharray */
+    lines.forEach((line) => {
+      const length = line.getTotalLength ? line.getTotalLength() : 1000;
+      line.style.setProperty('--line-length', length);
+      line.style.strokeDasharray = length;
+      line.style.strokeDashoffset = length;
+    });
+
+    this._scrollCleanup = csTimelineScrollProgress(track, (progress) => {
+      /* Map progress 0-1 to line draw 0-100% */
+      lines.forEach((line) => {
+        const length = parseFloat(
+          getComputedStyle(line).getPropertyValue('--line-length')
+        ) || 1000;
+        const offset = length * (1 - progress * 1.5);
+        line.style.strokeDashoffset = Math.max(offset, 0);
+      });
+    });
+  }
+
+  /**
+   * On mobile, copy time_label to card headline data attribute
+   * so CSS ::before can display it.
+   */
+  _setMobileTimeLabels() {
+    const milestones = this.querySelectorAll('.cs-transformation__milestone');
+    milestones.forEach((ms) => {
+      const label = ms.querySelector('.cs-transformation__time-label');
+      const headline = ms.querySelector('.cs-transformation__card-headline');
+      if (label && headline) {
+        headline.setAttribute('data-time-label', label.textContent.trim());
+      }
+    });
+  }
+}
+
+if (!customElements.get('cs-transformation-timeline')) {
+  customElements.define('cs-transformation-timeline', CsTransformationTimeline);
+}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Transformation Journey",
+  "tag": "cs-transformation-timeline",
+  "class": "cs-transformation-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "DONUSUM SURECI"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Baslik",
+      "default": "Vucudunuzun Yenilenme Yolculugu"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Alt baslik",
+      "default": "Duzenlı kullanımla vucudunuzda gozlemlenmesi beklenen degisimler. Her beden farklıdır — sonuclar kisisel degiskenlik gosterebilir."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Buton Metni",
+      "default": "3 Aylık Paketi Kesfet"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Buton Baglantısı"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "milestone",
+      "name": "Kilometre Tası",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time_label",
+          "label": "Zaman Etiketi",
+          "default": "Hafta 1"
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Baslik",
+          "default": "Ilk Degisimler Baslıyor"
+        },
+        {
+          "type": "richtext",
+          "id": "benefits",
+          "label": "Faydalar",
+          "default": "<ul><li>Enerji seviyesinde artıs</li><li>Uyku kalitesinde iyilesme</li><li>Sindirim duzeninde fark</li></ul>"
+        },
+        {
+          "type": "text",
+          "id": "stat",
+          "label": "Istatistik / Not (opsiyonel)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Transformation Journey",
+      "blocks": [
+        {
+          "type": "milestone",
+          "settings": {
+            "time_label": "Hafta 1",
+            "headline": "Ilk Degisimler Baslıyor",
+            "benefits": "<ul><li>Enerji seviyesinde artıs</li><li>Uyku kalitesinde iyilesme</li><li>Sindirim duzeninde fark</li></ul>",
+            "stat": ""
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "time_label": "Ay 1",
+            "headline": "Vucudunuz Yanıt Veriyor",
+            "benefits": "<ul><li>Cilt tonunda canlanma</li><li>Odaklanma ve zihinsel netlık</li><li>Fiziksel dayanıklılık artısı</li></ul>",
+            "stat": ""
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "time_label": "Ay 2",
+            "headline": "Donusum Hızlanıyor",
+            "benefits": "<ul><li>Bagirsak florasında denge</li><li>Saç ve tırnak guclenmesi</li><li>Bagısıklık sisteminde destek</li></ul>",
+            "stat": ""
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "time_label": "Ay 3",
+            "headline": "Tam Potansiyel",
+            "benefits": "<ul><li>Hucresel yenilenme</li><li>Kronik yorgunlukta azalma</li><li>Genel yasam kalitesinde artıs</li></ul>",
+            "stat": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
