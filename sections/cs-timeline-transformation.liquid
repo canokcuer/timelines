@@ -20,6 +20,7 @@
 {{ 'cs-timeline-base.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cs-timeline-base.js' | asset_url }}" defer="defer"></script>
 
+<cs-transformation-timeline>
 <section
   id="cs-transformation-{{ section.id }}"
   class="cs-timeline cs-transformation"
@@ -126,6 +127,7 @@
     </div>
   </div>
 </section>
+</cs-transformation-timeline>
 
 {% stylesheet %}
 /* ============================================================================
@@ -505,7 +507,6 @@ if (!customElements.get('cs-transformation-timeline')) {
 {% schema %}
 {
   "name": "Transformation Journey",
-  "tag": "cs-transformation-timeline",
   "class": "cs-transformation-section",
   "settings": [
     {

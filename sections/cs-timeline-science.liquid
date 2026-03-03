@@ -14,6 +14,7 @@
 {{ 'cs-timeline-base.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cs-timeline-base.js' | asset_url }}" defer></script>
 
+<cs-science-timeline data-section-id="{{ section.id }}">
 <section
   id="cs-science-{{ section.id }}"
   class="cs-timeline cs-science"
@@ -201,6 +202,7 @@
     </div>
   {%- endif -%}
 </section>
+</cs-science-timeline>
 
 {% stylesheet %}
 /* ==========================================================================
@@ -762,7 +764,6 @@ if (!customElements.get('cs-science-timeline')) {
 {% schema %}
 {
   "name": "Science of Absorption",
-  "tag": "cs-science-timeline",
   "class": "cs-science-section",
   "limit": 1,
   "settings": [
