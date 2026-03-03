@@ -1,21 +1,7 @@
-{%- doc -%}
+{% comment %}
   Renders "Your Transformation Journey" results timeline section.
-
-  A scroll-animated zigzag timeline showing 4 milestones of supplement
-  transformation results across Hafta 1, Ay 1, Ay 2, and Ay 3.
-
-  Dependencies:
-    - assets/cs-timeline-base.css (design tokens, shared classes)
-    - assets/cs-timeline-base.js (csTimelineReveal, csTimelineScrollProgress)
-    - snippets/cs-timeline-cta.liquid (CTA button)
-
-  @param {string} section.settings.kicker - Kicker text above title
-  @param {string} section.settings.title - Section heading
-  @param {string} section.settings.subtitle - Description paragraph
-  @param {string} section.settings.cta_text - CTA button label
-  @param {string} section.settings.cta_url - CTA button URL
-  @param {block[]} section.blocks - Milestone blocks (type: milestone)
-{%- enddoc -%}
+  Dependencies: cs-timeline-base.css, cs-timeline-base.js, cs-timeline-cta.liquid
+{% endcomment %}
 
 {{ 'cs-timeline-base.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cs-timeline-base.js' | asset_url }}" defer="defer"></script>
@@ -129,7 +115,7 @@
 </section>
 </cs-transformation-timeline>
 
-{% stylesheet %}
+<style>
 /* ============================================================================
    CS Transformation Journey — Section Styles
    ============================================================================ */
@@ -396,9 +382,9 @@
     stroke-dashoffset: 0 !important;
   }
 }
-{% endstylesheet %}
+</style>
 
-{% javascript %}
+<script>
 /* ============================================================================
    CS Transformation Journey — Web Component
    ============================================================================ */
@@ -502,7 +488,7 @@ class CsTransformationTimeline extends HTMLElement {
 if (!customElements.get('cs-transformation-timeline')) {
   customElements.define('cs-transformation-timeline', CsTransformationTimeline);
 }
-{% endjavascript %}
+</script>
 
 {% schema %}
 {

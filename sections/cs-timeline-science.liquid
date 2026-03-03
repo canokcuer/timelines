@@ -1,15 +1,7 @@
-{%- doc -%}
-  Section: Science of Absorption Timeline
-  Renders a vertical scroll-driven narrative of 5 absorption phases.
-  Deep dark (#0a0a0a) background, central spine gradient gold-to-teal,
-  alternating left/right content with circular illustration placeholders,
-  sticky progress indicator, and data callout pills.
-
-  Depends on:
-    - assets/cs-timeline-base.css  (design tokens, shared classes)
-    - assets/cs-timeline-base.js   (csTimelineReveal, csTimelineScrollProgress)
-    - snippets/cs-timeline-cta.liquid
-{%- enddoc -%}
+{% comment %}
+  Science of Absorption Timeline section.
+  Dependencies: cs-timeline-base.css, cs-timeline-base.js, cs-timeline-cta.liquid
+{% endcomment %}
 
 {{ 'cs-timeline-base.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cs-timeline-base.js' | asset_url }}" defer></script>
@@ -204,7 +196,7 @@
 </section>
 </cs-science-timeline>
 
-{% stylesheet %}
+<style>
 /* ==========================================================================
    CS Science of Absorption — Section-specific Styles
    ========================================================================== */
@@ -642,9 +634,9 @@
     animation: none !important;
   }
 }
-{% endstylesheet %}
+</style>
 
-{% javascript %}
+<script>
 /* ==========================================================================
    CS Science of Absorption — Web Component
    ========================================================================== */
@@ -759,7 +751,7 @@ class CsScienceTimeline extends HTMLElement {
 if (!customElements.get('cs-science-timeline')) {
   customElements.define('cs-science-timeline', CsScienceTimeline);
 }
-{% endjavascript %}
+</script>
 
 {% schema %}
 {

@@ -1,17 +1,7 @@
-{%- doc -%}
-  Renders the "From Source to Soul" ingredient sourcing journey.
-
-  A horizontal card carousel with 3D flip cards (desktop) or accordion
-  expand pattern (mobile). 6 journey stages trace each ingredient from
-  origin to delivery, with a scroll-synced progress bar.
-
-  @param {string} section.settings.kicker - Kicker text above title
-  @param {string} section.settings.title - Section title
-  @param {string} section.settings.subtitle - Subtitle description
-  @param {string} section.settings.cta_text - CTA button label
-  @param {string} section.settings.cta_url - CTA button URL
-  @param {block[]} section.blocks - Stage blocks (type: stage)
-{%- enddoc -%}
+{% comment %}
+  From Source to Soul — ingredient sourcing journey section.
+  Dependencies: cs-timeline-base.css, cs-timeline-base.js, cs-timeline-cta.liquid
+{% endcomment %}
 
 {%- assign kicker = section.settings.kicker | default: 'KAYNAK YOLCULUĞU' -%}
 {%- assign title = section.settings.title | default: 'Kaynaktan Ruha' -%}
@@ -202,7 +192,7 @@
   </div>
 </cs-sourcing-carousel>
 
-{% stylesheet %}
+<style>
 /* ==========================================================================
    CS Sourcing — From Source to Soul
    ========================================================================== */
@@ -648,9 +638,9 @@
     --_sourcing-card-h: 480px;
   }
 }
-{% endstylesheet %}
+</style>
 
-{% javascript %}
+<script>
 /* ==========================================================================
    CS Sourcing Carousel — Web Component
    ========================================================================== */
@@ -807,7 +797,7 @@ class CsSourcingCarousel extends HTMLElement {
 if (!customElements.get('cs-sourcing-carousel')) {
   customElements.define('cs-sourcing-carousel', CsSourcingCarousel);
 }
-{% endjavascript %}
+</script>
 
 {% schema %}
 {

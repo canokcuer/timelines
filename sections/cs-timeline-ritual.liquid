@@ -1,18 +1,7 @@
-{%- doc -%}
-  Daily Ritual Clock — Circadian Rhythm Timeline
-  Cyrasoul "Günlük Ritüel" section.
-
-  Displays a 24-hour SVG clock (desktop) or vertical timeline (mobile)
-  mapping five supplement products to optimal biological windows.
-
-  Dependencies:
-    - assets/cs-timeline-base.css  (design tokens, shared utilities)
-    - assets/cs-timeline-base.js   (csTimelineAutoAdvance, csTimelineReveal)
-    - snippets/cs-timeline-cta.liquid
-
-  Schema blocks: time_slot (time_label, product_name, product_handle,
-                 body_state, benefits, accent_color)
-{%- enddoc -%}
+{% comment %}
+  Daily Ritual Clock — Circadian Rhythm Timeline section.
+  Dependencies: cs-timeline-base.css, cs-timeline-base.js, cs-timeline-cta.liquid
+{% endcomment %}
 
 {%- comment -%} ── Slot data ─────────────────────────────────────────── {%- endcomment -%}
 {%- assign slots = section.blocks | where: 'type', 'time_slot' -%}
@@ -218,7 +207,7 @@
   </div>
 </section>
 
-{% stylesheet %}
+<style>
 /* ==========================================================================
    CS Ritual — Daily Ritual Clock
    ========================================================================== */
@@ -613,9 +602,9 @@
     transition: none;
   }
 }
-{% endstylesheet %}
+</style>
 
-{% javascript %}
+<script>
 /* ==========================================================================
    CS Ritual Clock — Web Component
    ========================================================================== */
@@ -812,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
-{% endjavascript %}
+</script>
 
 {% schema %}
 {
