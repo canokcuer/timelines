@@ -1,7 +1,8 @@
 {% comment %}
-  TheChill Transformation Journey — Swipeable Carousel.
+  TheChill Dönüşüm Yolculuğu — Hybrid Stepper + Carousel v2.
   Self-contained: all styles, scripts, and SVG illustrations inlined.
-  4 science-backed milestones in a touch-friendly scroll-snap carousel.
+  4 science-backed milestones with clickable stepper + swipeable carousel.
+  Each slide: 3 benefit bullets, 3 scientific references, CTA.
 {% endcomment %}
 
 <cs-transform-timeline>
@@ -31,6 +32,27 @@
         </p>
       {%- endif -%}
     </header>
+
+    {%- comment -%} ── Stepper Bar ─────────────────────────────────── {%- endcomment -%}
+    <div class="cs-transform__stepper cs-transform__reveal" role="tablist" aria-label="Dönüşüm adımları">
+      <div class="cs-transform__stepper-rail">
+        <div class="cs-transform__stepper-fill" data-cs-stepper-fill></div>
+      </div>
+      {%- for block in section.blocks -%}
+        <button
+          type="button"
+          class="cs-transform__step{% if forloop.first %} cs-transform__step--active{% endif %}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-label="Adım {{ forloop.index }}: {{ block.settings.time_label }}"
+          data-cs-step="{{ forloop.index0 }}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+        >
+          <span class="cs-transform__step-node">{{ forloop.index }}</span>
+          <span class="cs-transform__step-label">{{ block.settings.time_label }}</span>
+        </button>
+      {%- endfor -%}
+    </div>
 
     {%- comment -%} ── Carousel ────────────────────────────────────── {%- endcomment -%}
     <div
@@ -64,24 +86,24 @@
                   {%- when 'molecule' -%}
                     <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
                       <defs>
-                        <radialGradient id="ct-fglow-{{ section.id }}" cx="50%" cy="42%" r="38%">
+                        <radialGradient id="ct-fglow-{{ section.id }}-{{ forloop.index0 }}" cx="50%" cy="42%" r="38%">
                           <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.07"/>
                           <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
                         </radialGradient>
-                        <linearGradient id="ct-petal-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="ct-petal-{{ section.id }}-{{ forloop.index0 }}" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.08"/>
                           <stop offset="100%" stop-color="#0D4F47" stop-opacity="0.02"/>
                         </linearGradient>
                       </defs>
-                      <circle cx="120" cy="100" r="88" fill="url(#ct-fglow-{{ section.id }})"/>
+                      <circle cx="120" cy="100" r="88" fill="url(#ct-fglow-{{ section.id }}-{{ forloop.index0 }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
                       <g transform="translate(120,95)">
-                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55"/>
-                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(30)"/>
-                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(60)"/>
-                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" transform="rotate(90)"/>
-                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(120)"/>
-                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(150)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }}-{{ forloop.index0 }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }}-{{ forloop.index0 }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(30)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }}-{{ forloop.index0 }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(60)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }}-{{ forloop.index0 }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" transform="rotate(90)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }}-{{ forloop.index0 }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(120)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }}-{{ forloop.index0 }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(150)"/>
                         <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18"/>
                         <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18" transform="rotate(60)"/>
                         <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18" transform="rotate(120)"/>
@@ -113,55 +135,84 @@
                       <circle cx="65" cy="190" r="1" fill="#0D4F47" opacity="0.06"/>
                     </svg>
 
-                  {%- when 'wave' -%}
+                  {%- when 'neuron' -%}
                     <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
                       <defs>
-                        <linearGradient id="ct-ngrd-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.06"/>
-                          <stop offset="60%" stop-color="#0D4F47" stop-opacity="0.02"/>
+                        <radialGradient id="ct-nglow-{{ section.id }}-{{ forloop.index0 }}" cx="50%" cy="45%" r="40%">
+                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.07"/>
                           <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
-                        </linearGradient>
-                        <linearGradient id="ct-wgrd-{{ section.id }}" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stop-color="#0D4F47"/>
-                          <stop offset="100%" stop-color="#C4973B"/>
-                        </linearGradient>
+                        </radialGradient>
                       </defs>
-                      <circle cx="120" cy="120" r="110" fill="url(#ct-ngrd-{{ section.id }})"/>
+                      <!-- Background -->
+                      <circle cx="120" cy="115" r="90" fill="url(#ct-nglow-{{ section.id }}-{{ forloop.index0 }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
-                      <path d="M125 28 A28 28 0 1 0 125 84 A20 20 0 1 1 125 28Z" stroke="#C4973B" stroke-width="1.2" opacity="0.5" fill="#C4973B" fill-opacity="0.06"/>
-                      <circle cx="112" cy="50" r="3" fill="#C4973B" opacity="0.07"/>
-                      <circle cx="108" cy="63" r="2" fill="#C4973B" opacity="0.05"/>
-                      <path d="M70 33 L72 38 L77 40 L72 42 L70 47 L68 42 L63 40 L68 38Z" fill="#C4973B" opacity="0.28"/>
-                      <path d="M170 53 L171.5 57 L175.5 58.5 L171.5 60 L170 64 L168.5 60 L164.5 58.5 L168.5 57Z" fill="#C4973B" opacity="0.22"/>
-                      <circle cx="55" cy="48" r="1.2" fill="#C4973B" opacity="0.22"/>
-                      <circle cx="185" cy="36" r="1" fill="#C4973B" opacity="0.18"/>
-                      <circle cx="90" cy="23" r="0.8" fill="#C4973B" opacity="0.16"/>
-                      <circle cx="155" cy="26" r="1" fill="#C4973B" opacity="0.2"/>
-                      <circle cx="200" cy="63" r="0.8" fill="#C4973B" opacity="0.14"/>
-                      <circle cx="42" cy="73" r="1" fill="#C4973B" opacity="0.16"/>
-                      <path d="M40 85 Q65 80,90 85 Q110 82,130 86" stroke="#0D4F47" stroke-width="0.6" opacity="0.09" fill="none"/>
-                      <path d="M100 90 Q130 85,160 90 Q180 87,200 91" stroke="#0D4F47" stroke-width="0.5" opacity="0.06" fill="none"/>
-                      <line x1="20" y1="105" x2="220" y2="105" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
-                      <path d="M15 120 Q40 105,65 120 Q90 135,115 120 Q140 105,165 120 Q190 135,215 120" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1.5" opacity="0.5" fill="none"/>
-                      <path d="M15 140 Q45 128,75 140 Q105 152,135 140 Q165 128,195 140 Q215 148,225 143" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1.3" opacity="0.32" fill="none"/>
-                      <path d="M15 158 Q50 149,85 158 Q120 167,155 158 Q190 149,225 158" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1" opacity="0.22" fill="none"/>
-                      <path d="M15 174 Q55 168,95 174 Q135 180,175 174 Q205 170,225 173" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="0.8" opacity="0.13" fill="none"/>
-                      <text x="150" y="42" font-family="var(--cs-font-family)" font-size="14" font-weight="300" fill="#C4973B" opacity="0.18">z</text>
-                      <text x="163" y="32" font-family="var(--cs-font-family)" font-size="10" font-weight="300" fill="#C4973B" opacity="0.13">z</text>
-                      <text x="173" y="24" font-family="var(--cs-font-family)" font-size="7" font-weight="300" fill="#C4973B" opacity="0.09">z</text>
-                      <circle cx="45" cy="180" r="1.5" fill="#0D4F47" opacity="0.07"/>
-                      <circle cx="195" cy="170" r="1.2" fill="#C4973B" opacity="0.09"/>
+                      <!-- Neuron soma (cell body) -->
+                      <ellipse cx="120" cy="105" rx="28" ry="24" stroke="#0D4F47" stroke-width="1.4" opacity="0.45" fill="#0D4F47" fill-opacity="0.03"/>
+                      <circle cx="120" cy="105" r="10" stroke="#C4973B" stroke-width="1" opacity="0.35" fill="#C4973B" fill-opacity="0.08"/>
+                      <circle cx="120" cy="105" r="4" fill="#C4973B" opacity="0.25"/>
+                      <!-- Dendrites (upper branches) -->
+                      <path d="M108 85 Q95 65,80 50" stroke="#0D4F47" stroke-width="1.1" opacity="0.35" fill="none"/>
+                      <path d="M80 50 Q72 40,65 32" stroke="#0D4F47" stroke-width="0.7" opacity="0.25" fill="none"/>
+                      <path d="M80 50 Q85 38,82 28" stroke="#0D4F47" stroke-width="0.7" opacity="0.22" fill="none"/>
+                      <path d="M115 83 Q110 62,108 42" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
+                      <path d="M108 42 Q106 30,100 22" stroke="#0D4F47" stroke-width="0.6" opacity="0.2" fill="none"/>
+                      <path d="M108 42 Q112 32,118 25" stroke="#0D4F47" stroke-width="0.6" opacity="0.2" fill="none"/>
+                      <path d="M132 85 Q145 65,160 50" stroke="#0D4F47" stroke-width="1.1" opacity="0.35" fill="none"/>
+                      <path d="M160 50 Q168 40,175 32" stroke="#0D4F47" stroke-width="0.7" opacity="0.25" fill="none"/>
+                      <path d="M160 50 Q155 38,158 28" stroke="#0D4F47" stroke-width="0.7" opacity="0.22" fill="none"/>
+                      <path d="M125 83 Q130 62,132 42" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
+                      <path d="M132 42 Q134 30,140 22" stroke="#0D4F47" stroke-width="0.6" opacity="0.2" fill="none"/>
+                      <!-- Axon (downward) -->
+                      <path d="M120 129 L120 195" stroke="#0D4F47" stroke-width="1.5" opacity="0.38" fill="none"/>
+                      <!-- Myelin sheath segments -->
+                      <rect x="114" y="138" width="12" height="14" rx="4" stroke="#108474" stroke-width="0.8" opacity="0.22" fill="#108474" fill-opacity="0.04"/>
+                      <rect x="114" y="158" width="12" height="14" rx="4" stroke="#108474" stroke-width="0.8" opacity="0.22" fill="#108474" fill-opacity="0.04"/>
+                      <rect x="114" y="178" width="12" height="14" rx="4" stroke="#108474" stroke-width="0.8" opacity="0.22" fill="#108474" fill-opacity="0.04"/>
+                      <!-- Axon terminals -->
+                      <path d="M120 195 Q112 202,105 210" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
+                      <path d="M120 195 Q120 205,120 212" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
+                      <path d="M120 195 Q128 202,135 210" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
+                      <circle cx="105" cy="212" r="3.5" fill="#C4973B" opacity="0.2" stroke="#C4973B" stroke-width="0.7"/>
+                      <circle cx="120" cy="214" r="3.5" fill="#C4973B" opacity="0.2" stroke="#C4973B" stroke-width="0.7"/>
+                      <circle cx="135" cy="212" r="3.5" fill="#C4973B" opacity="0.2" stroke="#C4973B" stroke-width="0.7"/>
+                      <!-- Neurotransmitter droplets in synaptic cleft -->
+                      <circle cx="100" cy="220" r="1.5" fill="#C4973B" opacity="0.4"/>
+                      <circle cx="107" cy="222" r="1.2" fill="#C4973B" opacity="0.35"/>
+                      <circle cx="117" cy="221" r="1.4" fill="#C4973B" opacity="0.38"/>
+                      <circle cx="123" cy="223" r="1.1" fill="#C4973B" opacity="0.32"/>
+                      <circle cx="132" cy="220" r="1.3" fill="#C4973B" opacity="0.36"/>
+                      <circle cx="139" cy="222" r="1.2" fill="#C4973B" opacity="0.3"/>
+                      <!-- B6 hexagonal molecule symbol -->
+                      <g transform="translate(52,140)" opacity="0.55">
+                        <polygon points="0,-13 11,-6.5 11,6.5 0,13 -11,6.5 -11,-6.5" stroke="#C4973B" stroke-width="1" fill="#C4973B" fill-opacity="0.04"/>
+                        <circle r="3" fill="#C4973B" opacity="0.18"/>
+                        <text x="-4" y="3" font-family="var(--cs-font-family)" font-size="6" fill="#C4973B" opacity="0.4" font-weight="600">B6</text>
+                      </g>
+                      <!-- B12 hexagonal molecule symbol -->
+                      <g transform="translate(188,140)" opacity="0.55">
+                        <rect x="-12" y="-12" width="24" height="24" rx="3" stroke="#C4973B" stroke-width="0.8" fill="#C4973B" fill-opacity="0.03" transform="rotate(45)"/>
+                        <circle r="5" stroke="#C4973B" stroke-width="0.7" opacity="0.28" fill="#C4973B" fill-opacity="0.08"/>
+                        <text x="-6" y="3" font-family="var(--cs-font-family)" font-size="5.5" fill="#C4973B" opacity="0.38" font-weight="600">B12</text>
+                      </g>
+                      <!-- Signal particles -->
+                      <circle cx="70" cy="70" r="1.5" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="170" cy="70" r="1.5" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="45" cy="105" r="1.2" fill="#C4973B" opacity="0.12"/>
+                      <circle cx="195" cy="105" r="1.2" fill="#C4973B" opacity="0.12"/>
+                      <!-- Dashed connection lines (signal flow) -->
+                      <path d="M65 140 Q85 120,108 105" stroke="#C4973B" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.18" fill="none"/>
+                      <path d="M175 140 Q155 120,132 105" stroke="#C4973B" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.18" fill="none"/>
                     </svg>
 
                   {%- when 'brain' -%}
                     <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
                       <defs>
-                        <radialGradient id="ct-bglow-{{ section.id }}" cx="50%" cy="38%" r="36%">
+                        <radialGradient id="ct-bglow-{{ section.id }}-{{ forloop.index0 }}" cx="50%" cy="38%" r="36%">
                           <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.06"/>
                           <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
                         </radialGradient>
                       </defs>
-                      <circle cx="120" cy="100" r="88" fill="url(#ct-bglow-{{ section.id }})"/>
+                      <circle cx="120" cy="100" r="88" fill="url(#ct-bglow-{{ section.id }}-{{ forloop.index0 }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
                       <path d="M120 30 C95 30,75 42,68 58 C62 72,58 85,60 100 C62 110,68 118,72 125 C65 132,60 142,63 152 C66 162,78 168,90 165 C98 163,108 158,115 150 L120 145" stroke="#0D4F47" stroke-width="1.3" opacity="0.42" fill="#0D4F47" fill-opacity="0.02"/>
                       <path d="M120 30 C145 30,165 42,172 58 C178 72,182 85,180 100 C178 110,172 118,168 125 C175 132,180 142,177 152 C174 162,162 168,150 165 C142 163,132 158,125 150 L120 145" stroke="#0D4F47" stroke-width="1.3" opacity="0.42" fill="#0D4F47" fill-opacity="0.02"/>
@@ -204,12 +255,12 @@
                   {%- when 'harmony' -%}
                     <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
                       <defs>
-                        <radialGradient id="ct-hglow-{{ section.id }}" cx="50%" cy="50%" r="42%">
+                        <radialGradient id="ct-hglow-{{ section.id }}-{{ forloop.index0 }}" cx="50%" cy="50%" r="42%">
                           <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.05"/>
                           <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
                         </radialGradient>
                       </defs>
-                      <circle cx="120" cy="120" r="105" fill="url(#ct-hglow-{{ section.id }})"/>
+                      <circle cx="120" cy="120" r="105" fill="url(#ct-hglow-{{ section.id }}-{{ forloop.index0 }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
                       <circle cx="120" cy="120" r="98" stroke="#0D4F47" stroke-width="0.35" opacity="0.05"/>
                       <circle cx="120" cy="120" r="55" stroke="#0D4F47" stroke-width="0.6" opacity="0.08" stroke-dasharray="4 4"/>
@@ -281,7 +332,37 @@
                 {{ block.settings.headline }}
               </h3>
 
-              {%- comment -%} Ingredient Pills {%- endcomment -%}
+              {%- comment -%} Benefit Bullets with Ingredient Pills {%- endcomment -%}
+              {%- if block.settings.benefit_1 != blank or block.settings.benefit_2 != blank or block.settings.benefit_3 != blank -%}
+                <ul class="cs-transform__benefits" aria-label="Faydalar">
+                  {%- if block.settings.benefit_1 != blank -%}
+                    <li class="cs-transform__benefit">
+                      <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
+                      {%- if block.settings.benefit_pill_1 != blank -%}
+                        <span class="cs-transform__pill cs-transform__pill--inline">{{ block.settings.benefit_pill_1 }}</span>
+                      {%- endif -%}
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.benefit_2 != blank -%}
+                    <li class="cs-transform__benefit">
+                      <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
+                      {%- if block.settings.benefit_pill_2 != blank -%}
+                        <span class="cs-transform__pill cs-transform__pill--inline">{{ block.settings.benefit_pill_2 }}</span>
+                      {%- endif -%}
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.benefit_3 != blank -%}
+                    <li class="cs-transform__benefit">
+                      <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
+                      {%- if block.settings.benefit_pill_3 != blank -%}
+                        <span class="cs-transform__pill cs-transform__pill--inline">{{ block.settings.benefit_pill_3 }}</span>
+                      {%- endif -%}
+                    </li>
+                  {%- endif -%}
+                </ul>
+              {%- endif -%}
+
+              {%- comment -%} Ingredient Pills (legacy / summary) {%- endcomment -%}
               {%- if block.settings.ingredient_pills != blank -%}
                 <div class="cs-transform__pills" aria-label="Bileşenler">
                   {%- assign pills = block.settings.ingredient_pills | split: ',' -%}
@@ -301,24 +382,42 @@
                 </p>
               {%- endif -%}
 
-              {%- comment -%} Science Callout {%- endcomment -%}
-              {%- if block.settings.science_text != blank -%}
-                <div class="cs-transform__science">
-                  <span class="cs-transform__science-icon" aria-hidden="true">
+              {%- comment -%} Science References (3 per slide) {%- endcomment -%}
+              {%- if block.settings.science_ref_1 != blank or block.settings.science_ref_2 != blank or block.settings.science_ref_3 != blank -%}
+                <div class="cs-transform__science-list">
+                  <span class="cs-transform__science-list-icon" aria-hidden="true">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path d="M6 2v4L4 9v1h8V9l-2-3V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                       <path d="M4 13h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
                       <circle cx="8" cy="9" r="1" fill="currentColor"/>
                     </svg>
                   </span>
-                  <div>
-                    <p class="cs-transform__science-text">{{ block.settings.science_text }}</p>
-                    {%- if block.settings.science_pmid != blank -%}
-                      <cite class="cs-transform__science-ref">
-                        PMID: {{ block.settings.science_pmid }}
-                      </cite>
+                  <ul class="cs-transform__science-refs">
+                    {%- if block.settings.science_ref_1 != blank -%}
+                      <li class="cs-transform__science-ref-item">
+                        <p class="cs-transform__science-text">{{ block.settings.science_ref_1 }}</p>
+                        {%- if block.settings.science_pmid_1 != blank -%}
+                          <cite class="cs-transform__science-ref">PMID: {{ block.settings.science_pmid_1 }}</cite>
+                        {%- endif -%}
+                      </li>
                     {%- endif -%}
-                  </div>
+                    {%- if block.settings.science_ref_2 != blank -%}
+                      <li class="cs-transform__science-ref-item">
+                        <p class="cs-transform__science-text">{{ block.settings.science_ref_2 }}</p>
+                        {%- if block.settings.science_pmid_2 != blank -%}
+                          <cite class="cs-transform__science-ref">PMID: {{ block.settings.science_pmid_2 }}</cite>
+                        {%- endif -%}
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.science_ref_3 != blank -%}
+                      <li class="cs-transform__science-ref-item">
+                        <p class="cs-transform__science-text">{{ block.settings.science_ref_3 }}</p>
+                        {%- if block.settings.science_pmid_3 != blank -%}
+                          <cite class="cs-transform__science-ref">PMID: {{ block.settings.science_pmid_3 }}</cite>
+                        {%- endif -%}
+                      </li>
+                    {%- endif -%}
+                  </ul>
                 </div>
               {%- endif -%}
 
@@ -383,16 +482,13 @@
           </svg>
         </button>
 
-        <div class="cs-transform__dots" role="tablist" aria-label="Slayt seçimi">
+        <div class="cs-transform__dots" aria-label="Slayt seçimi">
           {%- for block in section.blocks -%}
             <button
               type="button"
               class="cs-transform__dot{% if forloop.first %} cs-transform__dot--active{% endif %}"
-              role="tab"
-              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
               aria-label="Slayt {{ forloop.index }}: {{ block.settings.time_label }}"
               data-cs-dot="{{ forloop.index0 }}"
-              tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
             ></button>
           {%- endfor -%}
         </div>
@@ -582,7 +678,7 @@
 }
 
 /* ============================================================================
-   CS Transform — Swipeable Carousel
+   CS Transform — Hybrid Stepper + Carousel
    ============================================================================ */
 
 .cs-transform {
@@ -611,6 +707,122 @@
 .cs-transform__kicker { color: var(--ct-deep-teal); }
 .cs-transform__title { color: var(--ct-text-primary); }
 .cs-transform__subtitle { color: var(--ct-text-secondary); }
+
+/* ============================================================================
+   Stepper Bar
+   ============================================================================ */
+.cs-transform__stepper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 600px;
+  margin: 0 auto var(--cs-space-xl);
+  padding-inline: var(--cs-space-md);
+}
+
+.cs-transform__stepper-rail {
+  position: absolute;
+  top: 16px;
+  left: calc(var(--cs-space-md) + 16px);
+  right: calc(var(--cs-space-md) + 16px);
+  height: 3px;
+  background: rgba(13, 79, 71, 0.12);
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.cs-transform__stepper-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--ct-warm-gold);
+  border-radius: 2px;
+  transition: width var(--cs-duration-base) var(--cs-ease-out);
+}
+
+.cs-transform__step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cs-transform__step-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--cs-radius-full);
+  border: 2.5px solid rgba(13, 79, 71, 0.2);
+  background: var(--ct-card-bg);
+  font-family: var(--cs-font-family);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ct-text-secondary);
+  transition:
+    border-color var(--cs-duration-fast) var(--cs-ease-out),
+    background var(--cs-duration-fast) var(--cs-ease-out),
+    color var(--cs-duration-fast) var(--cs-ease-out),
+    transform var(--cs-duration-fast) var(--cs-ease-out),
+    box-shadow var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-transform__step-label {
+  font-family: var(--cs-font-family);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ct-text-secondary);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  transition: color var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+/* Active step */
+.cs-transform__step--active .cs-transform__step-node {
+  border-color: var(--ct-warm-gold);
+  background: var(--ct-warm-gold);
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(196, 151, 59, 0.3);
+}
+
+.cs-transform__step--active .cs-transform__step-label {
+  color: var(--ct-deep-teal);
+  font-weight: 700;
+}
+
+/* Completed step */
+.cs-transform__step--completed .cs-transform__step-node {
+  border-color: var(--ct-soft-teal);
+  background: var(--ct-soft-teal);
+  color: #ffffff;
+}
+
+.cs-transform__step--completed .cs-transform__step-label {
+  color: var(--ct-soft-teal);
+}
+
+/* Hover (non-active, non-completed) */
+.cs-transform__step:hover:not(.cs-transform__step--active):not(.cs-transform__step--completed) .cs-transform__step-node {
+  border-color: var(--ct-deep-teal);
+  color: var(--ct-deep-teal);
+}
+
+.cs-transform__step:focus-visible .cs-transform__step-node {
+  outline: 2px solid var(--ct-deep-teal);
+  outline-offset: 2px;
+}
 
 /* --------------------------------------------------------------------------
    Carousel Wrapper
@@ -683,7 +895,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Illustration Frame (carousel version)
+   Illustration Frame
    -------------------------------------------------------------------------- */
 .cs-transform__illust-frame {
   width: 200px;
@@ -729,6 +941,43 @@
 }
 
 /* --------------------------------------------------------------------------
+   Benefit Bullets
+   -------------------------------------------------------------------------- */
+.cs-transform__benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--cs-space-md);
+  text-align: left;
+  width: 100%;
+  max-width: 520px;
+}
+
+.cs-transform__benefit {
+  position: relative;
+  padding-left: 1.25em;
+  margin-block-end: var(--cs-space-sm);
+  font-size: var(--cs-font-size-sm);
+  color: var(--ct-text-secondary);
+  line-height: 1.55;
+}
+
+.cs-transform__benefit::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--cs-radius-full);
+  background: var(--ct-soft-teal);
+  opacity: 0.6;
+}
+
+.cs-transform__benefit-text {
+  display: inline;
+}
+
+/* --------------------------------------------------------------------------
    Ingredient Pills
    -------------------------------------------------------------------------- */
 .cs-transform__pills {
@@ -754,6 +1003,13 @@
   text-transform: uppercase;
 }
 
+.cs-transform__pill--inline {
+  margin-left: 0.4em;
+  font-size: 10px;
+  padding: 0.2em 0.6em;
+  vertical-align: middle;
+}
+
 /* --------------------------------------------------------------------------
    Storytelling Paragraph
    -------------------------------------------------------------------------- */
@@ -766,9 +1022,9 @@
 }
 
 /* --------------------------------------------------------------------------
-   Science Callout
+   Science References (3 per slide — bullet list)
    -------------------------------------------------------------------------- */
-.cs-transform__science {
+.cs-transform__science-list {
   display: flex;
   align-items: flex-start;
   gap: var(--cs-space-sm);
@@ -779,16 +1035,36 @@
   margin-block-end: var(--cs-space-lg);
   text-align: left;
   max-width: 520px;
+  width: 100%;
 }
 
-.cs-transform__science-icon {
+.cs-transform__science-list-icon {
   flex-shrink: 0;
   color: var(--ct-soft-teal);
   margin-top: 2px;
 }
 
+.cs-transform__science-refs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-sm);
+}
+
+.cs-transform__science-ref-item {
+  padding-bottom: var(--cs-space-xs);
+  border-bottom: 1px solid rgba(16, 132, 116, 0.1);
+}
+
+.cs-transform__science-ref-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .cs-transform__science-text {
-  font-size: var(--cs-font-size-sm);
+  font-size: var(--cs-font-size-xs);
   font-style: italic;
   color: var(--ct-text-secondary);
   line-height: 1.5;
@@ -799,7 +1075,7 @@
   display: block;
   font-size: 10px;
   color: var(--ct-soft-teal);
-  margin-block-start: 6px;
+  margin-block-start: 4px;
   font-style: normal;
   opacity: 0.8;
   font-weight: 600;
@@ -959,12 +1235,34 @@
     font-size: var(--cs-font-size-xs);
   }
 
-  .cs-transform__science {
+  .cs-transform__science-list {
     padding: var(--cs-space-sm);
   }
 
   .cs-transform__science-text {
-    font-size: var(--cs-font-size-xs);
+    font-size: 11px;
+  }
+
+  /* Stepper: smaller on mobile */
+  .cs-transform__stepper {
+    padding-inline: var(--cs-space-xs);
+    max-width: 100%;
+  }
+
+  .cs-transform__step-node {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .cs-transform__step-label {
+    font-size: 9px;
+  }
+
+  .cs-transform__stepper-rail {
+    top: 14px;
+    left: calc(var(--cs-space-xs) + 14px);
+    right: calc(var(--cs-space-xs) + 14px);
   }
 }
 
@@ -976,7 +1274,10 @@
   .cs-transform__cta,
   .cs-transform__arrow,
   .cs-transform__dot,
-  .cs-transform__illust-frame {
+  .cs-transform__illust-frame,
+  .cs-transform__step-node,
+  .cs-transform__step-label,
+  .cs-transform__stepper-fill {
     transition: none !important;
     animation: none !important;
   }
@@ -1033,7 +1334,7 @@ function csTimelineReveal(selector, options = {}) {
 }
 
 /* ============================================================================
-   CS Transform Timeline — Swipeable Carousel Web Component
+   CS Transform Timeline — Hybrid Stepper + Carousel Web Component
    ============================================================================ */
 
 class CsTransformTimeline extends HTMLElement {
@@ -1050,12 +1351,15 @@ class CsTransformTimeline extends HTMLElement {
     this._track = this.querySelector('[data-cs-track]');
     this._slides = [...this.querySelectorAll('[data-cs-slide]')];
     this._dots = [...this.querySelectorAll('[data-cs-dot]')];
+    this._steps = [...this.querySelectorAll('[data-cs-step]')];
+    this._stepperFill = this.querySelector('[data-cs-stepper-fill]');
     this._prevBtn = this.querySelector('[data-cs-prev]');
     this._nextBtn = this.querySelector('[data-cs-next]');
 
     if (!this._track || !this._slides.length) return;
 
     this._initReveal();
+    this._initStepper();
     this._initCarousel();
     this._initCTA();
   }
@@ -1078,6 +1382,17 @@ class CsTransformTimeline extends HTMLElement {
       '.cs-transform .cs-transform__reveal',
       { threshold: 0.2, rootMargin: '0px 0px -40px 0px', once: true }
     );
+  }
+
+  /* ── Stepper ─────────────────────────────────────────────────────────── */
+
+  _initStepper() {
+    this._steps.forEach((step) => {
+      step.addEventListener('click', () => {
+        const idx = parseInt(step.dataset.csStep, 10);
+        this._goToSlide(idx);
+      });
+    });
   }
 
   /* ── Carousel ───────────────────────────────────────────────────────── */
@@ -1137,23 +1452,39 @@ class CsTransformTimeline extends HTMLElement {
   _updateIndicators(index) {
     const total = this._slides.length;
 
+    /* Dots */
     this._dots.forEach((dot, i) => {
-      const isActive = i === index;
-      dot.classList.toggle('cs-transform__dot--active', isActive);
-      dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      dot.setAttribute('tabindex', isActive ? '0' : '-1');
+      dot.classList.toggle('cs-transform__dot--active', i === index);
     });
 
+    /* Arrows */
     if (this._prevBtn) {
       this._prevBtn.disabled = index === 0;
     }
     if (this._nextBtn) {
       this._nextBtn.disabled = index === total - 1;
     }
+
+    /* Stepper */
+    this._steps.forEach((step, i) => {
+      const isActive = i === index;
+      const isCompleted = i < index;
+      step.classList.toggle('cs-transform__step--active', isActive);
+      step.classList.toggle('cs-transform__step--completed', isCompleted);
+      step.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      step.setAttribute('tabindex', isActive ? '0' : '-1');
+    });
+
+    /* Stepper fill bar */
+    if (this._stepperFill && total > 1) {
+      const pct = (index / (total - 1)) * 100;
+      this._stepperFill.style.width = pct + '%';
+    }
   }
 
   _onKeydown(e) {
-    if (e.target.closest('[data-cs-dot]')) {
+    /* Stepper keyboard */
+    if (e.target.closest('[data-cs-step]')) {
       let next = this._activeIndex;
       if (e.key === 'ArrowRight') {
         next = Math.min(this._activeIndex + 1, this._slides.length - 1);
@@ -1171,10 +1502,28 @@ class CsTransformTimeline extends HTMLElement {
         return;
       }
       this._goToSlide(next);
+      this._steps[next].focus();
+      return;
+    }
+
+    /* Dot keyboard */
+    if (e.target.closest('[data-cs-dot]')) {
+      let next = this._activeIndex;
+      if (e.key === 'ArrowRight') {
+        next = Math.min(this._activeIndex + 1, this._slides.length - 1);
+        e.preventDefault();
+      } else if (e.key === 'ArrowLeft') {
+        next = Math.max(this._activeIndex - 1, 0);
+        e.preventDefault();
+      } else {
+        return;
+      }
+      this._goToSlide(next);
       this._dots[next].focus();
       return;
     }
 
+    /* Carousel region keyboard */
     if (e.target.closest('.cs-transform__carousel')) {
       if (e.key === 'ArrowRight') {
         this._onNext();
@@ -1205,7 +1554,6 @@ class CsTransformTimeline extends HTMLElement {
     if (!variantId) return;
 
     btn.disabled = true;
-    const originalText = btn.textContent;
 
     try {
       const response = await fetch('/cart/add.js', {
@@ -1279,7 +1627,7 @@ if (!customElements.get('cs-transform-timeline')) {
           "type": "text",
           "id": "headline",
           "label": "Başlık",
-          "default": "İlk Kapsülden Hissedilen Fark"
+          "default": "Doğal Sakinliğin İlk Sinyali"
         },
         {
           "type": "text",
@@ -1289,21 +1637,81 @@ if (!customElements.get('cs-transform-timeline')) {
         },
         {
           "type": "textarea",
-          "id": "storytelling",
-          "label": "Hikaye Anlatımı",
-          "default": "Papatya'daki apigenin, beyindeki GABA-A reseptörlerine bağlanarak doğal bir sakinlik sinyali göndermeyi destekler."
-        },
-        {
-          "type": "textarea",
-          "id": "science_text",
-          "label": "Bilimsel Referans",
-          "default": "Amsterdam et al. (2009) — Papatya ekstresi (1.2% apigenin), anksiyete skorlarında anlamlı iyileşmeyi desteklediği gözlenmiştir."
+          "id": "benefit_1",
+          "label": "Fayda 1",
+          "default": "Apigenin, GABA-A reseptörlerine bağlanarak sakinleştirici bir sinyal başlatmayı destekler"
         },
         {
           "type": "text",
-          "id": "science_pmid",
-          "label": "PubMed PMID",
-          "default": "19593179"
+          "id": "benefit_pill_1",
+          "label": "Fayda 1 Bileşeni",
+          "default": "Papatya"
+        },
+        {
+          "type": "textarea",
+          "id": "benefit_2",
+          "label": "Fayda 2",
+          "default": "GABA transaminaz inhibisyonu yoluyla sinir sisteminin rahatlamasına katkıda bulunabilir"
+        },
+        {
+          "type": "text",
+          "id": "benefit_pill_2",
+          "label": "Fayda 2 Bileşeni",
+          "default": "Melisa"
+        },
+        {
+          "type": "textarea",
+          "id": "benefit_3",
+          "label": "Fayda 3",
+          "default": "Serotonin ve GABA sentezinde kofaktör olarak bu süreci destekler"
+        },
+        {
+          "type": "text",
+          "id": "benefit_pill_3",
+          "label": "Fayda 3 Bileşeni",
+          "default": "B6"
+        },
+        {
+          "type": "textarea",
+          "id": "storytelling",
+          "label": "Hikaye Anlatımı",
+          "default": ""
+        },
+        {
+          "type": "textarea",
+          "id": "science_ref_1",
+          "label": "Bilimsel Referans 1",
+          "default": "Amsterdam et al. (2012) — Papatya ekstresi, anksiyöz ve depresif bireylerde anksiyolitik etkiye ek olarak anlamlı antidepresan aktivite göstermiştir."
+        },
+        {
+          "type": "text",
+          "id": "science_pmid_1",
+          "label": "PMID 1",
+          "default": "22894890"
+        },
+        {
+          "type": "textarea",
+          "id": "science_ref_2",
+          "label": "Bilimsel Referans 2",
+          "default": "Ranjbar et al. (2023) — 400mg/gün Melisa fosfolipid ekstresi, 3 haftada anksiyete, stres ve depresif ruh halinde anlamlı iyileşme sağlamıştır."
+        },
+        {
+          "type": "text",
+          "id": "science_pmid_2",
+          "label": "PMID 2",
+          "default": "37927585"
+        },
+        {
+          "type": "textarea",
+          "id": "science_ref_3",
+          "label": "Bilimsel Referans 3",
+          "default": "Field et al. (2022) — 100mg/gün B6, GABAerjik nöral inhibisyonu güçlendirerek anksiyetede anlamlı azalma sağlamıştır."
+        },
+        {
+          "type": "text",
+          "id": "science_pmid_3",
+          "label": "PMID 3",
+          "default": "35851507"
         },
         {
           "type": "select",
@@ -1312,7 +1720,7 @@ if (!customElements.get('cs-transform-timeline')) {
           "default": "molecule",
           "options": [
             { "value": "molecule", "label": "Molekül (Papatya + Apigenin)" },
-            { "value": "wave", "label": "Uyku Dalgası" },
+            { "value": "neuron", "label": "Nöron (Sinir Sistemi)" },
             { "value": "brain", "label": "Beyin Dengesi" },
             { "value": "harmony", "label": "Botanik Harmoni" }
           ]
@@ -1334,11 +1742,21 @@ if (!customElements.get('cs-transform-timeline')) {
           "type": "milestone",
           "settings": {
             "time_label": "1. GÜN",
-            "headline": "İlk Kapsülden Hissedilen Fark",
+            "headline": "Doğal Sakinliğin İlk Sinyali",
             "ingredient_pills": "Papatya, Melisa, B6",
-            "storytelling": "Papatya'daki apigenin, beyindeki GABA-A reseptörlerine bağlanarak doğal bir sakinlik sinyali göndermeyi destekler. Melisa, GABA metabolizmasını dengelemeye katkıda bulunurken, B6 vitamini serotonin ve GABA üretimini destekler. İlk dozdan itibaren bu üçlü sinerji, gerginliğin yumuşamasına katkıda bulunabilir.",
-            "science_text": "Amsterdam et al. (2009) — Papatya ekstresi (1.2% apigenin), anksiyete skorlarında anlamlı iyileşmeyi desteklediği gözlenmiştir.",
-            "science_pmid": "19593179",
+            "benefit_1": "Apigenin, GABA-A reseptörlerine bağlanarak sakinleştirici bir sinyal başlatmayı destekler",
+            "benefit_pill_1": "Papatya",
+            "benefit_2": "GABA transaminaz inhibisyonu yoluyla sinir sisteminin rahatlamasına katkıda bulunabilir",
+            "benefit_pill_2": "Melisa",
+            "benefit_3": "Serotonin ve GABA sentezinde kofaktör olarak bu süreci destekler",
+            "benefit_pill_3": "B6",
+            "storytelling": "",
+            "science_ref_1": "Amsterdam et al. (2012) — Papatya ekstresi, anksiyöz ve depresif bireylerde anksiyolitik etkiye ek olarak anlamlı antidepresan aktivite göstermiştir.",
+            "science_pmid_1": "22894890",
+            "science_ref_2": "Ranjbar et al. (2023) — 400mg/gün Melisa fosfolipid ekstresi, 3 haftada anksiyete, stres ve depresif ruh halinde anlamlı iyileşme sağlamıştır.",
+            "science_pmid_2": "37927585",
+            "science_ref_3": "Field et al. (2022) — 100mg/gün B6, GABAerjik nöral inhibisyonu güçlendirerek anksiyetede anlamlı azalma sağlamıştır.",
+            "science_pmid_3": "35851507",
             "illustration": "molecule",
             "cart_quantity": 1
           }
@@ -1347,12 +1765,22 @@ if (!customElements.get('cs-transform-timeline')) {
           "type": "milestone",
           "settings": {
             "time_label": "1. HAFTA",
-            "headline": "Uyku Kaliteniz Dönüşmeye Başlıyor",
-            "ingredient_pills": "Passiflora, Rhodiola, B12",
-            "storytelling": "Passiflora, GABA geri alımını dengelemeye katkıda bulunarak uyku kalitesini destekler. Rhodiola, adaptojenik özellikleriyle vücudun stres yanıtını düzenlemeye başlarken, B12 sinir sistemi fonksiyonlarını destekler. Bir hafta içinde uyku düzeninizin iyileşmeye başladığını fark edebilirsiniz.",
-            "science_text": "Ngan & Conduit (2011) — 7 günlük passiflora kullanımı, uyku kalitesinde anlamlı iyileşmeyi desteklediği gözlenmiştir.",
-            "science_pmid": "21294203",
-            "illustration": "wave",
+            "headline": "Sinir Sisteminiz Dengelenmeye Başlıyor",
+            "ingredient_pills": "B6, B12, Melisa",
+            "benefit_1": "B6, GABA ve serotonin üretim yollarını destekleyerek nörotransmiter uyumuna katkıda bulunabilir",
+            "benefit_pill_1": "B6",
+            "benefit_2": "B12, sinir hücrelerinin sağlıklı iletişimini destekleyerek iletim kalitesine katkıda bulunabilir",
+            "benefit_pill_2": "B12",
+            "benefit_3": "Rosmarinik asit içeriğiyle GABA metabolizmasının düzenlenmesine yardımcı olabilir",
+            "benefit_pill_3": "Melisa",
+            "storytelling": "",
+            "science_ref_1": "Jung & Kwon (2019) — Piridoksin (B6), hipokampüste GAD67 ekspresyonunu artırarak GABA sentezini desteklemiştir.",
+            "science_pmid_1": "31759410",
+            "science_ref_2": "Syed et al. (2013) — B12 takviyesi, depresyon tedavisinde yanıt oranını %69'dan %100'e çıkarmayı desteklemiştir.",
+            "science_pmid_2": "24339839",
+            "science_ref_3": "Cases et al. (2011) — 600mg/gün Melisa (Cyracos®), 15 günde anksiyete belirtilerinde %18 ve uykusuzlukta %42 azalma sağlamıştır.",
+            "science_pmid_3": "22207903",
+            "illustration": "neuron",
             "cart_quantity": 1
           }
         },
@@ -1360,11 +1788,21 @@ if (!customElements.get('cs-transform-timeline')) {
           "type": "milestone",
           "settings": {
             "time_label": "1. AY",
-            "headline": "Stres Yanıtınız Dengeleniyor",
-            "ingredient_pills": "Rhodiola, Passiflora, Melisa",
-            "storytelling": "Rhodiola'nın adaptojenik etkisi, HPA aksını düzenleyerek kortizol seviyelerinin dengelenmesini destekler. Passiflora'nın anksiyolitik özellikleri tam etkinliğine ulaşırken, Melisa anksiyete ve uykusuzluk belirtilerinin hafiflemesine katkıda bulunur. Bir ay sonunda strese karşı daha dayanıklı hissedebilirsiniz.",
-            "science_text": "Olsson et al. (2009) — Rhodiola rosea, stres altında kortizol yanıtını azaltmayı ve mental performansı desteklediği gözlenmiştir.",
-            "science_pmid": "19016404",
+            "headline": "Stres Yanıtınız Yumuşamaya Başlıyor",
+            "ingredient_pills": "Rhodiola, Passiflora, B6 + B12",
+            "benefit_1": "Adaptojenik özellikleriyle HPA eksen regülasyonuna katkıda bulunarak kortizol seviyelerini destekleyebilir",
+            "benefit_pill_1": "Rhodiola",
+            "benefit_2": "Anksiyolitik özellikleriyle günlük gerginliğin hafiflemesine yardımcı olabilir",
+            "benefit_pill_2": "Passiflora",
+            "benefit_3": "Kümülatif kullanımla B-vitamin kofaktörlerinin tam kapasiteye ulaşmasını destekler",
+            "benefit_pill_3": "B6 + B12",
+            "storytelling": "",
+            "science_ref_1": "Edwards et al. (2012) — 400mg/gün Rhodiola rosea, 4 haftada stres semptomlarında anlamlı iyileşme; 3. günden itibaren etki gözlenmiştir.",
+            "science_pmid_1": "22228617",
+            "science_ref_2": "Aslanargun et al. (2012) — Passiflora incarnata, anksiyeteyi psikomotor fonksiyonu bozmadan anlamlı ölçüde baskılamıştır.",
+            "science_pmid_2": "22048283",
+            "science_ref_3": "Calderón-Ospina & Nava-Mesa (2020) — B6 ve B12'nin sinir sistemindeki sinerjik etkileri: miyelin sentezi, nörotransmiter üretimi ve nöroprotektif mekanizmalar.",
+            "science_pmid_3": "31490017",
             "illustration": "brain",
             "cart_quantity": 1
           }
@@ -1373,11 +1811,21 @@ if (!customElements.get('cs-transform-timeline')) {
           "type": "milestone",
           "settings": {
             "time_label": "3. AY",
-            "headline": "Yeni Dengeniz: Sakin ve Dayanıklı",
+            "headline": "Yeni Haliniz: Sakin ve Dayanıklı",
             "ingredient_pills": "Rhodiola, Papatya, Passiflora, Melisa, B6, B12",
-            "storytelling": "Üç aylık düzenli kullanımla adaptojenik döngü tamamlanır. Rhodiola'nın tam adaptojenik etkisi, Papatya ve Passiflora'nın sinerjik sakinleştirici desteği, Melisa'nın denge katkısı ve B vitaminlerinin nörotransmiter desteği birlikte çalışarak yeni bir denge oluşturmayı destekler.",
-            "science_text": "Cases et al. (2011) — 15 günlük Melisa kullanımı, anksiyetede %18 ve uykusuzlukta %42 azalmayı desteklediği gözlenmiştir.",
-            "science_pmid": "22207903",
+            "benefit_1": "Uzun süreli kullanımla adaptojenik döngünün tamamlanmasına katkıda bulunabilir",
+            "benefit_pill_1": "Rhodiola",
+            "benefit_2": "Düzenli kullanımla sirkadiyen ritmin doğal işleyişini destekleyebilir",
+            "benefit_pill_2": "Passiflora",
+            "benefit_3": "6 bileşenin bir arada kullanımı, sinerjik etki ile kalıcı bir iyilik haline katkıda bulunabilir",
+            "benefit_pill_3": "Tam Formül",
+            "storytelling": "",
+            "science_ref_1": "Kasper & Dienel (2017) — 12 haftalık Rhodiola rosea (400mg/gün), 118 hastada ilk haftadan iyileşme, 12. haftada kalıcı semptom azalması.",
+            "science_pmid_1": "28367055",
+            "science_ref_2": "Mao et al. (2016) — Uzun süreli papatya tedavisi (1500mg/gün, 38 hafta), anksiyete bozukluğunda nüks oranını anlamlı ölçüde azaltmıştır.",
+            "science_pmid_2": "27912875",
+            "science_ref_3": "Keefe et al. (2018) — Papatya ekstresi, tükürük kortizol profilini normalize ederek sabah-akşam ritmine katkıda bulunmuştur.",
+            "science_pmid_3": "29080520",
             "illustration": "harmony",
             "cart_quantity": 3
           }
