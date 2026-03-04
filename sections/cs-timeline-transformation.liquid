@@ -1,114 +1,231 @@
 {% comment %}
-  Renders "Your Transformation Journey" results timeline section.
-  Self-contained: all styles, scripts, and CTA markup are inlined.
+  TheChill Transformation Journey — calming timeline section.
+  Self-contained: all styles, scripts, and illustrations are inlined.
+  4 science-backed milestones showing TheChill's progressive benefits.
 {% endcomment %}
 
-<cs-transformation-timeline>
+<cs-transform-timeline>
 <section
-  id="cs-transformation-{{ section.id }}"
-  class="cs-timeline cs-transformation"
-  aria-label="{{ section.settings.kicker | default: 'Donusum Sureci' }}"
-  data-cs-transformation
+  id="cs-transform-{{ section.id }}"
+  class="cs-timeline cs-transform"
+  aria-label="{{ section.settings.kicker | default: 'Dönüşüm Yolculuğu' }}"
+  data-cs-transform
 >
   <div class="cs-timeline__container">
     {%- comment -%} Section Header {%- endcomment -%}
-    <header class="cs-timeline__header cs-timeline__reveal">
+    <header class="cs-timeline__header cs-transform__header cs-transform__reveal">
       {%- if section.settings.kicker != blank -%}
-        <p class="cs-timeline__kicker cs-transformation__kicker">
+        <span class="cs-timeline__kicker cs-transform__kicker">
           {{ section.settings.kicker }}
-        </p>
+        </span>
       {%- endif -%}
 
-      <h2 class="cs-timeline__title cs-transformation__title">
+      <h2 class="cs-timeline__title cs-transform__title">
         {{ section.settings.title }}
       </h2>
 
       {%- if section.settings.subtitle != blank -%}
-        <p class="cs-timeline__subtitle cs-transformation__subtitle">
+        <p class="cs-timeline__subtitle cs-transform__subtitle">
           {{ section.settings.subtitle }}
         </p>
       {%- endif -%}
     </header>
+  </div>
 
-    {%- comment -%} Timeline Track {%- endcomment -%}
-    <div class="cs-transformation__track" role="list" aria-label="Donusum zaman cizelgesi">
-      {%- comment -%} SVG connector lines — desktop {%- endcomment -%}
-      <svg class="cs-transformation__connector cs-timeline--hide-mobile" aria-hidden="true" preserveAspectRatio="none">
+  {%- comment -%} Timeline Body with Vertical Spine {%- endcomment -%}
+  <div class="cs-transform__body">
+    {%- comment -%} Central Spine SVG (desktop only) {%- endcomment -%}
+    <div class="cs-transform__spine cs-timeline--hide-mobile" aria-hidden="true">
+      <svg class="cs-transform__spine-svg" viewBox="0 0 2 100" preserveAspectRatio="none" fill="none">
+        <defs>
+          <linearGradient id="transformSpineGrad-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0D4F47" />
+            <stop offset="100%" stop-color="#C4973B" />
+          </linearGradient>
+        </defs>
         <line
-          class="cs-timeline__line-draw cs-transformation__line"
-          x1="0" y1="50%" x2="100%" y2="50%"
-          stroke="var(--cs-gold)"
+          x1="1" y1="0" x2="1" y2="100"
+          stroke="url(#transformSpineGrad-{{ section.id }})"
           stroke-width="2"
+          class="cs-timeline__line-draw cs-transform__spine-line"
+          data-cs-spine-line
+          style="--line-length: 100;"
         />
       </svg>
+    </div>
 
-      {%- comment -%} SVG connector line — mobile {%- endcomment -%}
-      <svg class="cs-transformation__connector cs-transformation__connector--mobile cs-timeline--hide-desktop" aria-hidden="true" preserveAspectRatio="none">
-        <line
-          class="cs-timeline__line-draw cs-transformation__line"
-          x1="50%" y1="0" x2="50%" y2="100%"
-          stroke="var(--cs-gold)"
-          stroke-width="2"
-        />
-      </svg>
+    {%- comment -%} Milestone Panels {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- assign is_odd = forloop.index | modulo: 2 -%}
+      {%- assign panel_side = 'left' -%}
+      {%- if is_odd == 0 -%}
+        {%- assign panel_side = 'right' -%}
+      {%- endif -%}
+      {%- assign is_last = false -%}
+      {%- if forloop.last -%}
+        {%- assign is_last = true -%}
+      {%- endif -%}
 
-      {%- for block in section.blocks -%}
-        {%- assign is_last = false -%}
-        {%- if forloop.last -%}
-          {%- assign is_last = true -%}
-        {%- endif -%}
-        {%- assign delay = forloop.index0 | times: 150 -%}
+      <div
+        class="cs-transform__panel cs-transform__panel--{{ panel_side }}"
+        role="listitem"
+        data-milestone-index="{{ forloop.index0 }}"
+        {{ block.shopify_attributes }}
+      >
+        {%- comment -%} Node on spine {%- endcomment -%}
+        <div class="cs-transform__node-wrap" aria-hidden="true">
+          <div class="cs-transform__node" data-cs-node></div>
+          <span class="cs-transform__time-badge">
+            {{ block.settings.time_label }}
+          </span>
+        </div>
 
-        <div
-          class="cs-transformation__milestone cs-timeline__reveal"
-          role="listitem"
-          data-milestone-index="{{ forloop.index0 }}"
-          style="transition-delay: {{ delay }}ms;"
-          {{ block.shopify_attributes }}
-        >
-          {%- comment -%} Node {%- endcomment -%}
-          <div class="cs-transformation__node-wrap">
-            <div class="cs-timeline__node cs-timeline__node--large cs-transformation__node" aria-hidden="true"></div>
-            <span class="cs-transformation__time-label cs-timeline__tag cs-timeline__tag--gold">
-              {{ block.settings.time_label }}
-            </span>
-          </div>
+        {%- comment -%} Content Card {%- endcomment -%}
+        <div class="cs-transform__card cs-transform__reveal" data-cs-reveal>
+          <h3 class="cs-transform__card-headline" data-time-label="{{ block.settings.time_label }}">
+            {{ block.settings.headline }}
+          </h3>
 
-          {%- comment -%} Content Card {%- endcomment -%}
-          <div class="cs-timeline__card-frost cs-transformation__card">
-            <h3 class="cs-transformation__card-headline">
-              {{ block.settings.headline }}
-            </h3>
-
-            {%- if block.settings.benefits != blank -%}
-              <div class="cs-transformation__benefits">
-                {{ block.settings.benefits }}
-              </div>
+          {%- comment -%} Benefits with ingredient pills {%- endcomment -%}
+          <ul class="cs-transform__benefits" role="list">
+            {%- if block.settings.benefit_1 != blank -%}
+              <li class="cs-transform__benefit">
+                <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
+                {%- if block.settings.ingredient_1 != blank -%}
+                  <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_1 }}</span>
+                {%- endif -%}
+              </li>
             {%- endif -%}
-
-            {%- if block.settings.stat != blank -%}
-              <p class="cs-transformation__stat">
-                {{ block.settings.stat }}
-              </p>
+            {%- if block.settings.benefit_2 != blank -%}
+              <li class="cs-transform__benefit">
+                <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
+                {%- if block.settings.ingredient_2 != blank -%}
+                  <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_2 }}</span>
+                {%- endif -%}
+              </li>
             {%- endif -%}
-
-            {%- if is_last and section.settings.cta_text != blank -%}
-              <div class="cs-transformation__cta-wrap">
-                <a href="{{ section.settings.cta_url }}" class="cs-timeline__cta cs-timeline__cta--gold cs-transformation__cta" aria-label="{{ section.settings.cta_text }}">
-                  {{- section.settings.cta_text -}}
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
-                    <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
+            {%- if block.settings.benefit_3 != blank -%}
+              <li class="cs-transform__benefit">
+                <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
+                {%- if block.settings.ingredient_3 != blank -%}
+                  <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_3 }}</span>
+                {%- endif -%}
+              </li>
             {%- endif -%}
+          </ul>
+
+          {%- comment -%} Science callout box {%- endcomment -%}
+          {%- if block.settings.science_callout != blank -%}
+            <div class="cs-transform__science-callout">
+              <span class="cs-transform__science-label">Bilimsel Mekanizma</span>
+              <p class="cs-transform__science-text">{{ block.settings.science_callout }}</p>
+              {%- if block.settings.stat_reference != blank -%}
+                <cite class="cs-transform__science-ref">{{ block.settings.stat_reference }}</cite>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} CTA on last milestone {%- endcomment -%}
+          {%- if is_last and section.settings.cta_text != blank -%}
+            <div class="cs-transform__cta-wrap">
+              <a
+                href="{{ section.settings.cta_url }}"
+                class="cs-transform__cta"
+                aria-label="{{ section.settings.cta_text }}"
+              >
+                {{- section.settings.cta_text -}}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                  <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} SVG Illustration (desktop only) {%- endcomment -%}
+        <div class="cs-transform__illust cs-timeline--hide-mobile cs-transform__reveal" data-cs-reveal>
+          <div class="cs-transform__illust-circle">
+            {%- case block.settings.illustration -%}
+              {%- when 'molecule' -%}
+                {%- comment -%} Chamomile flower silhouette + hexagonal apigenin ring {%- endcomment -%}
+                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
+                  <!-- Chamomile petals -->
+                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.5" transform="rotate(0 60 60)"/>
+                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.45" transform="rotate(60 60 60)"/>
+                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.4" transform="rotate(120 60 60)"/>
+                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.45" transform="rotate(180 60 60)"/>
+                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.5" transform="rotate(240 60 60)"/>
+                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.4" transform="rotate(300 60 60)"/>
+                  <!-- Center -->
+                  <circle cx="60" cy="60" r="8" stroke="#C4973B" stroke-width="1.2" opacity="0.5"/>
+                  <!-- Hexagonal apigenin ring -->
+                  <polygon points="60,78 72,85 72,99 60,106 48,99 48,85" stroke="#0D4F47" stroke-width="1" opacity="0.35" fill="none"/>
+                  <circle cx="60" cy="92" r="2" fill="#C4973B" opacity="0.4"/>
+                </svg>
+
+              {%- when 'wave' -%}
+                {%- comment -%} Sleep wave rhythm + crescent moon {%- endcomment -%}
+                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
+                  <!-- Sleep waves -->
+                  <path d="M15 50 Q30 38, 45 50 Q60 62, 75 50 Q90 38, 105 50" stroke="#0D4F47" stroke-width="1.5" opacity="0.5" fill="none"/>
+                  <path d="M15 60 Q30 48, 45 60 Q60 72, 75 60 Q90 48, 105 60" stroke="#0D4F47" stroke-width="1.2" opacity="0.4" fill="none"/>
+                  <path d="M15 70 Q30 58, 45 70 Q60 82, 75 70 Q90 58, 105 70" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
+                  <!-- Crescent moon -->
+                  <path d="M60 20 A18 18 0 1 0 60 56 A12 12 0 1 1 60 20Z" stroke="#C4973B" stroke-width="1.2" opacity="0.5" fill="none"/>
+                  <!-- Stars -->
+                  <circle cx="35" cy="28" r="1.5" fill="#C4973B" opacity="0.4"/>
+                  <circle cx="88" cy="24" r="1" fill="#C4973B" opacity="0.35"/>
+                  <circle cx="78" cy="35" r="1.2" fill="#C4973B" opacity="0.3"/>
+                </svg>
+
+              {%- when 'brain' -%}
+                {%- comment -%} Brain outline with balance scales (cortisol equilibrium) {%- endcomment -%}
+                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
+                  <!-- Simplified brain outline -->
+                  <path d="M60 25 C42 25, 30 35, 30 50 C30 58, 34 64, 40 68 C36 72, 35 78, 38 84 C41 90, 48 92, 55 90 L60 88 L65 90 C72 92, 79 90, 82 84 C85 78, 84 72, 80 68 C86 64, 90 58, 90 50 C90 35, 78 25, 60 25Z" stroke="#0D4F47" stroke-width="1.2" opacity="0.45" fill="none"/>
+                  <!-- Center divide -->
+                  <line x1="60" y1="28" x2="60" y2="88" stroke="#0D4F47" stroke-width="0.8" opacity="0.25"/>
+                  <!-- Balance scales below -->
+                  <line x1="40" y1="102" x2="80" y2="102" stroke="#C4973B" stroke-width="1.2" opacity="0.5"/>
+                  <line x1="60" y1="95" x2="60" y2="102" stroke="#C4973B" stroke-width="1.2" opacity="0.5"/>
+                  <!-- Scale pans -->
+                  <path d="M42 102 L38 108 L50 108 L46 102" stroke="#C4973B" stroke-width="1" opacity="0.4" fill="none"/>
+                  <path d="M74 102 L70 108 L82 108 L78 102" stroke="#C4973B" stroke-width="1" opacity="0.4" fill="none"/>
+                  <!-- Fulcrum -->
+                  <polygon points="60,95 56,100 64,100" stroke="#C4973B" stroke-width="1" opacity="0.5" fill="none"/>
+                </svg>
+
+              {%- when 'harmony' -%}
+                {%- comment -%} Botanical harmony circle — 6 radiating leaves for 6 ingredients {%- endcomment -%}
+                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
+                  <!-- Central circle -->
+                  <circle cx="60" cy="60" r="12" stroke="#0D4F47" stroke-width="1.2" opacity="0.5"/>
+                  <circle cx="60" cy="60" r="24" stroke="#0D4F47" stroke-width="0.8" opacity="0.2" stroke-dasharray="3 3"/>
+                  <!-- 6 botanical leaves radiating outward -->
+                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.5" fill="none"/>
+                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.45" fill="none" transform="rotate(60 60 60)"/>
+                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#C4973B" stroke-width="1" opacity="0.4" fill="none" transform="rotate(120 60 60)"/>
+                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.5" fill="none" transform="rotate(180 60 60)"/>
+                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#C4973B" stroke-width="1" opacity="0.45" fill="none" transform="rotate(240 60 60)"/>
+                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.4" fill="none" transform="rotate(300 60 60)"/>
+                  <!-- Center dot -->
+                  <circle cx="60" cy="60" r="3" fill="#C4973B" opacity="0.4"/>
+                </svg>
+
+              {%- else -%}
+                {%- comment -%} Default: simple circle placeholder {%- endcomment -%}
+                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
+                  <circle cx="60" cy="60" r="30" stroke="#0D4F47" stroke-width="1.2" opacity="0.3"/>
+                  <circle cx="60" cy="60" r="6" fill="#C4973B" opacity="0.4"/>
+                </svg>
+            {%- endcase -%}
           </div>
         </div>
-      {%- endfor -%}
-    </div>
+      </div>
+    {%- endfor -%}
   </div>
 </section>
-</cs-transformation-timeline>
+</cs-transform-timeline>
 
 <style>
 /* ============================================================================
@@ -232,10 +349,6 @@
   padding-inline: var(--cs-space-md);
 }
 
-.cs-timeline__container--narrow {
-  max-width: var(--cs-content-narrow);
-}
-
 /* --------------------------------------------------------------------------
    Section Header (shared)
    -------------------------------------------------------------------------- */
@@ -270,84 +383,20 @@
 }
 
 /* --------------------------------------------------------------------------
-   Shared Animation States
+   Shared Animation States — Calming reveal (opacity only, NO translate)
    -------------------------------------------------------------------------- */
 
-.cs-timeline__reveal {
+.cs-transform__reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity var(--cs-duration-slow) var(--cs-ease-out),
-    transform var(--cs-duration-slow) var(--cs-ease-out);
+  transition: opacity 800ms var(--cs-ease-out);
 }
 
-.cs-timeline__reveal--visible {
+.cs-transform__reveal--visible {
   opacity: 1;
-  transform: translateY(0);
-}
-
-.cs-timeline__reveal--left {
-  opacity: 0;
-  transform: translateX(-24px);
-  transition:
-    opacity var(--cs-duration-slow) var(--cs-ease-out),
-    transform var(--cs-duration-slow) var(--cs-ease-out);
-}
-
-.cs-timeline__reveal--left.cs-timeline__reveal--visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.cs-timeline__reveal--right {
-  opacity: 0;
-  transform: translateX(24px);
-  transition:
-    opacity var(--cs-duration-slow) var(--cs-ease-out),
-    transform var(--cs-duration-slow) var(--cs-ease-out);
-}
-
-.cs-timeline__reveal--right.cs-timeline__reveal--visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.cs-timeline__reveal--scale {
-  opacity: 0;
-  transform: scale(0.85);
-  transition:
-    opacity var(--cs-duration-slow) var(--cs-ease-out),
-    transform var(--cs-duration-slow) var(--cs-ease-out);
-}
-
-.cs-timeline__reveal--scale.cs-timeline__reveal--visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Stagger children */
-.cs-timeline__reveal--visible .cs-timeline__stagger:nth-child(1) { transition-delay: 0ms; }
-.cs-timeline__reveal--visible .cs-timeline__stagger:nth-child(2) { transition-delay: 80ms; }
-.cs-timeline__reveal--visible .cs-timeline__stagger:nth-child(3) { transition-delay: 160ms; }
-.cs-timeline__reveal--visible .cs-timeline__stagger:nth-child(4) { transition-delay: 240ms; }
-.cs-timeline__reveal--visible .cs-timeline__stagger:nth-child(5) { transition-delay: 320ms; }
-.cs-timeline__reveal--visible .cs-timeline__stagger:nth-child(6) { transition-delay: 400ms; }
-
-.cs-timeline__stagger {
-  opacity: 0;
-  transform: translateY(12px);
-  transition:
-    opacity var(--cs-duration-base) var(--cs-ease-out),
-    transform var(--cs-duration-base) var(--cs-ease-out);
-}
-
-.cs-timeline__reveal--visible .cs-timeline__stagger {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* --------------------------------------------------------------------------
-   Line Draw Animation
+   Line Draw Animation (shared)
    -------------------------------------------------------------------------- */
 
 .cs-timeline__line-draw {
@@ -361,46 +410,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Node (shared dot/circle on timeline)
-   -------------------------------------------------------------------------- */
-
-.cs-timeline__node {
-  position: relative;
-  width: 16px;
-  height: 16px;
-  border-radius: var(--cs-radius-full);
-  border: 2px solid var(--cs-gold);
-  background: transparent;
-  transition: background var(--cs-duration-base) var(--cs-ease-out),
-              box-shadow var(--cs-duration-base) var(--cs-ease-out);
-  flex-shrink: 0;
-}
-
-.cs-timeline__node--active {
-  background: var(--cs-gold);
-  box-shadow: var(--cs-shadow-gold);
-}
-
-.cs-timeline__node--large {
-  width: 24px;
-  height: 24px;
-}
-
-/* --------------------------------------------------------------------------
-   Frosted Glass Card
-   -------------------------------------------------------------------------- */
-
-.cs-timeline__card-frost {
-  background: var(--cs-bg-card-frost);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--cs-border-light);
-  border-radius: var(--cs-radius-lg);
-  padding: var(--cs-space-lg);
-}
-
-/* --------------------------------------------------------------------------
-   Tag / Pill
+   Tag / Pill (shared)
    -------------------------------------------------------------------------- */
 
 .cs-timeline__tag {
@@ -414,12 +424,6 @@
   white-space: nowrap;
 }
 
-.cs-timeline__tag--gold {
-  background: var(--cs-gold-soft);
-  color: var(--cs-gold);
-  border: 1px solid var(--cs-border-gold);
-}
-
 .cs-timeline__tag--teal {
   background: var(--cs-teal-soft);
   color: var(--cs-teal);
@@ -427,110 +431,18 @@
 }
 
 /* --------------------------------------------------------------------------
-   CTA Button (base)
-   -------------------------------------------------------------------------- */
-
-.cs-timeline__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  font-family: var(--cs-font-family);
-  font-size: var(--cs-font-size-sm);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  padding: 0.875em 2em;
-  border-radius: var(--cs-radius-full);
-  border: none;
-  cursor: pointer;
-  min-height: 44px;
-  min-width: 44px;
-  transition:
-    background var(--cs-duration-fast) var(--cs-ease-out),
-    transform var(--cs-duration-fast) var(--cs-ease-out),
-    box-shadow var(--cs-duration-fast) var(--cs-ease-out);
-}
-
-.cs-timeline__cta:hover {
-  transform: translateY(-1px);
-}
-
-.cs-timeline__cta:active {
-  transform: translateY(0);
-}
-
-.cs-timeline__cta--gold {
-  background: var(--cs-gold);
-  color: var(--cs-bg-dark);
-}
-
-.cs-timeline__cta--gold:hover {
-  box-shadow: var(--cs-shadow-gold);
-}
-
-.cs-timeline__cta--ghost {
-  background: transparent;
-  border: 1px solid var(--cs-border-light);
-  color: var(--cs-text-white);
-}
-
-.cs-timeline__cta--ghost:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* --------------------------------------------------------------------------
-   Progress Bar (shared)
-   -------------------------------------------------------------------------- */
-
-.cs-timeline__progress {
-  position: relative;
-  width: 100%;
-  height: 2px;
-  background: var(--cs-border-light);
-  border-radius: var(--cs-radius-full);
-  overflow: hidden;
-}
-
-.cs-timeline__progress-fill {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  width: 0%;
-  background: linear-gradient(90deg, var(--cs-gold), var(--cs-teal));
-  border-radius: var(--cs-radius-full);
-  transition: width var(--cs-duration-base) var(--cs-ease-out);
-}
-
-/* --------------------------------------------------------------------------
    Prefers Reduced Motion (base)
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .cs-timeline__reveal,
-  .cs-timeline__reveal--left,
-  .cs-timeline__reveal--right,
-  .cs-timeline__reveal--scale,
-  .cs-timeline__stagger,
-  .cs-timeline__line-draw,
-  .cs-timeline__node,
-  .cs-timeline__cta,
-  .cs-timeline__progress-fill {
+  .cs-transform__reveal,
+  .cs-timeline__line-draw {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
 
-  .cs-timeline__reveal,
-  .cs-timeline__reveal--left,
-  .cs-timeline__reveal--right,
-  .cs-timeline__reveal--scale {
+  .cs-transform__reveal {
     opacity: 1;
-    transform: none;
-  }
-
-  .cs-timeline__stagger {
-    opacity: 1;
-    transform: none;
   }
 
   .cs-timeline__line-draw {
@@ -572,15 +484,32 @@
 }
 
 /* ============================================================================
-   CS Transformation Journey — Section Styles
+   CS Transform Journey — Section-specific Styles (TheChill)
    ============================================================================ */
 
 /* --------------------------------------------------------------------------
-   Section Root
+   Section-scoped Custom Properties
    -------------------------------------------------------------------------- */
-.cs-transformation {
-  background: var(--cs-bg-dark);
-  color: var(--cs-text-white);
+.cs-transform {
+  --ct-deep-teal: #0D4F47;
+  --ct-soft-teal: #108474;
+  --ct-warm-gold: #C4973B;
+  --ct-text-primary: #1a1a1a;
+  --ct-text-secondary: #6B6B6B;
+  --ct-card-bg: #ffffff;
+  --ct-science-bg: #E8F4F2;
+  --ct-pill-bg: rgba(16, 132, 116, 0.1);
+  --ct-pill-border: rgba(16, 132, 116, 0.25);
+  --ct-node-size: 20px;
+  --ct-spine-width: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Section Root — Warm gradient background
+   -------------------------------------------------------------------------- */
+.cs-transform {
+  background: linear-gradient(180deg, #f9f6f2 0%, #f0ebe4 100%);
+  color: var(--ct-text-primary);
   padding-block: var(--cs-space-3xl);
   overflow: hidden;
   position: relative;
@@ -589,238 +518,363 @@
 /* --------------------------------------------------------------------------
    Header Overrides
    -------------------------------------------------------------------------- */
-.cs-transformation__kicker {
-  color: var(--cs-gold);
+.cs-transform__kicker {
+  color: var(--ct-deep-teal);
 }
 
-.cs-transformation__title {
-  color: var(--cs-text-white);
+.cs-transform__title {
+  color: var(--ct-text-primary);
 }
 
-.cs-transformation__subtitle {
-  color: var(--cs-text-white-muted);
+.cs-transform__subtitle {
+  color: var(--ct-text-secondary);
 }
 
 /* --------------------------------------------------------------------------
-   Track — Desktop Zigzag
+   Timeline Body — central spine layout
    -------------------------------------------------------------------------- */
-.cs-transformation__track {
+.cs-transform__body {
+  position: relative;
+  max-width: var(--cs-content-max);
+  margin-inline: auto;
+  padding-inline: var(--cs-space-md);
+}
+
+/* Spine */
+.cs-transform__spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: var(--ct-spine-width);
+  transform: translateX(-50%);
+  z-index: var(--cs-z-base);
+}
+
+.cs-transform__spine-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Panel — milestone row
+   -------------------------------------------------------------------------- */
+.cs-transform__panel {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--cs-space-md);
-  align-items: start;
-}
-
-.cs-transformation__connector {
-  position: absolute;
-  top: 12px;
-  left: 0;
-  width: 100%;
-  height: 24px;
-  z-index: var(--cs-z-base);
-  pointer-events: none;
+  align-items: center;
+  gap: var(--cs-space-lg);
+  padding-block: var(--cs-space-xl);
 }
 
 /* --------------------------------------------------------------------------
-   Milestone — Desktop
+   Node on spine
    -------------------------------------------------------------------------- */
-.cs-transformation__milestone {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: var(--cs-z-above);
+.cs-transform__node-wrap {
+  display: none; /* shown on desktop via MQ */
 }
 
-/* Zigzag: even milestones push card down, odd milestones are default */
-.cs-transformation__milestone:nth-child(odd) .cs-transformation__card {
-  margin-block-start: var(--cs-space-md);
+.cs-transform__node {
+  width: var(--ct-node-size);
+  height: var(--ct-node-size);
+  border-radius: var(--cs-radius-full);
+  border: 2px solid var(--ct-warm-gold);
+  background: transparent;
+  transition: background 600ms var(--cs-ease-out),
+              box-shadow 600ms var(--cs-ease-out),
+              transform 600ms var(--cs-ease-out);
+  flex-shrink: 0;
 }
 
-.cs-transformation__milestone:nth-child(even) {
-  margin-block-start: clamp(8rem, 6rem + 8vw, 14rem);
+.cs-transform__node--active {
+  background: var(--ct-warm-gold);
+  box-shadow: 0 0 16px rgba(196, 151, 59, 0.3);
+  animation: cs-transform-pulse 600ms var(--cs-ease-out) forwards;
 }
 
-.cs-transformation__milestone:nth-child(even) .cs-transformation__card {
-  order: -1;
-  margin-block-end: var(--cs-space-md);
+@keyframes cs-transform-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
-.cs-transformation__milestone:nth-child(even) .cs-transformation__node-wrap {
-  order: 1;
-}
-
-/* --------------------------------------------------------------------------
-   Node Wrap & Time Label
-   -------------------------------------------------------------------------- */
-.cs-transformation__node-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--cs-space-xs);
-}
-
-.cs-transformation__time-label {
+.cs-transform__time-badge {
+  display: inline-block;
   font-size: var(--cs-font-size-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: var(--ct-deep-teal);
+  margin-block-start: var(--cs-space-xs);
+  white-space: nowrap;
 }
 
 /* --------------------------------------------------------------------------
-   Content Card
+   Content Card — white card with subtle shadow
    -------------------------------------------------------------------------- */
-.cs-transformation__card {
-  width: 100%;
-  text-align: center;
+.cs-transform__card {
+  background: var(--ct-card-bg);
+  border-radius: var(--cs-radius-lg);
+  padding: var(--cs-space-lg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-.cs-transformation__card-headline {
-  font-size: var(--cs-font-size-lg);
+.cs-transform__card-headline {
+  font-size: var(--cs-font-size-xl);
   font-weight: 700;
-  color: var(--cs-text-white);
-  margin: 0 0 var(--cs-space-sm);
-  line-height: 1.3;
+  color: var(--ct-text-primary);
+  margin: 0 0 var(--cs-space-md);
+  line-height: 1.25;
 }
 
-.cs-transformation__benefits {
-  font-size: var(--cs-font-size-sm);
-  color: var(--cs-text-white-muted);
-  line-height: 1.6;
-}
-
-.cs-transformation__benefits p {
-  margin: 0 0 var(--cs-space-xs);
-}
-
-.cs-transformation__benefits ul {
+/* --------------------------------------------------------------------------
+   Benefits list with ingredient pills
+   -------------------------------------------------------------------------- */
+.cs-transform__benefits {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 var(--cs-space-md);
   display: flex;
+  flex-direction: column;
+  gap: var(--cs-space-sm);
+}
+
+.cs-transform__benefit {
+  display: flex;
+  align-items: baseline;
+  gap: var(--cs-space-sm);
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--cs-space-xs);
 }
 
-.cs-transformation__benefits li {
-  background: var(--cs-teal-soft);
-  color: var(--cs-teal);
+.cs-transform__benefit-text {
+  font-size: var(--cs-font-size-base);
+  color: var(--ct-text-secondary);
+  line-height: 1.5;
+}
+
+.cs-transform__ingredient-pill {
+  display: inline-flex;
+  align-items: center;
   font-size: var(--cs-font-size-xs);
   font-weight: 600;
-  padding: 0.3em 0.75em;
+  padding: 0.2em 0.65em;
   border-radius: var(--cs-radius-full);
-  border: 1px solid var(--cs-border-teal);
+  background: var(--ct-pill-bg);
+  color: var(--ct-soft-teal);
+  border: 1px solid var(--ct-pill-border);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* --------------------------------------------------------------------------
-   Stat
+   Science Callout Box
    -------------------------------------------------------------------------- */
-.cs-transformation__stat {
+.cs-transform__science-callout {
+  background: var(--ct-science-bg);
+  border-radius: var(--cs-radius-md);
+  padding: var(--cs-space-md);
+  margin-block-start: var(--cs-space-sm);
+}
+
+.cs-transform__science-label {
+  display: block;
   font-size: var(--cs-font-size-xs);
-  color: var(--cs-gold);
-  font-weight: 600;
-  margin: var(--cs-space-sm) 0 0;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ct-deep-teal);
+  margin-block-end: var(--cs-space-xs);
+}
+
+.cs-transform__science-text {
+  font-size: var(--cs-font-size-sm);
   font-style: italic;
+  color: var(--ct-text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.cs-transform__science-ref {
+  display: block;
+  font-size: var(--cs-font-size-xs);
+  color: var(--ct-soft-teal);
+  margin-block-start: var(--cs-space-xs);
+  font-style: normal;
 }
 
 /* --------------------------------------------------------------------------
-   CTA Wrap
+   CTA Button — pill-shaped teal (matching cyrasoul.com)
    -------------------------------------------------------------------------- */
-.cs-transformation__cta-wrap {
+.cs-transform__cta-wrap {
   margin-block-start: var(--cs-space-lg);
 }
 
-/* --------------------------------------------------------------------------
-   Active / Revealed Node State
-   -------------------------------------------------------------------------- */
-.cs-timeline__reveal--visible .cs-transformation__node {
-  background: var(--cs-gold);
-  box-shadow: var(--cs-shadow-gold);
+.cs-transform__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  font-family: var(--cs-font-family);
+  font-size: var(--cs-font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  padding: 0.875em 2em;
+  border-radius: 3.75rem;
+  border: none;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  background: var(--ct-deep-teal);
+  color: #ffffff;
+  transition:
+    background var(--cs-duration-fast) var(--cs-ease-out),
+    transform var(--cs-duration-fast) var(--cs-ease-out),
+    box-shadow var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-transform__cta:hover {
+  background: var(--ct-soft-teal);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(13, 79, 71, 0.2);
+}
+
+.cs-transform__cta:active {
+  transform: translateY(0);
 }
 
 /* --------------------------------------------------------------------------
-   Mobile — Vertical Timeline (< 750px)
+   SVG Illustration Circle
    -------------------------------------------------------------------------- */
-@media screen and (max-width: 749px) {
-  .cs-transformation__track {
+.cs-transform__illust {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cs-transform__illust-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: var(--cs-radius-full);
+  background: rgba(13, 79, 71, 0.04);
+  border: 1px solid rgba(13, 79, 71, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cs-transform__illust-svg {
+  width: 80%;
+  height: 80%;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop Layout (>= 750px) — 3-column alternating spine
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 750px) {
+  .cs-transform__panel {
+    grid-template-columns: 1fr 48px 1fr;
+    grid-template-rows: 1fr;
+    gap: var(--cs-space-xl);
+    padding-inline: var(--cs-space-lg);
+  }
+
+  .cs-transform__node-wrap {
     display: flex;
     flex-direction: column;
-    gap: var(--cs-space-xl);
+    align-items: center;
+    justify-content: center;
+    grid-column: 2;
+    grid-row: 1;
+    z-index: var(--cs-z-above);
+  }
+
+  /* Left-aligned: card left, illustration right */
+  .cs-transform__panel--left .cs-transform__card {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    max-width: 460px;
+  }
+
+  .cs-transform__panel--left .cs-transform__illust {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  /* Right-aligned: illustration left, card right */
+  .cs-transform__panel--right .cs-transform__illust {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .cs-transform__panel--right .cs-transform__card {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    max-width: 460px;
+  }
+
+  .cs-transform__illust-circle {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Layout (< 750px) — single column, spine on left
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .cs-transform__body {
     padding-inline-start: 40px;
+  }
+
+  /* Mobile spine line on left edge */
+  .cs-transform__body::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 0;
+    bottom: 0;
+    width: var(--ct-spine-width);
+    background: linear-gradient(180deg, var(--ct-deep-teal), var(--ct-warm-gold));
+    opacity: 0.3;
+  }
+
+  .cs-transform__panel {
+    grid-template-columns: 1fr;
+    padding-block: var(--cs-space-lg);
+    gap: var(--cs-space-md);
     position: relative;
   }
 
-  .cs-transformation__connector--mobile {
+  /* Mobile node — positioned on left spine */
+  .cs-transform__node-wrap {
+    display: block;
     position: absolute;
-    top: 0;
-    left: 11px;
-    width: 24px;
-    height: 100%;
-    z-index: var(--cs-z-base);
+    left: -28px;
+    top: var(--cs-space-lg);
+    transform: translateX(-50%);
   }
 
-  .cs-transformation__milestone {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: var(--cs-space-md);
-  }
-
-  /* Reset zigzag for mobile */
-  .cs-transformation__milestone:nth-child(even) {
-    margin-block-start: 0;
-  }
-
-  .cs-transformation__milestone:nth-child(even) .cs-transformation__card {
-    order: unset;
-    margin-block-end: 0;
-    margin-block-start: var(--cs-space-sm);
-  }
-
-  .cs-transformation__milestone:nth-child(even) .cs-transformation__node-wrap {
-    order: unset;
-  }
-
-  .cs-transformation__milestone:nth-child(odd) .cs-transformation__card {
-    margin-block-start: var(--cs-space-sm);
-  }
-
-  .cs-transformation__node-wrap {
-    position: absolute;
-    left: -40px;
-    top: 0;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .cs-transformation__time-label {
-    writing-mode: unset;
-    white-space: nowrap;
-    position: absolute;
-    left: calc(100% + var(--cs-space-xs));
-    top: 50%;
-    transform: translateY(-50%);
+  .cs-transform__time-badge {
     display: none;
   }
 
-  .cs-transformation__card {
-    text-align: left;
-  }
-
-  .cs-transformation__card-headline::before {
+  /* Show time label above headline on mobile via data attribute */
+  .cs-transform__card-headline::before {
     content: attr(data-time-label);
     display: block;
     font-size: var(--cs-font-size-xs);
     font-weight: 700;
-    color: var(--cs-gold);
+    color: var(--ct-deep-teal);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-block-end: var(--cs-space-xs);
-  }
-
-  .cs-transformation__benefits ul {
-    justify-content: flex-start;
   }
 }
 
@@ -828,13 +882,17 @@
    Reduced Motion — section-specific overrides
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .cs-transformation__node {
-    background: var(--cs-gold) !important;
-    box-shadow: var(--cs-shadow-gold) !important;
+  .cs-transform__node {
+    background: var(--ct-warm-gold) !important;
+    box-shadow: 0 0 16px rgba(196, 151, 59, 0.3) !important;
   }
 
-  .cs-transformation__line {
+  .cs-transform__spine-line {
     stroke-dashoffset: 0 !important;
+  }
+
+  @keyframes cs-transform-pulse {
+    0%, 50%, 100% { transform: scale(1); }
   }
 }
 </style>
@@ -871,7 +929,7 @@ function csTimelineReveal(selector, options = {}) {
 
   if (prefersReducedMotion) {
     elements.forEach((el) => {
-      el.classList.add('cs-timeline__reveal--visible');
+      el.classList.add('cs-transform__reveal--visible');
       if (onReveal) onReveal(el);
     });
     return null;
@@ -881,7 +939,7 @@ function csTimelineReveal(selector, options = {}) {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('cs-timeline__reveal--visible');
+          entry.target.classList.add('cs-transform__reveal--visible');
           if (onReveal) onReveal(entry.target);
           if (once) observer.unobserve(entry.target);
         }
@@ -931,10 +989,10 @@ function csTimelineScrollProgress(container, onProgress) {
 }
 
 /* ============================================================================
-   CS Transformation Journey — Web Component
+   CS Transform Timeline — Web Component (TheChill)
    ============================================================================ */
 
-class CsTransformationTimeline extends HTMLElement {
+class CsTransformTimeline extends HTMLElement {
   constructor() {
     super();
     this._scrollCleanup = null;
@@ -943,8 +1001,8 @@ class CsTransformationTimeline extends HTMLElement {
 
   connectedCallback() {
     this._initReveal();
-    this._initConnectorDraw();
-    this._setMobileTimeLabels();
+    this._initSpineDraw();
+    this._initMobileLabels();
   }
 
   disconnectedCallback() {
@@ -959,25 +1017,24 @@ class CsTransformationTimeline extends HTMLElement {
   }
 
   /**
-   * Initialize IntersectionObserver reveal for header + milestones.
+   * Initialize IntersectionObserver reveal for header + cards.
+   * Higher threshold (0.2) for calming, deliberate trigger.
    */
   _initReveal() {
-    const sectionId = this.querySelector('[data-cs-transformation]')
-      ? this.id || ''
-      : '';
-    const scope = this;
-
     this._observer = csTimelineReveal(
-      '.cs-transformation .cs-timeline__reveal',
+      '.cs-transform .cs-transform__reveal',
       {
-        threshold: 0.15,
-        rootMargin: '0px 0px -60px 0px',
+        threshold: 0.2,
+        rootMargin: '0px 0px -40px 0px',
         once: true,
         onReveal: (el) => {
-          /* Activate the node fill when milestone is revealed */
-          const node = el.querySelector('.cs-transformation__node');
-          if (node) {
-            node.classList.add('cs-timeline__node--active');
+          /* Activate the node when its sibling card is revealed */
+          const panel = el.closest('.cs-transform__panel');
+          if (panel) {
+            const node = panel.querySelector('.cs-transform__node');
+            if (node) {
+              node.classList.add('cs-transform__node--active');
+            }
           }
         }
       }
@@ -985,160 +1042,234 @@ class CsTransformationTimeline extends HTMLElement {
   }
 
   /**
-   * Draw the SVG connector line as user scrolls through the section.
+   * Draw the spine SVG line as user scrolls through the section.
+   * 1.3x multiplier for slightly-ahead-of-scroll drawing.
    */
-  _initConnectorDraw() {
-    const track = this.querySelector('.cs-transformation__track');
-    if (!track) return;
+  _initSpineDraw() {
+    const body = this.querySelector('.cs-transform__body');
+    if (!body) return;
 
-    const lines = this.querySelectorAll('.cs-transformation__line');
-    if (!lines.length) return;
+    const line = this.querySelector('.cs-transform__spine-line');
+    if (!line) return;
 
-    /* Measure SVG line lengths and set dasharray */
-    lines.forEach((line) => {
-      const length = line.getTotalLength ? line.getTotalLength() : 1000;
-      line.style.setProperty('--line-length', length);
-      line.style.strokeDasharray = length;
-      line.style.strokeDashoffset = length;
-    });
+    const length = line.getTotalLength ? line.getTotalLength() : 100;
+    line.style.setProperty('--line-length', length);
+    line.style.strokeDasharray = length;
+    line.style.strokeDashoffset = length;
 
-    this._scrollCleanup = csTimelineScrollProgress(track, (progress) => {
-      /* Map progress 0-1 to line draw 0-100% */
-      lines.forEach((line) => {
-        const length = parseFloat(
-          getComputedStyle(line).getPropertyValue('--line-length')
-        ) || 1000;
-        const offset = length * (1 - progress * 1.5);
-        line.style.strokeDashoffset = Math.max(offset, 0);
-      });
+    this._scrollCleanup = csTimelineScrollProgress(body, (progress) => {
+      const offset = length * (1 - progress * 1.3);
+      line.style.strokeDashoffset = Math.max(offset, 0);
     });
   }
 
   /**
-   * On mobile, copy time_label to card headline data attribute
-   * so CSS ::before can display it.
+   * On mobile, ensure time labels are available via data attributes
+   * so CSS ::before can display them.
    */
-  _setMobileTimeLabels() {
-    const milestones = this.querySelectorAll('.cs-transformation__milestone');
-    milestones.forEach((ms) => {
-      const label = ms.querySelector('.cs-transformation__time-label');
-      const headline = ms.querySelector('.cs-transformation__card-headline');
-      if (label && headline) {
-        headline.setAttribute('data-time-label', label.textContent.trim());
+  _initMobileLabels() {
+    const panels = this.querySelectorAll('.cs-transform__panel');
+    panels.forEach((panel) => {
+      const badge = panel.querySelector('.cs-transform__time-badge');
+      const headline = panel.querySelector('.cs-transform__card-headline');
+      if (badge && headline && !headline.getAttribute('data-time-label')) {
+        headline.setAttribute('data-time-label', badge.textContent.trim());
       }
     });
   }
 }
 
-if (!customElements.get('cs-transformation-timeline')) {
-  customElements.define('cs-transformation-timeline', CsTransformationTimeline);
+if (!customElements.get('cs-transform-timeline')) {
+  customElements.define('cs-transform-timeline', CsTransformTimeline);
 }
 </script>
 
 {% schema %}
 {
-  "name": "Transformation Journey",
-  "class": "cs-transformation-section",
+  "name": "TheChill Dönüşüm Yolculuğu",
+  "class": "cs-transform-section",
   "settings": [
     {
       "type": "text",
       "id": "kicker",
-      "label": "Kicker",
-      "default": "DONUSUM SURECI"
+      "label": "Üst Etiket",
+      "default": "DÖNÜŞÜM YOLCULUĞU"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Baslik",
-      "default": "Vucudunuzun Yenilenme Yolculugu"
+      "label": "Başlık",
+      "default": "TheChill ile Sakinliğin Bilimi"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Alt baslik",
-      "default": "Duzenlı kullanımla vucudunuzda gozlemlenmesi beklenen degisimler. Her beden farklıdır — sonuclar kisisel degiskenlik gosterebilir."
+      "label": "Alt başlık",
+      "default": "6 bilimsel bileşen, 2 kapsül, her akşam. Vücudunuzun doğal sakinlik mekanizmalarını adım adım nasıl yeniden kuracağınızı keşfedin."
     },
     {
       "type": "text",
       "id": "cta_text",
       "label": "CTA Buton Metni",
-      "default": "3 Aylık Paketi Kesfet"
+      "default": "3 Aylık Paketi Keşfet"
     },
     {
       "type": "url",
       "id": "cta_url",
-      "label": "CTA Buton Baglantısı"
+      "label": "CTA Buton Bağlantısı"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Ürün"
     }
   ],
   "blocks": [
     {
       "type": "milestone",
-      "name": "Kilometre Tası",
+      "name": "Kilometre Taşı",
       "settings": [
         {
           "type": "text",
           "id": "time_label",
           "label": "Zaman Etiketi",
-          "default": "Hafta 1"
+          "default": "İlk Doz"
         },
         {
           "type": "text",
           "id": "headline",
-          "label": "Baslik",
-          "default": "Ilk Degisimler Baslıyor"
-        },
-        {
-          "type": "richtext",
-          "id": "benefits",
-          "label": "Faydalar",
-          "default": "<ul><li>Enerji seviyesinde artıs</li><li>Uyku kalitesinde iyilesme</li><li>Sindirim duzeninde fark</li></ul>"
+          "label": "Başlık",
+          "default": "Doğal Sakinliğin İlk Sinyali"
         },
         {
           "type": "text",
-          "id": "stat",
-          "label": "Istatistik / Not (opsiyonel)"
+          "id": "benefit_1",
+          "label": "Fayda 1",
+          "default": "Apigenin, GABA-A reseptörlerine bağlanarak 30–60 dakikada sakinleştirici etki başlatır"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_1",
+          "label": "Bileşen 1",
+          "default": "Papatya"
+        },
+        {
+          "type": "text",
+          "id": "benefit_2",
+          "label": "Fayda 2",
+          "default": "GABA transaminaz inhibisyonu ile sinir sistemi dengelenir"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_2",
+          "label": "Bileşen 2",
+          "default": "Melisa"
+        },
+        {
+          "type": "text",
+          "id": "benefit_3",
+          "label": "Fayda 3",
+          "default": "Serotonin ve GABA sentezinde kofaktör olarak görev yapar"
+        },
+        {
+          "type": "text",
+          "id": "ingredient_3",
+          "label": "Bileşen 3",
+          "default": "B6"
+        },
+        {
+          "type": "textarea",
+          "id": "science_callout",
+          "label": "Bilimsel Mekanizma",
+          "default": "Apigenin, benzodiazepinlere benzer bir GABA-A bağlanma profili gösterir — ancak bağımlılık riski taşımadan doğal sakinlik sağlar."
+        },
+        {
+          "type": "text",
+          "id": "stat_reference",
+          "label": "Kaynak / Referans",
+          "default": "Srivastava et al., Molecular Medicine Reports, 2010"
+        },
+        {
+          "type": "select",
+          "id": "illustration",
+          "label": "İllüstrasyon",
+          "default": "molecule",
+          "options": [
+            { "value": "molecule", "label": "Molekül (Papatya + Apigenin)" },
+            { "value": "wave", "label": "Uyku Dalgası" },
+            { "value": "brain", "label": "Beyin Dengesi" },
+            { "value": "harmony", "label": "Botanik Harmoni" }
+          ]
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Transformation Journey",
+      "name": "TheChill Dönüşüm Yolculuğu",
       "blocks": [
         {
           "type": "milestone",
           "settings": {
-            "time_label": "Hafta 1",
-            "headline": "Ilk Degisimler Baslıyor",
-            "benefits": "<ul><li>Enerji seviyesinde artıs</li><li>Uyku kalitesinde iyilesme</li><li>Sindirim duzeninde fark</li></ul>",
-            "stat": ""
+            "time_label": "İLK DOZ",
+            "headline": "Doğal Sakinliğin İlk Sinyali",
+            "benefit_1": "Apigenin, GABA-A reseptörlerine bağlanarak 30–60 dakikada sakinleştirici etki başlatır",
+            "ingredient_1": "Papatya",
+            "benefit_2": "GABA transaminaz inhibisyonu ile sinir sistemi dengelenir",
+            "ingredient_2": "Melisa",
+            "benefit_3": "Serotonin ve GABA sentezinde kofaktör olarak görev yapar",
+            "ingredient_3": "B6",
+            "science_callout": "Apigenin, benzodiazepinlere benzer bir GABA-A bağlanma profili gösterir — ancak bağımlılık riski taşımadan doğal sakinlik sağlar.",
+            "stat_reference": "Srivastava et al., Molecular Medicine Reports, 2010",
+            "illustration": "molecule"
           }
         },
         {
           "type": "milestone",
           "settings": {
-            "time_label": "Ay 1",
-            "headline": "Vucudunuz Yanıt Veriyor",
-            "benefits": "<ul><li>Cilt tonunda canlanma</li><li>Odaklanma ve zihinsel netlık</li><li>Fiziksel dayanıklılık artısı</li></ul>",
-            "stat": ""
+            "time_label": "İLK HAFTA",
+            "headline": "Uyku Kaliteniz Dönüşmeye Başlıyor",
+            "benefit_1": "GABA geri alımı inhibisyonu ile 1 haftada ölçülebilir uyku iyileşmesi",
+            "ingredient_1": "Passiflora",
+            "benefit_2": "İlk adaptojenik yanıt başlar, stres direnci artmaya başlar",
+            "ingredient_2": "Rhodiola",
+            "benefit_3": "Miyelin kılıfı desteği ile sinir iletimi optimize edilir",
+            "ingredient_3": "B12",
+            "science_callout": "Klinik çalışmalar, passiflora ekstresinin 1 hafta içinde uyku kalitesini anlamlı şekilde iyileştirdiğini göstermektedir.",
+            "stat_reference": "Ngan & Conduit, Phytotherapy Research, 2011",
+            "illustration": "wave"
           }
         },
         {
           "type": "milestone",
           "settings": {
-            "time_label": "Ay 2",
-            "headline": "Donusum Hızlanıyor",
-            "benefits": "<ul><li>Bagirsak florasında denge</li><li>Saç ve tırnak guclenmesi</li><li>Bagısıklık sisteminde destek</li></ul>",
-            "stat": ""
+            "time_label": "1. AY",
+            "headline": "Kortizol Dengeniz Yeniden Kuruldu",
+            "benefit_1": "HPA eksen regülasyonu ile kortizol seviyeleri normalleşir",
+            "ingredient_1": "Rhodiola",
+            "benefit_2": "Anksiyolitik etkinlik, 4 haftalık denemelerde benzodiazepinlerle karşılaştırılabilir",
+            "ingredient_2": "Passiflora",
+            "benefit_3": "Tüm B-vitamin kofaktörleri tam kapasiteyle çalışır",
+            "ingredient_3": "B6 + B12",
+            "science_callout": "Rhodiola rosea ekstresi (2×50mg/gün) ile yapılan 20 günlük çalışma, yorgunlukta anlamlı azalma ve genel iyilik halinde artış göstermiştir.",
+            "stat_reference": "Darbinyan et al., Phytomedicine, 2000",
+            "illustration": "brain"
           }
         },
         {
           "type": "milestone",
           "settings": {
-            "time_label": "Ay 3",
-            "headline": "Tam Potansiyel",
-            "benefits": "<ul><li>Hucresel yenilenme</li><li>Kronik yorgunlukta azalma</li><li>Genel yasam kalitesinde artıs</li></ul>",
-            "stat": ""
+            "time_label": "3. AY",
+            "headline": "Yeni Normal: Sakin ve Dengeli",
+            "benefit_1": "Tam adaptojenik döngü tamamlanır, kronik stres direnci kurulur",
+            "ingredient_1": "Rhodiola",
+            "benefit_2": "Sirkadiyen ritim optimizasyonu ile kalıcı uyku düzeni sağlanır",
+            "ingredient_2": "Passiflora",
+            "benefit_3": "6 bileşenin sinerjik etkisi ile kalıcı sakinlik ve denge",
+            "ingredient_3": "Tam Formül",
+            "science_callout": "Tam adaptojenik etki için 3 ay düzenli kullanım önerilir — kalıcı kortizol direnci ancak bu sürede oluşur.",
+            "stat_reference": "EFSA Panel on Dietetic Products, 2012",
+            "illustration": "harmony"
           }
         }
       ]
