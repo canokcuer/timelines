@@ -1,7 +1,7 @@
 {% comment %}
-  TheChill Transformation Journey — calming timeline section.
-  Self-contained: all styles, scripts, and illustrations are inlined.
-  4 science-backed milestones showing TheChill's progressive benefits.
+  TheChill Transformation Journey — Horizontal Stepper Timeline.
+  Self-contained: all styles, scripts, and SVG illustrations inlined.
+  4 science-backed milestones in a compact ~1-viewport stepper layout.
 {% endcomment %}
 
 <cs-transform-timeline>
@@ -12,7 +12,8 @@
   data-cs-transform
 >
   <div class="cs-timeline__container">
-    {%- comment -%} Section Header {%- endcomment -%}
+
+    {%- comment -%} ── Section Header ──────────────────────────────── {%- endcomment -%}
     <header class="cs-timeline__header cs-transform__header cs-transform__reveal">
       {%- if section.settings.kicker != blank -%}
         <span class="cs-timeline__kicker cs-transform__kicker">
@@ -30,199 +31,370 @@
         </p>
       {%- endif -%}
     </header>
-  </div>
 
-  {%- comment -%} Timeline Body with Vertical Spine {%- endcomment -%}
-  <div class="cs-transform__body">
-    {%- comment -%} Central Spine SVG (desktop only) {%- endcomment -%}
-    <div class="cs-transform__spine cs-timeline--hide-mobile" aria-hidden="true">
-      <svg class="cs-transform__spine-svg" viewBox="0 0 2 100" preserveAspectRatio="none" fill="none">
-        <defs>
-          <linearGradient id="transformSpineGrad-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0D4F47" />
-            <stop offset="100%" stop-color="#C4973B" />
-          </linearGradient>
-        </defs>
-        <line
-          x1="1" y1="0" x2="1" y2="100"
-          stroke="url(#transformSpineGrad-{{ section.id }})"
-          stroke-width="2"
-          class="cs-timeline__line-draw cs-transform__spine-line"
-          data-cs-spine-line
-          style="--line-length: 100;"
-        />
-      </svg>
+    {%- comment -%} ── Stepper Navigation ──────────────────────────── {%- endcomment -%}
+    <div class="cs-transform__stepper cs-transform__reveal" role="tablist" aria-label="Dönüşüm adımları">
+      <div class="cs-transform__stepper-track">
+        <div class="cs-transform__stepper-rail" aria-hidden="true">
+          <div class="cs-transform__stepper-fill" data-cs-stepper-fill></div>
+        </div>
+
+        {%- for block in section.blocks -%}
+          <button
+            class="cs-transform__step{% if forloop.first %} cs-transform__step--active{% endif %}"
+            role="tab"
+            type="button"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="ct-panel-{{ forloop.index0 }}-{{ section.id }}"
+            id="ct-tab-{{ forloop.index0 }}-{{ section.id }}"
+            data-cs-step="{{ forloop.index0 }}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="cs-transform__step-node" aria-hidden="true">{{ forloop.index }}</span>
+            <span class="cs-transform__step-label">{{ block.settings.time_label }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
     </div>
 
-    {%- comment -%} Milestone Panels {%- endcomment -%}
-    {%- for block in section.blocks -%}
-      {%- assign is_odd = forloop.index | modulo: 2 -%}
-      {%- assign panel_side = 'left' -%}
-      {%- if is_odd == 0 -%}
-        {%- assign panel_side = 'right' -%}
-      {%- endif -%}
-      {%- assign is_last = false -%}
-      {%- if forloop.last -%}
-        {%- assign is_last = true -%}
-      {%- endif -%}
+    {%- comment -%} ── Detail Panels ───────────────────────────────── {%- endcomment -%}
+    <div class="cs-transform__details" data-cs-details>
+      {%- for block in section.blocks -%}
+        {%- assign is_last = false -%}
+        {%- if forloop.last -%}{%- assign is_last = true -%}{%- endif -%}
 
-      <div
-        class="cs-transform__panel cs-transform__panel--{{ panel_side }}"
-        role="listitem"
-        data-milestone-index="{{ forloop.index0 }}"
-        {{ block.shopify_attributes }}
-      >
-        {%- comment -%} Node on spine {%- endcomment -%}
-        <div class="cs-transform__node-wrap" aria-hidden="true">
-          <div class="cs-transform__node" data-cs-node></div>
-          <span class="cs-transform__time-badge">
-            {{ block.settings.time_label }}
-          </span>
-        </div>
+        <div
+          class="cs-transform__detail{% if forloop.first %} cs-transform__detail--active{% endif %}"
+          role="tabpanel"
+          id="ct-panel-{{ forloop.index0 }}-{{ section.id }}"
+          aria-labelledby="ct-tab-{{ forloop.index0 }}-{{ section.id }}"
+          {% unless forloop.first %}aria-hidden="true"{% endunless %}
+          data-cs-detail="{{ forloop.index0 }}"
+        >
+          <div class="cs-transform__detail-grid">
 
-        {%- comment -%} Content Card {%- endcomment -%}
-        <div class="cs-transform__card cs-transform__reveal" data-cs-reveal>
-          <h3 class="cs-transform__card-headline" data-time-label="{{ block.settings.time_label }}">
-            {{ block.settings.headline }}
-          </h3>
+            {%- comment -%} ── SVG Illustration ─────────────────────── {%- endcomment -%}
+            <div class="cs-transform__detail-visual">
+              <div class="cs-transform__illust-frame">
+                {%- case block.settings.illustration -%}
 
-          {%- comment -%} Benefits with ingredient pills {%- endcomment -%}
-          <ul class="cs-transform__benefits" role="list">
-            {%- if block.settings.benefit_1 != blank -%}
-              <li class="cs-transform__benefit">
-                <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
-                {%- if block.settings.ingredient_1 != blank -%}
-                  <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_1 }}</span>
+                  {%- when 'molecule' -%}
+                    <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
+                      <defs>
+                        <radialGradient id="ct-fglow-{{ section.id }}" cx="50%" cy="42%" r="38%">
+                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.07"/>
+                          <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
+                        </radialGradient>
+                        <linearGradient id="ct-petal-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.08"/>
+                          <stop offset="100%" stop-color="#0D4F47" stop-opacity="0.02"/>
+                        </linearGradient>
+                      </defs>
+                      <circle cx="120" cy="100" r="88" fill="url(#ct-fglow-{{ section.id }})"/>
+                      <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
+                      <!-- Chamomile — 12 petals -->
+                      <g transform="translate(120,95)">
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(30)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(60)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" transform="rotate(90)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(120)"/>
+                        <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(150)"/>
+                        <!-- Petal veins -->
+                        <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18"/>
+                        <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18" transform="rotate(60)"/>
+                        <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18" transform="rotate(120)"/>
+                        <!-- Centre disc -->
+                        <circle r="12" fill="#C4973B" opacity="0.12" stroke="#C4973B" stroke-width="1"/>
+                        <circle cx="-4" cy="-4" r="1.8" fill="#C4973B" opacity="0.4"/>
+                        <circle cx="4" cy="2" r="1.5" fill="#C4973B" opacity="0.35"/>
+                        <circle cx="-1" cy="5" r="1.2" fill="#C4973B" opacity="0.28"/>
+                        <circle cx="5" cy="-3" r="1" fill="#C4973B" opacity="0.25"/>
+                        <circle r="2.2" fill="#C4973B" opacity="0.5"/>
+                      </g>
+                      <!-- Stem & leaves -->
+                      <path d="M120 125 Q117 148,113 168 Q109 185,105 200" stroke="#0D4F47" stroke-width="1.2" opacity="0.22" fill="none"/>
+                      <path d="M114 150 Q102 143,95 148 Q103 153,114 150Z" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="#0D4F47" fill-opacity="0.04"/>
+                      <path d="M110 175 Q122 168,130 173 Q122 178,110 175Z" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="#0D4F47" fill-opacity="0.04"/>
+                      <!-- Apigenin molecule — three fused hexagonal rings -->
+                      <g transform="translate(175,178)" opacity="0.55">
+                        <polygon points="0,-14 12,-7 12,7 0,14 -12,7 -12,-7" stroke="#C4973B" stroke-width="1" fill="none"/>
+                        <polygon points="24,-14 36,-7 36,7 24,14 12,7 12,-7" stroke="#C4973B" stroke-width="1" fill="none"/>
+                        <polygon points="24,14 36,21 36,35 24,42 12,35 12,21" stroke="#C4973B" stroke-width="1" fill="none"/>
+                        <line x1="2" y1="-11" x2="9" y2="-8" stroke="#C4973B" stroke-width="0.5" opacity="0.4"/>
+                        <line x1="2" y1="11" x2="9" y2="8" stroke="#C4973B" stroke-width="0.5" opacity="0.4"/>
+                        <circle cx="-12" cy="7" r="3.5" stroke="#108474" stroke-width="0.7" fill="#108474" fill-opacity="0.12"/>
+                        <circle cx="36" cy="-7" r="3.5" stroke="#108474" stroke-width="0.7" fill="#108474" fill-opacity="0.12"/>
+                        <circle cx="36" cy="35" r="3.5" stroke="#108474" stroke-width="0.7" fill="#108474" fill-opacity="0.12"/>
+                      </g>
+                      <!-- Connecting dotted line -->
+                      <path d="M132 115 Q155 140,168 168" stroke="#C4973B" stroke-width="0.7" stroke-dasharray="3 4" opacity="0.18" fill="none"/>
+                      <!-- Floating particles -->
+                      <circle cx="75" cy="55" r="2" fill="#0D4F47" opacity="0.09"/>
+                      <circle cx="165" cy="45" r="1.5" fill="#C4973B" opacity="0.13"/>
+                      <circle cx="50" cy="135" r="1.8" fill="#0D4F47" opacity="0.07"/>
+                      <circle cx="195" cy="85" r="1.5" fill="#C4973B" opacity="0.1"/>
+                      <circle cx="65" cy="190" r="1" fill="#0D4F47" opacity="0.06"/>
+                    </svg>
+
+                  {%- when 'wave' -%}
+                    <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
+                      <defs>
+                        <linearGradient id="ct-ngrd-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.06"/>
+                          <stop offset="60%" stop-color="#0D4F47" stop-opacity="0.02"/>
+                          <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
+                        </linearGradient>
+                        <linearGradient id="ct-wgrd-{{ section.id }}" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#0D4F47"/>
+                          <stop offset="100%" stop-color="#C4973B"/>
+                        </linearGradient>
+                      </defs>
+                      <circle cx="120" cy="120" r="110" fill="url(#ct-ngrd-{{ section.id }})"/>
+                      <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
+                      <!-- Crescent moon -->
+                      <path d="M125 28 A28 28 0 1 0 125 84 A20 20 0 1 1 125 28Z" stroke="#C4973B" stroke-width="1.2" opacity="0.5" fill="#C4973B" fill-opacity="0.06"/>
+                      <circle cx="112" cy="50" r="3" fill="#C4973B" opacity="0.07"/>
+                      <circle cx="108" cy="63" r="2" fill="#C4973B" opacity="0.05"/>
+                      <!-- Stars — 4-pointed -->
+                      <path d="M70 33 L72 38 L77 40 L72 42 L70 47 L68 42 L63 40 L68 38Z" fill="#C4973B" opacity="0.28"/>
+                      <path d="M170 53 L171.5 57 L175.5 58.5 L171.5 60 L170 64 L168.5 60 L164.5 58.5 L168.5 57Z" fill="#C4973B" opacity="0.22"/>
+                      <!-- Stars — dots -->
+                      <circle cx="55" cy="48" r="1.2" fill="#C4973B" opacity="0.22"/>
+                      <circle cx="185" cy="36" r="1" fill="#C4973B" opacity="0.18"/>
+                      <circle cx="90" cy="23" r="0.8" fill="#C4973B" opacity="0.16"/>
+                      <circle cx="155" cy="26" r="1" fill="#C4973B" opacity="0.2"/>
+                      <circle cx="200" cy="63" r="0.8" fill="#C4973B" opacity="0.14"/>
+                      <circle cx="42" cy="73" r="1" fill="#C4973B" opacity="0.16"/>
+                      <!-- Cloud wisps -->
+                      <path d="M40 85 Q65 80,90 85 Q110 82,130 86" stroke="#0D4F47" stroke-width="0.6" opacity="0.09" fill="none"/>
+                      <path d="M100 90 Q130 85,160 90 Q180 87,200 91" stroke="#0D4F47" stroke-width="0.5" opacity="0.06" fill="none"/>
+                      <!-- Horizon -->
+                      <line x1="20" y1="105" x2="220" y2="105" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <!-- Sleep waves — deeper = calmer -->
+                      <path d="M15 120 Q40 105,65 120 Q90 135,115 120 Q140 105,165 120 Q190 135,215 120" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1.5" opacity="0.5" fill="none"/>
+                      <path d="M15 140 Q45 128,75 140 Q105 152,135 140 Q165 128,195 140 Q215 148,225 143" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1.3" opacity="0.32" fill="none"/>
+                      <path d="M15 158 Q50 149,85 158 Q120 167,155 158 Q190 149,225 158" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1" opacity="0.22" fill="none"/>
+                      <path d="M15 174 Q55 168,95 174 Q135 180,175 174 Q205 170,225 173" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="0.8" opacity="0.13" fill="none"/>
+                      <!-- Floating z's -->
+                      <text x="150" y="42" font-family="var(--cs-font-family)" font-size="14" font-weight="300" fill="#C4973B" opacity="0.18">z</text>
+                      <text x="163" y="32" font-family="var(--cs-font-family)" font-size="10" font-weight="300" fill="#C4973B" opacity="0.13">z</text>
+                      <text x="173" y="24" font-family="var(--cs-font-family)" font-size="7" font-weight="300" fill="#C4973B" opacity="0.09">z</text>
+                      <!-- Particles -->
+                      <circle cx="45" cy="180" r="1.5" fill="#0D4F47" opacity="0.07"/>
+                      <circle cx="195" cy="170" r="1.2" fill="#C4973B" opacity="0.09"/>
+                    </svg>
+
+                  {%- when 'brain' -%}
+                    <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
+                      <defs>
+                        <radialGradient id="ct-bglow-{{ section.id }}" cx="50%" cy="38%" r="36%">
+                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.06"/>
+                          <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
+                        </radialGradient>
+                      </defs>
+                      <circle cx="120" cy="100" r="88" fill="url(#ct-bglow-{{ section.id }})"/>
+                      <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
+                      <!-- Brain — left hemisphere -->
+                      <path d="M120 30 C95 30,75 42,68 58 C62 72,58 85,60 100 C62 110,68 118,72 125 C65 132,60 142,63 152 C66 162,78 168,90 165 C98 163,108 158,115 150 L120 145" stroke="#0D4F47" stroke-width="1.3" opacity="0.42" fill="#0D4F47" fill-opacity="0.02"/>
+                      <!-- Brain — right hemisphere -->
+                      <path d="M120 30 C145 30,165 42,172 58 C178 72,182 85,180 100 C178 110,172 118,168 125 C175 132,180 142,177 152 C174 162,162 168,150 165 C142 163,132 158,125 150 L120 145" stroke="#0D4F47" stroke-width="1.3" opacity="0.42" fill="#0D4F47" fill-opacity="0.02"/>
+                      <!-- Centre line -->
+                      <line x1="120" y1="33" x2="120" y2="143" stroke="#0D4F47" stroke-width="0.6" opacity="0.12"/>
+                      <!-- Gyri folds — left -->
+                      <path d="M80 55 Q90 50,100 58" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="none"/>
+                      <path d="M72 75 Q85 68,98 78" stroke="#0D4F47" stroke-width="0.7" opacity="0.15" fill="none"/>
+                      <path d="M68 95 Q82 88,96 98" stroke="#0D4F47" stroke-width="0.7" opacity="0.13" fill="none"/>
+                      <path d="M75 115 Q88 108,100 118" stroke="#0D4F47" stroke-width="0.7" opacity="0.12" fill="none"/>
+                      <!-- Gyri folds — right -->
+                      <path d="M160 55 Q150 50,140 58" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="none"/>
+                      <path d="M168 75 Q155 68,142 78" stroke="#0D4F47" stroke-width="0.7" opacity="0.15" fill="none"/>
+                      <path d="M172 95 Q158 88,144 98" stroke="#0D4F47" stroke-width="0.7" opacity="0.13" fill="none"/>
+                      <path d="M165 115 Q152 108,140 118" stroke="#0D4F47" stroke-width="0.7" opacity="0.12" fill="none"/>
+                      <!-- Neural dots + connections -->
+                      <circle cx="88" cy="65" r="2" fill="#0D4F47" opacity="0.13"/>
+                      <circle cx="105" cy="82" r="2" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="92" cy="100" r="1.8" fill="#0D4F47" opacity="0.09"/>
+                      <circle cx="152" cy="65" r="2" fill="#0D4F47" opacity="0.13"/>
+                      <circle cx="135" cy="82" r="2" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="148" cy="100" r="1.8" fill="#0D4F47" opacity="0.09"/>
+                      <line x1="88" y1="65" x2="105" y2="82" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
+                      <line x1="105" y1="82" x2="92" y2="100" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
+                      <line x1="152" y1="65" x2="135" y2="82" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
+                      <line x1="135" y1="82" x2="148" y2="100" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
+                      <!-- Balance scales -->
+                      <polygon points="120,170 114,180 126,180" stroke="#C4973B" stroke-width="1" opacity="0.45" fill="#C4973B" fill-opacity="0.05"/>
+                      <line x1="78" y1="170" x2="162" y2="170" stroke="#C4973B" stroke-width="1.2" opacity="0.42"/>
+                      <circle cx="120" cy="170" r="2.5" fill="#C4973B" opacity="0.38"/>
+                      <!-- Left pan — cortisol down -->
+                      <line x1="78" y1="170" x2="78" y2="183" stroke="#C4973B" stroke-width="0.8" opacity="0.3"/>
+                      <path d="M66 183 Q72 187,78 183 Q84 187,90 183" stroke="#C4973B" stroke-width="0.8" opacity="0.3" fill="#C4973B" fill-opacity="0.03"/>
+                      <path d="M72 189 L75 193 L78 189 L81 193 L84 189" stroke="#C4973B" stroke-width="0.6" opacity="0.2" fill="none"/>
+                      <!-- Right pan — wellness up -->
+                      <line x1="162" y1="170" x2="162" y2="183" stroke="#C4973B" stroke-width="0.8" opacity="0.3"/>
+                      <path d="M150 183 Q156 187,162 183 Q168 187,174 183" stroke="#C4973B" stroke-width="0.8" opacity="0.3" fill="#C4973B" fill-opacity="0.03"/>
+                      <path d="M154 190 Q158 186,162 190 Q166 194,170 190" stroke="#108474" stroke-width="0.7" opacity="0.25" fill="none"/>
+                      <!-- Arrows -->
+                      <line x1="52" y1="88" x2="52" y2="118" stroke="#C4973B" stroke-width="0.9" opacity="0.2"/>
+                      <polyline points="48,113 52,120 56,113" stroke="#C4973B" stroke-width="0.9" opacity="0.2" fill="none"/>
+                      <line x1="188" y1="118" x2="188" y2="88" stroke="#108474" stroke-width="0.9" opacity="0.2"/>
+                      <polyline points="184,93 188,86 192,93" stroke="#108474" stroke-width="0.9" opacity="0.2" fill="none"/>
+                      <!-- Calm radiations -->
+                      <circle cx="120" cy="90" r="52" stroke="#0D4F47" stroke-width="0.3" opacity="0.05" fill="none"/>
+                      <circle cx="120" cy="90" r="72" stroke="#0D4F47" stroke-width="0.25" opacity="0.03" fill="none"/>
+                    </svg>
+
+                  {%- when 'harmony' -%}
+                    <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
+                      <defs>
+                        <radialGradient id="ct-hglow-{{ section.id }}" cx="50%" cy="50%" r="42%">
+                          <stop offset="0%" stop-color="#0D4F47" stop-opacity="0.05"/>
+                          <stop offset="100%" stop-color="#0D4F47" stop-opacity="0"/>
+                        </radialGradient>
+                      </defs>
+                      <circle cx="120" cy="120" r="105" fill="url(#ct-hglow-{{ section.id }})"/>
+                      <!-- Decorative rings -->
+                      <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
+                      <circle cx="120" cy="120" r="98" stroke="#0D4F47" stroke-width="0.35" opacity="0.05"/>
+                      <circle cx="120" cy="120" r="55" stroke="#0D4F47" stroke-width="0.6" opacity="0.08" stroke-dasharray="4 4"/>
+                      <!-- Central medallion -->
+                      <circle cx="120" cy="120" r="18" stroke="#C4973B" stroke-width="1" opacity="0.38" fill="#C4973B" fill-opacity="0.04"/>
+                      <circle cx="120" cy="120" r="8" fill="#C4973B" opacity="0.13"/>
+                      <!-- Connecting lines -->
+                      <line x1="120" y1="102" x2="120" y2="38" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <line x1="136" y1="111" x2="191" y2="78" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <line x1="136" y1="129" x2="191" y2="162" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <line x1="120" y1="138" x2="120" y2="202" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <line x1="104" y1="129" x2="49" y2="162" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <line x1="104" y1="111" x2="49" y2="78" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
+                      <!-- 1 · Rhodiola Rosea (0°) — rosette -->
+                      <g transform="translate(120,36)">
+                        <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" fill="#0D4F47" fill-opacity="0.03"/>
+                        <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.42" fill="#0D4F47" fill-opacity="0.02" transform="rotate(45)"/>
+                        <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" fill="#0D4F47" fill-opacity="0.03" transform="rotate(90)"/>
+                        <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.42" fill="#0D4F47" fill-opacity="0.02" transform="rotate(135)"/>
+                        <circle r="3" fill="#0D4F47" opacity="0.13"/>
+                      </g>
+                      <!-- 2 · Chamomile (60°) — daisy -->
+                      <g transform="translate(191,76)">
+                        <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.42" fill="none"/>
+                        <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.38" fill="none" transform="rotate(45)"/>
+                        <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.42" fill="none" transform="rotate(90)"/>
+                        <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.38" fill="none" transform="rotate(135)"/>
+                        <circle r="4" stroke="#C4973B" stroke-width="0.7" fill="#C4973B" opacity="0.18"/>
+                      </g>
+                      <!-- 3 · Passiflora (120°) — star corona -->
+                      <g transform="translate(191,164)">
+                        <polygon points="0,-14 3,-5 12,-5 5,1 7,10 0,5 -7,10 -5,1 -12,-5 -3,-5" stroke="#C4973B" stroke-width="0.7" opacity="0.38" fill="#C4973B" fill-opacity="0.03"/>
+                        <line x1="0" y1="0" x2="0" y2="-11" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
+                        <line x1="0" y1="0" x2="10" y2="-4" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
+                        <line x1="0" y1="0" x2="6" y2="9" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
+                        <line x1="0" y1="0" x2="-6" y2="9" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
+                        <line x1="0" y1="0" x2="-10" y2="-4" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
+                        <circle r="2.5" fill="#C4973B" opacity="0.18"/>
+                      </g>
+                      <!-- 4 · Melissa (180°) — heart-leaf -->
+                      <g transform="translate(120,202)">
+                        <path d="M0,-14 C8,-14 14,-6 14,2 C14,8 8,14 0,16 C-8,14 -14,8 -14,2 C-14,-6 -8,-14 0,-14Z" stroke="#0D4F47" stroke-width="0.8" opacity="0.45" fill="#0D4F47" fill-opacity="0.03"/>
+                        <line x1="0" y1="-12" x2="0" y2="14" stroke="#0D4F47" stroke-width="0.35" opacity="0.18"/>
+                        <line x1="0" y1="0" x2="8" y2="-4" stroke="#0D4F47" stroke-width="0.3" opacity="0.12"/>
+                        <line x1="0" y1="4" x2="-7" y2="0" stroke="#0D4F47" stroke-width="0.3" opacity="0.12"/>
+                      </g>
+                      <!-- 5 · B6 (240°) — pyridine hex -->
+                      <g transform="translate(49,164)">
+                        <polygon points="0,-13 11,-6.5 11,6.5 0,13 -11,6.5 -11,-6.5" stroke="#C4973B" stroke-width="1" opacity="0.42" fill="#C4973B" fill-opacity="0.04"/>
+                        <circle r="3" fill="#C4973B" opacity="0.18"/>
+                        <text x="-4" y="3" font-family="var(--cs-font-family)" font-size="6" fill="#C4973B" opacity="0.35" font-weight="600">B6</text>
+                      </g>
+                      <!-- 6 · B12 (300°) — corrin ring -->
+                      <g transform="translate(49,76)">
+                        <rect x="-12" y="-12" width="24" height="24" rx="3" stroke="#C4973B" stroke-width="0.8" opacity="0.38" fill="#C4973B" fill-opacity="0.03" transform="rotate(45)"/>
+                        <circle r="5" stroke="#C4973B" stroke-width="0.7" opacity="0.28" fill="#C4973B" fill-opacity="0.08"/>
+                        <text x="-6" y="3" font-family="var(--cs-font-family)" font-size="5.5" fill="#C4973B" opacity="0.32" font-weight="600">B12</text>
+                      </g>
+                      <!-- Outer dots -->
+                      <circle cx="120" cy="22" r="2" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="205" cy="70" r="2" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="205" cy="170" r="2" fill="#C4973B" opacity="0.1"/>
+                      <circle cx="120" cy="218" r="2" fill="#0D4F47" opacity="0.1"/>
+                      <circle cx="35" cy="170" r="2" fill="#C4973B" opacity="0.1"/>
+                      <circle cx="35" cy="70" r="2" fill="#C4973B" opacity="0.1"/>
+                    </svg>
+
+                  {%- else -%}
+                    <svg class="cs-transform__illust-svg" viewBox="0 0 240 240" fill="none" aria-hidden="true" focusable="false">
+                      <circle cx="120" cy="120" r="60" stroke="#0D4F47" stroke-width="1" opacity="0.15"/>
+                      <circle cx="120" cy="120" r="8" fill="#C4973B" opacity="0.2"/>
+                    </svg>
+                {%- endcase -%}
+              </div>
+            </div>
+
+            {%- comment -%} ── Content ──────────────────────────────── {%- endcomment -%}
+            <div class="cs-transform__detail-content">
+              <h3 class="cs-transform__detail-headline">
+                {{ block.settings.headline }}
+              </h3>
+
+              <ul class="cs-transform__benefits" role="list">
+                {%- if block.settings.benefit_1 != blank -%}
+                  <li class="cs-transform__benefit">
+                    <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
+                    {%- if block.settings.ingredient_1 != blank -%}
+                      <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_1 }}</span>
+                    {%- endif -%}
+                  </li>
                 {%- endif -%}
-              </li>
-            {%- endif -%}
-            {%- if block.settings.benefit_2 != blank -%}
-              <li class="cs-transform__benefit">
-                <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
-                {%- if block.settings.ingredient_2 != blank -%}
-                  <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_2 }}</span>
+                {%- if block.settings.benefit_2 != blank -%}
+                  <li class="cs-transform__benefit">
+                    <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
+                    {%- if block.settings.ingredient_2 != blank -%}
+                      <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_2 }}</span>
+                    {%- endif -%}
+                  </li>
                 {%- endif -%}
-              </li>
-            {%- endif -%}
-            {%- if block.settings.benefit_3 != blank -%}
-              <li class="cs-transform__benefit">
-                <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
-                {%- if block.settings.ingredient_3 != blank -%}
-                  <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_3 }}</span>
+                {%- if block.settings.benefit_3 != blank -%}
+                  <li class="cs-transform__benefit">
+                    <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
+                    {%- if block.settings.ingredient_3 != blank -%}
+                      <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_3 }}</span>
+                    {%- endif -%}
+                  </li>
                 {%- endif -%}
-              </li>
-            {%- endif -%}
-          </ul>
+              </ul>
 
-          {%- comment -%} Science callout box {%- endcomment -%}
-          {%- if block.settings.science_callout != blank -%}
-            <div class="cs-transform__science-callout">
-              <span class="cs-transform__science-label">Bilimsel Mekanizma</span>
-              <p class="cs-transform__science-text">{{ block.settings.science_callout }}</p>
-              {%- if block.settings.stat_reference != blank -%}
-                <cite class="cs-transform__science-ref">{{ block.settings.stat_reference }}</cite>
+              {%- if block.settings.science_callout != blank -%}
+                <div class="cs-transform__science-callout">
+                  <span class="cs-transform__science-label">Bilimsel Mekanizma</span>
+                  <p class="cs-transform__science-text">{{ block.settings.science_callout }}</p>
+                  {%- if block.settings.stat_reference != blank -%}
+                    <cite class="cs-transform__science-ref">{{ block.settings.stat_reference }}</cite>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if is_last and section.settings.cta_text != blank -%}
+                <div class="cs-transform__cta-wrap">
+                  <a
+                    href="{{ section.settings.cta_url }}"
+                    class="cs-transform__cta"
+                    aria-label="{{ section.settings.cta_text }}"
+                  >
+                    {{- section.settings.cta_text -}}
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                      <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
               {%- endif -%}
             </div>
-          {%- endif -%}
 
-          {%- comment -%} CTA on last milestone {%- endcomment -%}
-          {%- if is_last and section.settings.cta_text != blank -%}
-            <div class="cs-transform__cta-wrap">
-              <a
-                href="{{ section.settings.cta_url }}"
-                class="cs-transform__cta"
-                aria-label="{{ section.settings.cta_text }}"
-              >
-                {{- section.settings.cta_text -}}
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
-                  <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </div>
-          {%- endif -%}
-        </div>
-
-        {%- comment -%} SVG Illustration (desktop only) {%- endcomment -%}
-        <div class="cs-transform__illust cs-timeline--hide-mobile cs-transform__reveal" data-cs-reveal>
-          <div class="cs-transform__illust-circle">
-            {%- case block.settings.illustration -%}
-              {%- when 'molecule' -%}
-                {%- comment -%} Chamomile flower silhouette + hexagonal apigenin ring {%- endcomment -%}
-                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
-                  <!-- Chamomile petals -->
-                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.5" transform="rotate(0 60 60)"/>
-                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.45" transform="rotate(60 60 60)"/>
-                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.4" transform="rotate(120 60 60)"/>
-                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.45" transform="rotate(180 60 60)"/>
-                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.5" transform="rotate(240 60 60)"/>
-                  <ellipse cx="60" cy="32" rx="6" ry="14" stroke="#0D4F47" stroke-width="1.2" opacity="0.4" transform="rotate(300 60 60)"/>
-                  <!-- Center -->
-                  <circle cx="60" cy="60" r="8" stroke="#C4973B" stroke-width="1.2" opacity="0.5"/>
-                  <!-- Hexagonal apigenin ring -->
-                  <polygon points="60,78 72,85 72,99 60,106 48,99 48,85" stroke="#0D4F47" stroke-width="1" opacity="0.35" fill="none"/>
-                  <circle cx="60" cy="92" r="2" fill="#C4973B" opacity="0.4"/>
-                </svg>
-
-              {%- when 'wave' -%}
-                {%- comment -%} Sleep wave rhythm + crescent moon {%- endcomment -%}
-                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
-                  <!-- Sleep waves -->
-                  <path d="M15 50 Q30 38, 45 50 Q60 62, 75 50 Q90 38, 105 50" stroke="#0D4F47" stroke-width="1.5" opacity="0.5" fill="none"/>
-                  <path d="M15 60 Q30 48, 45 60 Q60 72, 75 60 Q90 48, 105 60" stroke="#0D4F47" stroke-width="1.2" opacity="0.4" fill="none"/>
-                  <path d="M15 70 Q30 58, 45 70 Q60 82, 75 70 Q90 58, 105 70" stroke="#0D4F47" stroke-width="1" opacity="0.3" fill="none"/>
-                  <!-- Crescent moon -->
-                  <path d="M60 20 A18 18 0 1 0 60 56 A12 12 0 1 1 60 20Z" stroke="#C4973B" stroke-width="1.2" opacity="0.5" fill="none"/>
-                  <!-- Stars -->
-                  <circle cx="35" cy="28" r="1.5" fill="#C4973B" opacity="0.4"/>
-                  <circle cx="88" cy="24" r="1" fill="#C4973B" opacity="0.35"/>
-                  <circle cx="78" cy="35" r="1.2" fill="#C4973B" opacity="0.3"/>
-                </svg>
-
-              {%- when 'brain' -%}
-                {%- comment -%} Brain outline with balance scales (cortisol equilibrium) {%- endcomment -%}
-                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
-                  <!-- Simplified brain outline -->
-                  <path d="M60 25 C42 25, 30 35, 30 50 C30 58, 34 64, 40 68 C36 72, 35 78, 38 84 C41 90, 48 92, 55 90 L60 88 L65 90 C72 92, 79 90, 82 84 C85 78, 84 72, 80 68 C86 64, 90 58, 90 50 C90 35, 78 25, 60 25Z" stroke="#0D4F47" stroke-width="1.2" opacity="0.45" fill="none"/>
-                  <!-- Center divide -->
-                  <line x1="60" y1="28" x2="60" y2="88" stroke="#0D4F47" stroke-width="0.8" opacity="0.25"/>
-                  <!-- Balance scales below -->
-                  <line x1="40" y1="102" x2="80" y2="102" stroke="#C4973B" stroke-width="1.2" opacity="0.5"/>
-                  <line x1="60" y1="95" x2="60" y2="102" stroke="#C4973B" stroke-width="1.2" opacity="0.5"/>
-                  <!-- Scale pans -->
-                  <path d="M42 102 L38 108 L50 108 L46 102" stroke="#C4973B" stroke-width="1" opacity="0.4" fill="none"/>
-                  <path d="M74 102 L70 108 L82 108 L78 102" stroke="#C4973B" stroke-width="1" opacity="0.4" fill="none"/>
-                  <!-- Fulcrum -->
-                  <polygon points="60,95 56,100 64,100" stroke="#C4973B" stroke-width="1" opacity="0.5" fill="none"/>
-                </svg>
-
-              {%- when 'harmony' -%}
-                {%- comment -%} Botanical harmony circle — 6 radiating leaves for 6 ingredients {%- endcomment -%}
-                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
-                  <!-- Central circle -->
-                  <circle cx="60" cy="60" r="12" stroke="#0D4F47" stroke-width="1.2" opacity="0.5"/>
-                  <circle cx="60" cy="60" r="24" stroke="#0D4F47" stroke-width="0.8" opacity="0.2" stroke-dasharray="3 3"/>
-                  <!-- 6 botanical leaves radiating outward -->
-                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.5" fill="none"/>
-                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.45" fill="none" transform="rotate(60 60 60)"/>
-                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#C4973B" stroke-width="1" opacity="0.4" fill="none" transform="rotate(120 60 60)"/>
-                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.5" fill="none" transform="rotate(180 60 60)"/>
-                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#C4973B" stroke-width="1" opacity="0.45" fill="none" transform="rotate(240 60 60)"/>
-                  <path d="M60 48 C56 38, 52 28, 60 20 C68 28, 64 38, 60 48Z" stroke="#0D4F47" stroke-width="1" opacity="0.4" fill="none" transform="rotate(300 60 60)"/>
-                  <!-- Center dot -->
-                  <circle cx="60" cy="60" r="3" fill="#C4973B" opacity="0.4"/>
-                </svg>
-
-              {%- else -%}
-                {%- comment -%} Default: simple circle placeholder {%- endcomment -%}
-                <svg class="cs-transform__illust-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false">
-                  <circle cx="60" cy="60" r="30" stroke="#0D4F47" stroke-width="1.2" opacity="0.3"/>
-                  <circle cx="60" cy="60" r="6" fill="#C4973B" opacity="0.4"/>
-                </svg>
-            {%- endcase -%}
           </div>
         </div>
-      </div>
-    {%- endfor -%}
+      {%- endfor -%}
+    </div>
+
   </div>
 </section>
 </cs-transform-timeline>
@@ -230,15 +402,9 @@
 <style>
 /* ============================================================================
    CS Timeline Base — Design Tokens & Shared Utilities
-   Cyrasoul Timeline Sections
    ============================================================================ */
 
-/* --------------------------------------------------------------------------
-   Design Tokens
-   -------------------------------------------------------------------------- */
-
 :root {
-  /* Brand Colors */
   --cs-gold: #FFDF00;
   --cs-gold-soft: rgba(255, 223, 0, 0.15);
   --cs-gold-medium: rgba(255, 223, 0, 0.4);
@@ -248,7 +414,6 @@
   --cs-indigo: #3B3073;
   --cs-indigo-soft: rgba(59, 48, 115, 0.15);
 
-  /* Background Surfaces */
   --cs-bg-dark: #171717;
   --cs-bg-deep: #0a0a0a;
   --cs-bg-warm: #f9f6f2;
@@ -256,7 +421,6 @@
   --cs-bg-card-dark: rgba(255, 255, 255, 0.04);
   --cs-bg-card-frost: rgba(255, 255, 255, 0.06);
 
-  /* Text */
   --cs-text-white: #ffffff;
   --cs-text-white-muted: rgba(255, 255, 255, 0.7);
   --cs-text-white-subtle: rgba(255, 255, 255, 0.5);
@@ -264,23 +428,20 @@
   --cs-text-dark-muted: rgba(23, 23, 23, 0.7);
   --cs-text-dark-subtle: rgba(23, 23, 23, 0.5);
 
-  /* Borders */
   --cs-border-light: rgba(255, 255, 255, 0.08);
   --cs-border-gold: rgba(255, 223, 0, 0.3);
   --cs-border-teal: rgba(16, 132, 116, 0.3);
 
-  /* Typography — Inter stack */
   --cs-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --cs-font-size-xs: clamp(0.6875rem, 0.625rem + 0.25vw, 0.75rem);    /* 11-12px */
-  --cs-font-size-sm: clamp(0.75rem, 0.6875rem + 0.25vw, 0.875rem);    /* 12-14px */
-  --cs-font-size-base: clamp(0.875rem, 0.8125rem + 0.25vw, 1rem);     /* 14-16px */
-  --cs-font-size-md: clamp(1rem, 0.9375rem + 0.25vw, 1.125rem);       /* 16-18px */
-  --cs-font-size-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);         /* 18-22px */
-  --cs-font-size-xl: clamp(1.375rem, 1.125rem + 1vw, 1.75rem);        /* 22-28px */
-  --cs-font-size-2xl: clamp(1.75rem, 1.375rem + 1.5vw, 2.5rem);       /* 28-40px */
-  --cs-font-size-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);                /* 32-48px */
+  --cs-font-size-xs: clamp(0.6875rem, 0.625rem + 0.25vw, 0.75rem);
+  --cs-font-size-sm: clamp(0.75rem, 0.6875rem + 0.25vw, 0.875rem);
+  --cs-font-size-base: clamp(0.875rem, 0.8125rem + 0.25vw, 1rem);
+  --cs-font-size-md: clamp(1rem, 0.9375rem + 0.25vw, 1.125rem);
+  --cs-font-size-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --cs-font-size-xl: clamp(1.375rem, 1.125rem + 1vw, 1.75rem);
+  --cs-font-size-2xl: clamp(1.75rem, 1.375rem + 1.5vw, 2.5rem);
+  --cs-font-size-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);
 
-  /* Spacing */
   --cs-space-xs: clamp(0.25rem, 0.125rem + 0.5vw, 0.5rem);
   --cs-space-sm: clamp(0.5rem, 0.375rem + 0.5vw, 0.75rem);
   --cs-space-md: clamp(0.75rem, 0.5rem + 1vw, 1.25rem);
@@ -289,21 +450,18 @@
   --cs-space-2xl: clamp(3rem, 2rem + 4vw, 5rem);
   --cs-space-3xl: clamp(4rem, 2.5rem + 6vw, 7.5rem);
 
-  /* Radii */
   --cs-radius-sm: 4px;
   --cs-radius-md: 8px;
   --cs-radius-lg: 12px;
   --cs-radius-xl: 16px;
   --cs-radius-full: 9999px;
 
-  /* Shadows */
   --cs-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
   --cs-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
   --cs-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.2);
   --cs-shadow-gold: 0 0 20px rgba(255, 223, 0, 0.15);
   --cs-shadow-teal: 0 0 20px rgba(16, 132, 116, 0.15);
 
-  /* Transitions */
   --cs-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --cs-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --cs-duration-fast: 200ms;
@@ -311,23 +469,20 @@
   --cs-duration-slow: 600ms;
   --cs-duration-draw: 1200ms;
 
-  /* Z-index scale */
   --cs-z-base: 1;
   --cs-z-above: 10;
   --cs-z-sticky: 100;
   --cs-z-overlay: 200;
   --cs-z-modal: 300;
 
-  /* Layout */
   --cs-content-max: 1200px;
   --cs-content-narrow: 640px;
   --cs-mobile-dock-clearance: 95px;
 }
 
 /* --------------------------------------------------------------------------
-   Base Reset & Layout
+   Base Reset
    -------------------------------------------------------------------------- */
-
 .cs-timeline {
   font-family: var(--cs-font-family);
   line-height: 1.6;
@@ -352,10 +507,9 @@
 /* --------------------------------------------------------------------------
    Section Header (shared)
    -------------------------------------------------------------------------- */
-
 .cs-timeline__header {
   text-align: center;
-  margin-block-end: var(--cs-space-2xl);
+  margin-block-end: var(--cs-space-xl);
 }
 
 .cs-timeline__kicker {
@@ -370,8 +524,8 @@
 .cs-timeline__title {
   font-size: var(--cs-font-size-2xl);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
   margin: 0 0 var(--cs-space-md);
 }
 
@@ -383,9 +537,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   Shared Animation States — Calming reveal (opacity only, NO translate)
+   Calming Reveal — opacity-only, no translate
    -------------------------------------------------------------------------- */
-
 .cs-transform__reveal {
   opacity: 0;
   transition: opacity 800ms var(--cs-ease-out);
@@ -396,100 +549,26 @@
 }
 
 /* --------------------------------------------------------------------------
-   Line Draw Animation (shared)
-   -------------------------------------------------------------------------- */
-
-.cs-timeline__line-draw {
-  stroke-dasharray: var(--line-length, 1000);
-  stroke-dashoffset: var(--line-length, 1000);
-  transition: stroke-dashoffset var(--cs-duration-draw) var(--cs-ease-in-out);
-}
-
-.cs-timeline__line-draw--active {
-  stroke-dashoffset: 0;
-}
-
-/* --------------------------------------------------------------------------
-   Tag / Pill (shared)
-   -------------------------------------------------------------------------- */
-
-.cs-timeline__tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-  font-size: var(--cs-font-size-xs);
-  font-weight: 600;
-  padding: 0.25em 0.75em;
-  border-radius: var(--cs-radius-full);
-  white-space: nowrap;
-}
-
-.cs-timeline__tag--teal {
-  background: var(--cs-teal-soft);
-  color: var(--cs-teal);
-  border: 1px solid var(--cs-border-teal);
-}
-
-/* --------------------------------------------------------------------------
-   Prefers Reduced Motion (base)
-   -------------------------------------------------------------------------- */
-
-@media (prefers-reduced-motion: reduce) {
-  .cs-transform__reveal,
-  .cs-timeline__line-draw {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
-
-  .cs-transform__reveal {
-    opacity: 1;
-  }
-
-  .cs-timeline__line-draw {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* --------------------------------------------------------------------------
    Responsive Utilities
    -------------------------------------------------------------------------- */
-
 @media screen and (max-width: 749px) {
-  .cs-timeline--hide-mobile {
-    display: none !important;
-  }
-
-  .cs-timeline {
-    padding-block-end: var(--cs-mobile-dock-clearance);
-  }
+  .cs-timeline--hide-mobile { display: none !important; }
+  .cs-timeline { padding-block-end: var(--cs-mobile-dock-clearance); }
 }
 
 @media screen and (min-width: 750px) {
-  .cs-timeline--hide-desktop {
-    display: none !important;
-  }
+  .cs-timeline--hide-desktop { display: none !important; }
 }
 
-/* Screen reader only */
 .cs-timeline__sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
 }
 
 /* ============================================================================
-   CS Transform Journey — Section-specific Styles (TheChill)
+   CS Transform — TheChill Horizontal Stepper
    ============================================================================ */
 
-/* --------------------------------------------------------------------------
-   Section-scoped Custom Properties
-   -------------------------------------------------------------------------- */
 .cs-transform {
   --ct-deep-teal: #0D4F47;
   --ct-soft-teal: #108474;
@@ -500,137 +579,246 @@
   --ct-science-bg: #E8F4F2;
   --ct-pill-bg: rgba(16, 132, 116, 0.1);
   --ct-pill-border: rgba(16, 132, 116, 0.25);
-  --ct-node-size: 20px;
-  --ct-spine-width: 2px;
 }
 
 /* --------------------------------------------------------------------------
-   Section Root — Warm gradient background
+   Section Root
    -------------------------------------------------------------------------- */
 .cs-transform {
   background: linear-gradient(180deg, #f9f6f2 0%, #f0ebe4 100%);
   color: var(--ct-text-primary);
-  padding-block: var(--cs-space-3xl);
+  padding-block: var(--cs-space-3xl) var(--cs-space-2xl);
   overflow: hidden;
   position: relative;
 }
 
-/* --------------------------------------------------------------------------
-   Header Overrides
-   -------------------------------------------------------------------------- */
-.cs-transform__kicker {
-  color: var(--ct-deep-teal);
-}
-
-.cs-transform__title {
-  color: var(--ct-text-primary);
-}
-
-.cs-transform__subtitle {
-  color: var(--ct-text-secondary);
-}
+.cs-transform__kicker { color: var(--ct-deep-teal); }
+.cs-transform__title { color: var(--ct-text-primary); }
+.cs-transform__subtitle { color: var(--ct-text-secondary); }
 
 /* --------------------------------------------------------------------------
-   Timeline Body — central spine layout
+   Stepper Bar
    -------------------------------------------------------------------------- */
-.cs-transform__body {
+.cs-transform__stepper {
+  margin-block-end: var(--cs-space-xl);
+}
+
+.cs-transform__stepper-track {
+  display: flex;
+  justify-content: space-between;
   position: relative;
-  max-width: var(--cs-content-max);
+  max-width: 640px;
   margin-inline: auto;
-  padding-inline: var(--cs-space-md);
 }
 
-/* Spine */
-.cs-transform__spine {
+/* Rail behind steps */
+.cs-transform__stepper-rail {
   position: absolute;
-  left: 50%;
+  top: 14px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.07);
+  z-index: 0;
+  border-radius: 1px;
+}
+
+.cs-transform__stepper-fill {
+  position: absolute;
   top: 0;
-  bottom: 0;
-  width: var(--ct-spine-width);
-  transform: translateX(-50%);
-  z-index: var(--cs-z-base);
-}
-
-.cs-transform__spine-svg {
-  width: 100%;
+  left: 0;
   height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--ct-deep-teal), var(--ct-warm-gold));
+  border-radius: 1px;
+  transition: width 600ms var(--cs-ease-out);
 }
 
-/* --------------------------------------------------------------------------
-   Panel — milestone row
-   -------------------------------------------------------------------------- */
-.cs-transform__panel {
+/* Step button */
+.cs-transform__step {
   position: relative;
-  display: grid;
+  z-index: var(--cs-z-base);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--cs-space-lg);
-  padding-block: var(--cs-space-xl);
+  gap: var(--cs-space-xs);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--cs-font-family);
+  -webkit-tap-highlight-color: transparent;
+  outline-offset: 4px;
 }
 
-/* --------------------------------------------------------------------------
-   Node on spine
-   -------------------------------------------------------------------------- */
-.cs-transform__node-wrap {
-  display: none; /* shown on desktop via MQ */
+.cs-transform__step:focus-visible {
+  outline: 2px solid var(--ct-deep-teal);
+  border-radius: var(--cs-radius-sm);
 }
 
-.cs-transform__node {
-  width: var(--ct-node-size);
-  height: var(--ct-node-size);
+/* Node circle */
+.cs-transform__step-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   border-radius: var(--cs-radius-full);
-  border: 2px solid var(--ct-warm-gold);
-  background: transparent;
-  transition: background 600ms var(--cs-ease-out),
-              box-shadow 600ms var(--cs-ease-out),
-              transform 600ms var(--cs-ease-out);
-  flex-shrink: 0;
-}
-
-.cs-transform__node--active {
-  background: var(--ct-warm-gold);
-  box-shadow: 0 0 16px rgba(196, 151, 59, 0.3);
-  animation: cs-transform-pulse 600ms var(--cs-ease-out) forwards;
-}
-
-@keyframes cs-transform-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
-
-.cs-transform__time-badge {
-  display: inline-block;
-  font-size: var(--cs-font-size-xs);
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  background: var(--ct-card-bg);
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  color: var(--ct-text-secondary);
+  transition:
+    background 500ms var(--cs-ease-out),
+    border-color 500ms var(--cs-ease-out),
+    color 500ms var(--cs-ease-out),
+    box-shadow 500ms var(--cs-ease-out),
+    transform 500ms var(--cs-ease-out);
+}
+
+.cs-transform__step--active .cs-transform__step-node {
+  background: var(--ct-warm-gold);
+  border-color: var(--ct-warm-gold);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(196, 151, 59, 0.15), 0 2px 8px rgba(196, 151, 59, 0.25);
+  transform: scale(1.08);
+}
+
+.cs-transform__step--completed .cs-transform__step-node {
+  background: var(--ct-deep-teal);
+  border-color: var(--ct-deep-teal);
+  color: #fff;
+}
+
+/* Step label */
+.cs-transform__step-label {
+  font-size: var(--cs-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ct-deep-teal);
-  margin-block-start: var(--cs-space-xs);
+  color: var(--ct-text-secondary);
+  transition: color 400ms var(--cs-ease-out);
   white-space: nowrap;
 }
 
-/* --------------------------------------------------------------------------
-   Content Card — white card with subtle shadow
-   -------------------------------------------------------------------------- */
-.cs-transform__card {
-  background: var(--ct-card-bg);
-  border-radius: var(--cs-radius-lg);
-  padding: var(--cs-space-lg);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+.cs-transform__step--active .cs-transform__step-label {
+  color: var(--ct-deep-teal);
 }
 
-.cs-transform__card-headline {
+.cs-transform__step--completed .cs-transform__step-label {
+  color: var(--ct-deep-teal);
+}
+
+/* --------------------------------------------------------------------------
+   Detail Panels — grid overlay for crossfade
+   -------------------------------------------------------------------------- */
+.cs-transform__details {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.cs-transform__detail {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 500ms var(--cs-ease-out), visibility 0s 500ms;
+  pointer-events: none;
+}
+
+.cs-transform__detail--active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 500ms var(--cs-ease-out), visibility 0s 0s;
+  pointer-events: auto;
+}
+
+/* Inner grid: illustration left, content right */
+.cs-transform__detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--cs-space-xl);
+  align-items: center;
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+@media screen and (min-width: 750px) {
+  .cs-transform__detail-grid {
+    grid-template-columns: 340px 1fr;
+    gap: var(--cs-space-2xl);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .cs-transform__detail-grid {
+    grid-template-columns: 380px 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Illustration Frame
+   -------------------------------------------------------------------------- */
+.cs-transform__detail-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.cs-transform__illust-frame {
+  width: 220px;
+  height: 220px;
+  border-radius: var(--cs-radius-full);
+  background: rgba(13, 79, 71, 0.025);
+  border: 1px solid rgba(13, 79, 71, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: ct-float 5s ease-in-out infinite;
+}
+
+.cs-transform__illust-svg {
+  width: 88%;
+  height: 88%;
+}
+
+@keyframes ct-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media screen and (min-width: 750px) {
+  .cs-transform__illust-frame {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .cs-transform__illust-frame {
+    width: 340px;
+    height: 340px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Detail Content
+   -------------------------------------------------------------------------- */
+.cs-transform__detail-content {
+  min-width: 0;
+}
+
+.cs-transform__detail-headline {
   font-size: var(--cs-font-size-xl);
   font-weight: 700;
   color: var(--ct-text-primary);
   margin: 0 0 var(--cs-space-md);
-  line-height: 1.25;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
-/* --------------------------------------------------------------------------
-   Benefits list with ingredient pills
-   -------------------------------------------------------------------------- */
+/* Benefits */
 .cs-transform__benefits {
   list-style: none;
   padding: 0;
@@ -647,41 +835,54 @@
   flex-wrap: wrap;
 }
 
+.cs-transform__benefit::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: var(--cs-radius-full);
+  background: var(--ct-soft-teal);
+  flex-shrink: 0;
+  margin-top: 0.55em;
+  align-self: flex-start;
+}
+
 .cs-transform__benefit-text {
-  font-size: var(--cs-font-size-base);
+  font-size: var(--cs-font-size-sm);
   color: var(--ct-text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  flex: 1;
+  min-width: 0;
 }
 
 .cs-transform__ingredient-pill {
   display: inline-flex;
   align-items: center;
-  font-size: var(--cs-font-size-xs);
-  font-weight: 600;
-  padding: 0.2em 0.65em;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0.2em 0.6em;
   border-radius: var(--cs-radius-full);
   background: var(--ct-pill-bg);
   color: var(--ct-soft-teal);
   border: 1px solid var(--ct-pill-border);
   white-space: nowrap;
   flex-shrink: 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-/* --------------------------------------------------------------------------
-   Science Callout Box
-   -------------------------------------------------------------------------- */
+/* Science Callout */
 .cs-transform__science-callout {
   background: var(--ct-science-bg);
   border-radius: var(--cs-radius-md);
   padding: var(--cs-space-md);
-  margin-block-start: var(--cs-space-sm);
+  margin-block-start: var(--cs-space-xs);
 }
 
 .cs-transform__science-label {
   display: block;
-  font-size: var(--cs-font-size-xs);
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ct-deep-teal);
   margin-block-end: var(--cs-space-xs);
@@ -691,20 +892,21 @@
   font-size: var(--cs-font-size-sm);
   font-style: italic;
   color: var(--ct-text-secondary);
-  line-height: 1.55;
+  line-height: 1.5;
   margin: 0;
 }
 
 .cs-transform__science-ref {
   display: block;
-  font-size: var(--cs-font-size-xs);
+  font-size: 10px;
   color: var(--ct-soft-teal);
-  margin-block-start: var(--cs-space-xs);
+  margin-block-start: 6px;
   font-style: normal;
+  opacity: 0.8;
 }
 
 /* --------------------------------------------------------------------------
-   CTA Button — pill-shaped teal (matching cyrasoul.com)
+   CTA
    -------------------------------------------------------------------------- */
 .cs-transform__cta-wrap {
   margin-block-start: var(--cs-space-lg);
@@ -745,175 +947,70 @@
 }
 
 /* --------------------------------------------------------------------------
-   SVG Illustration Circle
-   -------------------------------------------------------------------------- */
-.cs-transform__illust {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cs-transform__illust-circle {
-  width: 140px;
-  height: 140px;
-  border-radius: var(--cs-radius-full);
-  background: rgba(13, 79, 71, 0.04);
-  border: 1px solid rgba(13, 79, 71, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.cs-transform__illust-svg {
-  width: 80%;
-  height: 80%;
-}
-
-/* --------------------------------------------------------------------------
-   Desktop Layout (>= 750px) — 3-column alternating spine
-   -------------------------------------------------------------------------- */
-@media screen and (min-width: 750px) {
-  .cs-transform__panel {
-    grid-template-columns: 1fr 48px 1fr;
-    grid-template-rows: 1fr;
-    gap: var(--cs-space-xl);
-    padding-inline: var(--cs-space-lg);
-  }
-
-  .cs-transform__node-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    grid-column: 2;
-    grid-row: 1;
-    z-index: var(--cs-z-above);
-  }
-
-  /* Left-aligned: card left, illustration right */
-  .cs-transform__panel--left .cs-transform__card {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: end;
-    max-width: 460px;
-  }
-
-  .cs-transform__panel--left .cs-transform__illust {
-    grid-column: 3;
-    grid-row: 1;
-    justify-self: start;
-  }
-
-  /* Right-aligned: illustration left, card right */
-  .cs-transform__panel--right .cs-transform__illust {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: end;
-  }
-
-  .cs-transform__panel--right .cs-transform__card {
-    grid-column: 3;
-    grid-row: 1;
-    justify-self: start;
-    max-width: 460px;
-  }
-
-  .cs-transform__illust-circle {
-    width: 180px;
-    height: 180px;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Mobile Layout (< 750px) — single column, spine on left
+   Mobile Overrides (< 750px)
    -------------------------------------------------------------------------- */
 @media screen and (max-width: 749px) {
-  .cs-transform__body {
-    padding-inline-start: 40px;
+  .cs-transform__stepper-track {
+    max-width: 100%;
+    gap: 0;
   }
 
-  /* Mobile spine line on left edge */
-  .cs-transform__body::before {
-    content: '';
-    position: absolute;
-    left: 28px;
-    top: 0;
-    bottom: 0;
-    width: var(--ct-spine-width);
-    background: linear-gradient(180deg, var(--ct-deep-teal), var(--ct-warm-gold));
-    opacity: 0.3;
+  .cs-transform__step {
+    flex: 1;
+    min-width: 0;
   }
 
-  .cs-transform__panel {
-    grid-template-columns: 1fr;
-    padding-block: var(--cs-space-lg);
-    gap: var(--cs-space-md);
-    position: relative;
+  .cs-transform__step-label {
+    font-size: 9px;
+    letter-spacing: 0.03em;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
-  /* Mobile node — positioned on left spine */
-  .cs-transform__node-wrap {
-    display: block;
-    position: absolute;
-    left: -28px;
-    top: var(--cs-space-lg);
-    transform: translateX(-50%);
+  .cs-transform__step-node {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
   }
 
-  .cs-transform__time-badge {
-    display: none;
+  .cs-transform__detail-content {
+    text-align: left;
   }
 
-  /* Show time label above headline on mobile via data attribute */
-  .cs-transform__card-headline::before {
-    content: attr(data-time-label);
-    display: block;
-    font-size: var(--cs-font-size-xs);
-    font-weight: 700;
-    color: var(--ct-deep-teal);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-block-end: var(--cs-space-xs);
+  .cs-transform__detail-headline {
+    font-size: var(--cs-font-size-lg);
   }
 }
 
 /* --------------------------------------------------------------------------
-   Reduced Motion — section-specific overrides
+   Reduced Motion
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .cs-transform__node {
-    background: var(--ct-warm-gold) !important;
-    box-shadow: 0 0 16px rgba(196, 151, 59, 0.3) !important;
+  .cs-transform__reveal,
+  .cs-transform__detail,
+  .cs-transform__detail--active,
+  .cs-transform__step-node,
+  .cs-transform__step-label,
+  .cs-transform__stepper-fill,
+  .cs-transform__cta,
+  .cs-transform__illust-frame {
+    transition: none !important;
+    animation: none !important;
   }
 
-  .cs-transform__spine-line {
-    stroke-dashoffset: 0 !important;
-  }
-
-  @keyframes cs-transform-pulse {
-    0%, 50%, 100% { transform: scale(1); }
+  .cs-transform__reveal {
+    opacity: 1;
   }
 }
 </style>
 
 <script>
 /* ============================================================================
-   CS Timeline Base — Shared JavaScript Utilities (inlined)
+   CS Timeline — Shared Utilities (inlined)
    ============================================================================ */
 
-/**
- * IntersectionObserver wrapper for scroll-triggered reveal animations.
- * Adds `--visible` modifier class when element enters viewport.
- *
- * @param {string} selector - CSS selector for elements to observe
- * @param {Object} [options]
- * @param {number} [options.threshold=0.15] - Visibility threshold (0-1)
- * @param {string} [options.rootMargin='0px 0px -60px 0px'] - Root margin
- * @param {boolean} [options.once=true] - Unobserve after first trigger
- * @param {Function} [options.onReveal] - Callback when element is revealed
- * @returns {IntersectionObserver|null}
- */
 function csTimelineReveal(selector, options = {}) {
   const {
     threshold = 0.15,
@@ -925,9 +1022,7 @@ function csTimelineReveal(selector, options = {}) {
   const elements = document.querySelectorAll(selector);
   if (!elements.length) return null;
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (prefersReducedMotion) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     elements.forEach((el) => {
       el.classList.add('cs-transform__reveal--visible');
       if (onReveal) onReveal(el);
@@ -952,130 +1047,110 @@ function csTimelineReveal(selector, options = {}) {
   return observer;
 }
 
-/**
- * Tracks scroll progress within a container element.
- * Calls back with a normalized 0-1 value as user scrolls through.
- *
- * @param {HTMLElement} container - The scrollable/trackable container
- * @param {Function} onProgress - Callback receiving progress (0-1)
- * @returns {Function} cleanup - Call to remove scroll listener
- */
-function csTimelineScrollProgress(container, onProgress) {
-  if (!container || typeof onProgress !== 'function') return () => {};
-
-  let ticking = false;
-
-  function update() {
-    const rect = container.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const totalTravel = rect.height + viewportHeight;
-    const traveled = viewportHeight - rect.top;
-    const progress = Math.min(Math.max(traveled / totalTravel, 0), 1);
-    onProgress(progress);
-    ticking = false;
-  }
-
-  function onScroll() {
-    if (!ticking) {
-      requestAnimationFrame(update);
-      ticking = true;
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  update();
-
-  return () => window.removeEventListener('scroll', onScroll);
-}
-
 /* ============================================================================
-   CS Transform Timeline — Web Component (TheChill)
+   CS Transform Timeline — Web Component
    ============================================================================ */
 
 class CsTransformTimeline extends HTMLElement {
   constructor() {
     super();
-    this._scrollCleanup = null;
     this._observer = null;
+    this._activeIndex = 0;
+    this._onKeydown = this._onKeydown.bind(this);
   }
 
   connectedCallback() {
     this._initReveal();
-    this._initSpineDraw();
-    this._initMobileLabels();
+    this._initStepper();
   }
 
   disconnectedCallback() {
-    if (this._scrollCleanup) {
-      this._scrollCleanup();
-      this._scrollCleanup = null;
-    }
     if (this._observer) {
       this._observer.disconnect();
       this._observer = null;
     }
+    const tablist = this.querySelector('[role="tablist"]');
+    if (tablist) tablist.removeEventListener('keydown', this._onKeydown);
   }
 
-  /**
-   * Initialize IntersectionObserver reveal for header + cards.
-   * Higher threshold (0.2) for calming, deliberate trigger.
-   */
   _initReveal() {
     this._observer = csTimelineReveal(
       '.cs-transform .cs-transform__reveal',
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -40px 0px',
-        once: true,
-        onReveal: (el) => {
-          /* Activate the node when its sibling card is revealed */
-          const panel = el.closest('.cs-transform__panel');
-          if (panel) {
-            const node = panel.querySelector('.cs-transform__node');
-            if (node) {
-              node.classList.add('cs-transform__node--active');
-            }
-          }
-        }
-      }
+      { threshold: 0.2, rootMargin: '0px 0px -40px 0px', once: true }
     );
   }
 
-  /**
-   * Draw the spine SVG line as user scrolls through the section.
-   * 1.3x multiplier for slightly-ahead-of-scroll drawing.
-   */
-  _initSpineDraw() {
-    const body = this.querySelector('.cs-transform__body');
-    if (!body) return;
+  _initStepper() {
+    const steps = this.querySelectorAll('[data-cs-step]');
+    const tablist = this.querySelector('[role="tablist"]');
+    if (!steps.length || !tablist) return;
 
-    const line = this.querySelector('.cs-transform__spine-line');
-    if (!line) return;
-
-    const length = line.getTotalLength ? line.getTotalLength() : 100;
-    line.style.setProperty('--line-length', length);
-    line.style.strokeDasharray = length;
-    line.style.strokeDashoffset = length;
-
-    this._scrollCleanup = csTimelineScrollProgress(body, (progress) => {
-      const offset = length * (1 - progress * 1.3);
-      line.style.strokeDashoffset = Math.max(offset, 0);
+    steps.forEach((step) => {
+      step.addEventListener('click', () => {
+        const idx = parseInt(step.dataset.csStep, 10);
+        this._goToStep(idx);
+      });
     });
+
+    tablist.addEventListener('keydown', this._onKeydown);
   }
 
-  /**
-   * On mobile, ensure time labels are available via data attributes
-   * so CSS ::before can display them.
-   */
-  _initMobileLabels() {
-    const panels = this.querySelectorAll('.cs-transform__panel');
-    panels.forEach((panel) => {
-      const badge = panel.querySelector('.cs-transform__time-badge');
-      const headline = panel.querySelector('.cs-transform__card-headline');
-      if (badge && headline && !headline.getAttribute('data-time-label')) {
-        headline.setAttribute('data-time-label', badge.textContent.trim());
-      }
+  _onKeydown(e) {
+    const steps = [...this.querySelectorAll('[data-cs-step]')];
+    const total = steps.length;
+    if (!total) return;
+
+    let next = this._activeIndex;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      next = (this._activeIndex + 1) % total;
+      e.preventDefault();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      next = (this._activeIndex - 1 + total) % total;
+      e.preventDefault();
+    } else if (e.key === 'Home') {
+      next = 0;
+      e.preventDefault();
+    } else if (e.key === 'End') {
+      next = total - 1;
+      e.preventDefault();
+    } else {
+      return;
+    }
+
+    this._goToStep(next);
+    steps[next].focus();
+  }
+
+  _goToStep(index) {
+    const steps = this.querySelectorAll('[data-cs-step]');
+    const panels = this.querySelectorAll('[data-cs-detail]');
+    const fill = this.querySelector('[data-cs-stepper-fill]');
+    const total = steps.length;
+    if (index < 0 || index >= total) return;
+
+    /* Update steps */
+    steps.forEach((step, i) => {
+      const isActive = i === index;
+      const isCompleted = i < index;
+      step.classList.toggle('cs-transform__step--active', isActive);
+      step.classList.toggle('cs-transform__step--completed', isCompleted);
+      step.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      step.setAttribute('tabindex', isActive ? '0' : '-1');
     });
+
+    /* Update panels */
+    panels.forEach((panel, i) => {
+      const isActive = i === index;
+      panel.classList.toggle('cs-transform__detail--active', isActive);
+      panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    });
+
+    /* Update progress fill */
+    if (fill && total > 1) {
+      fill.style.width = (index / (total - 1)) * 100 + '%';
+    }
+
+    this._activeIndex = index;
   }
 }
 
