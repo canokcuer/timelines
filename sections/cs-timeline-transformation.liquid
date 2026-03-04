@@ -1,7 +1,7 @@
 {% comment %}
-  TheChill Transformation Journey — Horizontal Stepper Timeline.
+  TheChill Transformation Journey — Swipeable Carousel.
   Self-contained: all styles, scripts, and SVG illustrations inlined.
-  4 science-backed milestones in a compact ~1-viewport stepper layout.
+  4 science-backed milestones in a touch-friendly scroll-snap carousel.
 {% endcomment %}
 
 <cs-transform-timeline>
@@ -32,50 +32,32 @@
       {%- endif -%}
     </header>
 
-    {%- comment -%} ── Stepper Navigation ──────────────────────────── {%- endcomment -%}
-    <div class="cs-transform__stepper cs-transform__reveal" role="tablist" aria-label="Dönüşüm adımları">
-      <div class="cs-transform__stepper-track">
-        <div class="cs-transform__stepper-rail" aria-hidden="true">
-          <div class="cs-transform__stepper-fill" data-cs-stepper-fill></div>
-        </div>
-
+    {%- comment -%} ── Carousel ────────────────────────────────────── {%- endcomment -%}
+    <div
+      class="cs-transform__carousel cs-transform__reveal"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Dönüşüm adımları"
+    >
+      {%- comment -%} ── Slide Track ─────────────────────────────── {%- endcomment -%}
+      <div class="cs-transform__track" data-cs-track>
         {%- for block in section.blocks -%}
-          <button
-            class="cs-transform__step{% if forloop.first %} cs-transform__step--active{% endif %}"
-            role="tab"
-            type="button"
-            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-            aria-controls="ct-panel-{{ forloop.index0 }}-{{ section.id }}"
-            id="ct-tab-{{ forloop.index0 }}-{{ section.id }}"
-            data-cs-step="{{ forloop.index0 }}"
-            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+          <div
+            class="cs-transform__slide"
+            role="group"
+            aria-roledescription="slide"
+            aria-label="{{ block.settings.time_label }} — {{ forloop.index }} / {{ forloop.length }}"
+            data-cs-slide="{{ forloop.index0 }}"
             {{ block.shopify_attributes }}
           >
-            <span class="cs-transform__step-node" aria-hidden="true">{{ forloop.index }}</span>
-            <span class="cs-transform__step-label">{{ block.settings.time_label }}</span>
-          </button>
-        {%- endfor -%}
-      </div>
-    </div>
+            <div class="cs-transform__slide-inner">
 
-    {%- comment -%} ── Detail Panels ───────────────────────────────── {%- endcomment -%}
-    <div class="cs-transform__details" data-cs-details>
-      {%- for block in section.blocks -%}
-        {%- assign is_last = false -%}
-        {%- if forloop.last -%}{%- assign is_last = true -%}{%- endif -%}
+              {%- comment -%} Time Badge {%- endcomment -%}
+              <div class="cs-transform__time-badge">
+                {{ block.settings.time_label }}
+              </div>
 
-        <div
-          class="cs-transform__detail{% if forloop.first %} cs-transform__detail--active{% endif %}"
-          role="tabpanel"
-          id="ct-panel-{{ forloop.index0 }}-{{ section.id }}"
-          aria-labelledby="ct-tab-{{ forloop.index0 }}-{{ section.id }}"
-          {% unless forloop.first %}aria-hidden="true"{% endunless %}
-          data-cs-detail="{{ forloop.index0 }}"
-        >
-          <div class="cs-transform__detail-grid">
-
-            {%- comment -%} ── SVG Illustration ─────────────────────── {%- endcomment -%}
-            <div class="cs-transform__detail-visual">
+              {%- comment -%} SVG Illustration {%- endcomment -%}
               <div class="cs-transform__illust-frame">
                 {%- case block.settings.illustration -%}
 
@@ -93,7 +75,6 @@
                       </defs>
                       <circle cx="120" cy="100" r="88" fill="url(#ct-fglow-{{ section.id }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
-                      <!-- Chamomile — 12 petals -->
                       <g transform="translate(120,95)">
                         <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55"/>
                         <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(30)"/>
@@ -101,11 +82,9 @@
                         <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" transform="rotate(90)"/>
                         <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.55" transform="rotate(120)"/>
                         <ellipse rx="7" ry="30" fill="url(#ct-petal-{{ section.id }})" stroke="#0D4F47" stroke-width="0.8" opacity="0.5" transform="rotate(150)"/>
-                        <!-- Petal veins -->
                         <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18"/>
                         <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18" transform="rotate(60)"/>
                         <line x1="0" y1="-6" x2="0" y2="-28" stroke="#0D4F47" stroke-width="0.35" opacity="0.18" transform="rotate(120)"/>
-                        <!-- Centre disc -->
                         <circle r="12" fill="#C4973B" opacity="0.12" stroke="#C4973B" stroke-width="1"/>
                         <circle cx="-4" cy="-4" r="1.8" fill="#C4973B" opacity="0.4"/>
                         <circle cx="4" cy="2" r="1.5" fill="#C4973B" opacity="0.35"/>
@@ -113,11 +92,9 @@
                         <circle cx="5" cy="-3" r="1" fill="#C4973B" opacity="0.25"/>
                         <circle r="2.2" fill="#C4973B" opacity="0.5"/>
                       </g>
-                      <!-- Stem & leaves -->
                       <path d="M120 125 Q117 148,113 168 Q109 185,105 200" stroke="#0D4F47" stroke-width="1.2" opacity="0.22" fill="none"/>
                       <path d="M114 150 Q102 143,95 148 Q103 153,114 150Z" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="#0D4F47" fill-opacity="0.04"/>
                       <path d="M110 175 Q122 168,130 173 Q122 178,110 175Z" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="#0D4F47" fill-opacity="0.04"/>
-                      <!-- Apigenin molecule — three fused hexagonal rings -->
                       <g transform="translate(175,178)" opacity="0.55">
                         <polygon points="0,-14 12,-7 12,7 0,14 -12,7 -12,-7" stroke="#C4973B" stroke-width="1" fill="none"/>
                         <polygon points="24,-14 36,-7 36,7 24,14 12,7 12,-7" stroke="#C4973B" stroke-width="1" fill="none"/>
@@ -128,9 +105,7 @@
                         <circle cx="36" cy="-7" r="3.5" stroke="#108474" stroke-width="0.7" fill="#108474" fill-opacity="0.12"/>
                         <circle cx="36" cy="35" r="3.5" stroke="#108474" stroke-width="0.7" fill="#108474" fill-opacity="0.12"/>
                       </g>
-                      <!-- Connecting dotted line -->
                       <path d="M132 115 Q155 140,168 168" stroke="#C4973B" stroke-width="0.7" stroke-dasharray="3 4" opacity="0.18" fill="none"/>
-                      <!-- Floating particles -->
                       <circle cx="75" cy="55" r="2" fill="#0D4F47" opacity="0.09"/>
                       <circle cx="165" cy="45" r="1.5" fill="#C4973B" opacity="0.13"/>
                       <circle cx="50" cy="135" r="1.8" fill="#0D4F47" opacity="0.07"/>
@@ -153,35 +128,27 @@
                       </defs>
                       <circle cx="120" cy="120" r="110" fill="url(#ct-ngrd-{{ section.id }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
-                      <!-- Crescent moon -->
                       <path d="M125 28 A28 28 0 1 0 125 84 A20 20 0 1 1 125 28Z" stroke="#C4973B" stroke-width="1.2" opacity="0.5" fill="#C4973B" fill-opacity="0.06"/>
                       <circle cx="112" cy="50" r="3" fill="#C4973B" opacity="0.07"/>
                       <circle cx="108" cy="63" r="2" fill="#C4973B" opacity="0.05"/>
-                      <!-- Stars — 4-pointed -->
                       <path d="M70 33 L72 38 L77 40 L72 42 L70 47 L68 42 L63 40 L68 38Z" fill="#C4973B" opacity="0.28"/>
                       <path d="M170 53 L171.5 57 L175.5 58.5 L171.5 60 L170 64 L168.5 60 L164.5 58.5 L168.5 57Z" fill="#C4973B" opacity="0.22"/>
-                      <!-- Stars — dots -->
                       <circle cx="55" cy="48" r="1.2" fill="#C4973B" opacity="0.22"/>
                       <circle cx="185" cy="36" r="1" fill="#C4973B" opacity="0.18"/>
                       <circle cx="90" cy="23" r="0.8" fill="#C4973B" opacity="0.16"/>
                       <circle cx="155" cy="26" r="1" fill="#C4973B" opacity="0.2"/>
                       <circle cx="200" cy="63" r="0.8" fill="#C4973B" opacity="0.14"/>
                       <circle cx="42" cy="73" r="1" fill="#C4973B" opacity="0.16"/>
-                      <!-- Cloud wisps -->
                       <path d="M40 85 Q65 80,90 85 Q110 82,130 86" stroke="#0D4F47" stroke-width="0.6" opacity="0.09" fill="none"/>
                       <path d="M100 90 Q130 85,160 90 Q180 87,200 91" stroke="#0D4F47" stroke-width="0.5" opacity="0.06" fill="none"/>
-                      <!-- Horizon -->
                       <line x1="20" y1="105" x2="220" y2="105" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
-                      <!-- Sleep waves — deeper = calmer -->
                       <path d="M15 120 Q40 105,65 120 Q90 135,115 120 Q140 105,165 120 Q190 135,215 120" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1.5" opacity="0.5" fill="none"/>
                       <path d="M15 140 Q45 128,75 140 Q105 152,135 140 Q165 128,195 140 Q215 148,225 143" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1.3" opacity="0.32" fill="none"/>
                       <path d="M15 158 Q50 149,85 158 Q120 167,155 158 Q190 149,225 158" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="1" opacity="0.22" fill="none"/>
                       <path d="M15 174 Q55 168,95 174 Q135 180,175 174 Q205 170,225 173" stroke="url(#ct-wgrd-{{ section.id }})" stroke-width="0.8" opacity="0.13" fill="none"/>
-                      <!-- Floating z's -->
                       <text x="150" y="42" font-family="var(--cs-font-family)" font-size="14" font-weight="300" fill="#C4973B" opacity="0.18">z</text>
                       <text x="163" y="32" font-family="var(--cs-font-family)" font-size="10" font-weight="300" fill="#C4973B" opacity="0.13">z</text>
                       <text x="173" y="24" font-family="var(--cs-font-family)" font-size="7" font-weight="300" fill="#C4973B" opacity="0.09">z</text>
-                      <!-- Particles -->
                       <circle cx="45" cy="180" r="1.5" fill="#0D4F47" opacity="0.07"/>
                       <circle cx="195" cy="170" r="1.2" fill="#C4973B" opacity="0.09"/>
                     </svg>
@@ -196,23 +163,17 @@
                       </defs>
                       <circle cx="120" cy="100" r="88" fill="url(#ct-bglow-{{ section.id }})"/>
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
-                      <!-- Brain — left hemisphere -->
                       <path d="M120 30 C95 30,75 42,68 58 C62 72,58 85,60 100 C62 110,68 118,72 125 C65 132,60 142,63 152 C66 162,78 168,90 165 C98 163,108 158,115 150 L120 145" stroke="#0D4F47" stroke-width="1.3" opacity="0.42" fill="#0D4F47" fill-opacity="0.02"/>
-                      <!-- Brain — right hemisphere -->
                       <path d="M120 30 C145 30,165 42,172 58 C178 72,182 85,180 100 C178 110,172 118,168 125 C175 132,180 142,177 152 C174 162,162 168,150 165 C142 163,132 158,125 150 L120 145" stroke="#0D4F47" stroke-width="1.3" opacity="0.42" fill="#0D4F47" fill-opacity="0.02"/>
-                      <!-- Centre line -->
                       <line x1="120" y1="33" x2="120" y2="143" stroke="#0D4F47" stroke-width="0.6" opacity="0.12"/>
-                      <!-- Gyri folds — left -->
                       <path d="M80 55 Q90 50,100 58" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="none"/>
                       <path d="M72 75 Q85 68,98 78" stroke="#0D4F47" stroke-width="0.7" opacity="0.15" fill="none"/>
                       <path d="M68 95 Q82 88,96 98" stroke="#0D4F47" stroke-width="0.7" opacity="0.13" fill="none"/>
                       <path d="M75 115 Q88 108,100 118" stroke="#0D4F47" stroke-width="0.7" opacity="0.12" fill="none"/>
-                      <!-- Gyri folds — right -->
                       <path d="M160 55 Q150 50,140 58" stroke="#0D4F47" stroke-width="0.7" opacity="0.18" fill="none"/>
                       <path d="M168 75 Q155 68,142 78" stroke="#0D4F47" stroke-width="0.7" opacity="0.15" fill="none"/>
                       <path d="M172 95 Q158 88,144 98" stroke="#0D4F47" stroke-width="0.7" opacity="0.13" fill="none"/>
                       <path d="M165 115 Q152 108,140 118" stroke="#0D4F47" stroke-width="0.7" opacity="0.12" fill="none"/>
-                      <!-- Neural dots + connections -->
                       <circle cx="88" cy="65" r="2" fill="#0D4F47" opacity="0.13"/>
                       <circle cx="105" cy="82" r="2" fill="#0D4F47" opacity="0.1"/>
                       <circle cx="92" cy="100" r="1.8" fill="#0D4F47" opacity="0.09"/>
@@ -223,24 +184,19 @@
                       <line x1="105" y1="82" x2="92" y2="100" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
                       <line x1="152" y1="65" x2="135" y2="82" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
                       <line x1="135" y1="82" x2="148" y2="100" stroke="#0D4F47" stroke-width="0.4" opacity="0.07"/>
-                      <!-- Balance scales -->
                       <polygon points="120,170 114,180 126,180" stroke="#C4973B" stroke-width="1" opacity="0.45" fill="#C4973B" fill-opacity="0.05"/>
                       <line x1="78" y1="170" x2="162" y2="170" stroke="#C4973B" stroke-width="1.2" opacity="0.42"/>
                       <circle cx="120" cy="170" r="2.5" fill="#C4973B" opacity="0.38"/>
-                      <!-- Left pan — cortisol down -->
                       <line x1="78" y1="170" x2="78" y2="183" stroke="#C4973B" stroke-width="0.8" opacity="0.3"/>
                       <path d="M66 183 Q72 187,78 183 Q84 187,90 183" stroke="#C4973B" stroke-width="0.8" opacity="0.3" fill="#C4973B" fill-opacity="0.03"/>
                       <path d="M72 189 L75 193 L78 189 L81 193 L84 189" stroke="#C4973B" stroke-width="0.6" opacity="0.2" fill="none"/>
-                      <!-- Right pan — wellness up -->
                       <line x1="162" y1="170" x2="162" y2="183" stroke="#C4973B" stroke-width="0.8" opacity="0.3"/>
                       <path d="M150 183 Q156 187,162 183 Q168 187,174 183" stroke="#C4973B" stroke-width="0.8" opacity="0.3" fill="#C4973B" fill-opacity="0.03"/>
                       <path d="M154 190 Q158 186,162 190 Q166 194,170 190" stroke="#108474" stroke-width="0.7" opacity="0.25" fill="none"/>
-                      <!-- Arrows -->
                       <line x1="52" y1="88" x2="52" y2="118" stroke="#C4973B" stroke-width="0.9" opacity="0.2"/>
                       <polyline points="48,113 52,120 56,113" stroke="#C4973B" stroke-width="0.9" opacity="0.2" fill="none"/>
                       <line x1="188" y1="118" x2="188" y2="88" stroke="#108474" stroke-width="0.9" opacity="0.2"/>
                       <polyline points="184,93 188,86 192,93" stroke="#108474" stroke-width="0.9" opacity="0.2" fill="none"/>
-                      <!-- Calm radiations -->
                       <circle cx="120" cy="90" r="52" stroke="#0D4F47" stroke-width="0.3" opacity="0.05" fill="none"/>
                       <circle cx="120" cy="90" r="72" stroke="#0D4F47" stroke-width="0.25" opacity="0.03" fill="none"/>
                     </svg>
@@ -254,21 +210,17 @@
                         </radialGradient>
                       </defs>
                       <circle cx="120" cy="120" r="105" fill="url(#ct-hglow-{{ section.id }})"/>
-                      <!-- Decorative rings -->
                       <circle cx="120" cy="120" r="115" stroke="#0D4F47" stroke-width="0.5" opacity="0.07" stroke-dasharray="2 8"/>
                       <circle cx="120" cy="120" r="98" stroke="#0D4F47" stroke-width="0.35" opacity="0.05"/>
                       <circle cx="120" cy="120" r="55" stroke="#0D4F47" stroke-width="0.6" opacity="0.08" stroke-dasharray="4 4"/>
-                      <!-- Central medallion -->
                       <circle cx="120" cy="120" r="18" stroke="#C4973B" stroke-width="1" opacity="0.38" fill="#C4973B" fill-opacity="0.04"/>
                       <circle cx="120" cy="120" r="8" fill="#C4973B" opacity="0.13"/>
-                      <!-- Connecting lines -->
                       <line x1="120" y1="102" x2="120" y2="38" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
                       <line x1="136" y1="111" x2="191" y2="78" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
                       <line x1="136" y1="129" x2="191" y2="162" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
                       <line x1="120" y1="138" x2="120" y2="202" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
                       <line x1="104" y1="129" x2="49" y2="162" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
                       <line x1="104" y1="111" x2="49" y2="78" stroke="#0D4F47" stroke-width="0.5" opacity="0.08"/>
-                      <!-- 1 · Rhodiola Rosea (0°) — rosette -->
                       <g transform="translate(120,36)">
                         <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.48" fill="#0D4F47" fill-opacity="0.03"/>
                         <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.42" fill="#0D4F47" fill-opacity="0.02" transform="rotate(45)"/>
@@ -276,7 +228,6 @@
                         <ellipse rx="5" ry="13" stroke="#0D4F47" stroke-width="0.8" opacity="0.42" fill="#0D4F47" fill-opacity="0.02" transform="rotate(135)"/>
                         <circle r="3" fill="#0D4F47" opacity="0.13"/>
                       </g>
-                      <!-- 2 · Chamomile (60°) — daisy -->
                       <g transform="translate(191,76)">
                         <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.42" fill="none"/>
                         <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.38" fill="none" transform="rotate(45)"/>
@@ -284,7 +235,6 @@
                         <ellipse rx="4" ry="10" stroke="#0D4F47" stroke-width="0.7" opacity="0.38" fill="none" transform="rotate(135)"/>
                         <circle r="4" stroke="#C4973B" stroke-width="0.7" fill="#C4973B" opacity="0.18"/>
                       </g>
-                      <!-- 3 · Passiflora (120°) — star corona -->
                       <g transform="translate(191,164)">
                         <polygon points="0,-14 3,-5 12,-5 5,1 7,10 0,5 -7,10 -5,1 -12,-5 -3,-5" stroke="#C4973B" stroke-width="0.7" opacity="0.38" fill="#C4973B" fill-opacity="0.03"/>
                         <line x1="0" y1="0" x2="0" y2="-11" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
@@ -294,26 +244,22 @@
                         <line x1="0" y1="0" x2="-10" y2="-4" stroke="#C4973B" stroke-width="0.4" opacity="0.2"/>
                         <circle r="2.5" fill="#C4973B" opacity="0.18"/>
                       </g>
-                      <!-- 4 · Melissa (180°) — heart-leaf -->
                       <g transform="translate(120,202)">
                         <path d="M0,-14 C8,-14 14,-6 14,2 C14,8 8,14 0,16 C-8,14 -14,8 -14,2 C-14,-6 -8,-14 0,-14Z" stroke="#0D4F47" stroke-width="0.8" opacity="0.45" fill="#0D4F47" fill-opacity="0.03"/>
                         <line x1="0" y1="-12" x2="0" y2="14" stroke="#0D4F47" stroke-width="0.35" opacity="0.18"/>
                         <line x1="0" y1="0" x2="8" y2="-4" stroke="#0D4F47" stroke-width="0.3" opacity="0.12"/>
                         <line x1="0" y1="4" x2="-7" y2="0" stroke="#0D4F47" stroke-width="0.3" opacity="0.12"/>
                       </g>
-                      <!-- 5 · B6 (240°) — pyridine hex -->
                       <g transform="translate(49,164)">
                         <polygon points="0,-13 11,-6.5 11,6.5 0,13 -11,6.5 -11,-6.5" stroke="#C4973B" stroke-width="1" opacity="0.42" fill="#C4973B" fill-opacity="0.04"/>
                         <circle r="3" fill="#C4973B" opacity="0.18"/>
                         <text x="-4" y="3" font-family="var(--cs-font-family)" font-size="6" fill="#C4973B" opacity="0.35" font-weight="600">B6</text>
                       </g>
-                      <!-- 6 · B12 (300°) — corrin ring -->
                       <g transform="translate(49,76)">
                         <rect x="-12" y="-12" width="24" height="24" rx="3" stroke="#C4973B" stroke-width="0.8" opacity="0.38" fill="#C4973B" fill-opacity="0.03" transform="rotate(45)"/>
                         <circle r="5" stroke="#C4973B" stroke-width="0.7" opacity="0.28" fill="#C4973B" fill-opacity="0.08"/>
                         <text x="-6" y="3" font-family="var(--cs-font-family)" font-size="5.5" fill="#C4973B" opacity="0.32" font-weight="600">B12</text>
                       </g>
-                      <!-- Outer dots -->
                       <circle cx="120" cy="22" r="2" fill="#0D4F47" opacity="0.1"/>
                       <circle cx="205" cy="70" r="2" fill="#0D4F47" opacity="0.1"/>
                       <circle cx="205" cy="170" r="2" fill="#C4973B" opacity="0.1"/>
@@ -329,70 +275,140 @@
                     </svg>
                 {%- endcase -%}
               </div>
-            </div>
 
-            {%- comment -%} ── Content ──────────────────────────────── {%- endcomment -%}
-            <div class="cs-transform__detail-content">
-              <h3 class="cs-transform__detail-headline">
+              {%- comment -%} Headline {%- endcomment -%}
+              <h3 class="cs-transform__slide-headline">
                 {{ block.settings.headline }}
               </h3>
 
-              <ul class="cs-transform__benefits" role="list">
-                {%- if block.settings.benefit_1 != blank -%}
-                  <li class="cs-transform__benefit">
-                    <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
-                    {%- if block.settings.ingredient_1 != blank -%}
-                      <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_1 }}</span>
+              {%- comment -%} Ingredient Pills {%- endcomment -%}
+              {%- if block.settings.ingredient_pills != blank -%}
+                <div class="cs-transform__pills" aria-label="Bileşenler">
+                  {%- assign pills = block.settings.ingredient_pills | split: ',' -%}
+                  {%- for pill in pills -%}
+                    {%- assign trimmed = pill | strip -%}
+                    {%- if trimmed != blank -%}
+                      <span class="cs-transform__pill">{{ trimmed }}</span>
                     {%- endif -%}
-                  </li>
-                {%- endif -%}
-                {%- if block.settings.benefit_2 != blank -%}
-                  <li class="cs-transform__benefit">
-                    <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
-                    {%- if block.settings.ingredient_2 != blank -%}
-                      <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_2 }}</span>
-                    {%- endif -%}
-                  </li>
-                {%- endif -%}
-                {%- if block.settings.benefit_3 != blank -%}
-                  <li class="cs-transform__benefit">
-                    <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
-                    {%- if block.settings.ingredient_3 != blank -%}
-                      <span class="cs-transform__ingredient-pill">{{ block.settings.ingredient_3 }}</span>
-                    {%- endif -%}
-                  </li>
-                {%- endif -%}
-              </ul>
-
-              {%- if block.settings.science_callout != blank -%}
-                <div class="cs-transform__science-callout">
-                  <span class="cs-transform__science-label">Bilimsel Mekanizma</span>
-                  <p class="cs-transform__science-text">{{ block.settings.science_callout }}</p>
-                  {%- if block.settings.stat_reference != blank -%}
-                    <cite class="cs-transform__science-ref">{{ block.settings.stat_reference }}</cite>
-                  {%- endif -%}
+                  {%- endfor -%}
                 </div>
               {%- endif -%}
 
-              {%- if is_last and section.settings.cta_text != blank -%}
-                <div class="cs-transform__cta-wrap">
-                  <a
-                    href="{{ section.settings.cta_url }}"
+              {%- comment -%} Storytelling {%- endcomment -%}
+              {%- if block.settings.storytelling != blank -%}
+                <p class="cs-transform__story">
+                  {{ block.settings.storytelling }}
+                </p>
+              {%- endif -%}
+
+              {%- comment -%} Science Callout {%- endcomment -%}
+              {%- if block.settings.science_text != blank -%}
+                <div class="cs-transform__science">
+                  <span class="cs-transform__science-icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M6 2v4L4 9v1h8V9l-2-3V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M4 13h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      <circle cx="8" cy="9" r="1" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <p class="cs-transform__science-text">{{ block.settings.science_text }}</p>
+                    {%- if block.settings.science_pmid != blank -%}
+                      <cite class="cs-transform__science-ref">
+                        PMID: {{ block.settings.science_pmid }}
+                      </cite>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- comment -%} CTA Button {%- endcomment -%}
+              <div class="cs-transform__cta-wrap">
+                {%- assign product = section.settings.product -%}
+                {%- if product != blank and product.available -%}
+                  <button
+                    type="button"
                     class="cs-transform__cta"
-                    aria-label="{{ section.settings.cta_text }}"
+                    data-cs-add-to-cart
+                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                    data-cart-quantity="{{ block.settings.cart_quantity | default: 1 }}"
+                    aria-label="Yolculuğuna Başla — {{ block.settings.cart_quantity | default: 1 }} adet sepete ekle"
                   >
-                    {{- section.settings.cta_text -}}
+                    Yolculuğuna Başla
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                      <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                {%- elsif product != blank -%}
+                  <a
+                    href="{{ product.url }}"
+                    class="cs-transform__cta"
+                    aria-label="Yolculuğuna Başla — Ürün sayfasına git"
+                  >
+                    Yolculuğuna Başla
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
                       <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </a>
-                </div>
-              {%- endif -%}
-            </div>
+                {%- else -%}
+                  <a
+                    href="{{ section.settings.cta_url | default: '#' }}"
+                    class="cs-transform__cta"
+                    aria-label="Yolculuğuna Başla"
+                  >
+                    Yolculuğuna Başla
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                      <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                {%- endif -%}
+              </div>
 
+            </div>
           </div>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} ── Navigation ─────────────────────────────── {%- endcomment -%}
+      <div class="cs-transform__nav">
+        <button
+          type="button"
+          class="cs-transform__arrow cs-transform__arrow--prev"
+          aria-label="Önceki adım"
+          data-cs-prev
+          disabled
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+            <path d="M12.5 15l-5-5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="cs-transform__dots" role="tablist" aria-label="Slayt seçimi">
+          {%- for block in section.blocks -%}
+            <button
+              type="button"
+              class="cs-transform__dot{% if forloop.first %} cs-transform__dot--active{% endif %}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-label="Slayt {{ forloop.index }}: {{ block.settings.time_label }}"
+              data-cs-dot="{{ forloop.index0 }}"
+              tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            ></button>
+          {%- endfor -%}
         </div>
-      {%- endfor -%}
+
+        <button
+          type="button"
+          class="cs-transform__arrow cs-transform__arrow--next"
+          aria-label="Sonraki adım"
+          data-cs-next
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+            <path d="M7.5 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
     </div>
 
   </div>
@@ -537,7 +553,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Calming Reveal — opacity-only, no translate
+   Calming Reveal
    -------------------------------------------------------------------------- */
 .cs-transform__reveal {
   opacity: 0;
@@ -566,7 +582,7 @@
 }
 
 /* ============================================================================
-   CS Transform — TheChill Horizontal Stepper
+   CS Transform — Swipeable Carousel
    ============================================================================ */
 
 .cs-transform {
@@ -597,177 +613,81 @@
 .cs-transform__subtitle { color: var(--ct-text-secondary); }
 
 /* --------------------------------------------------------------------------
-   Stepper Bar
+   Carousel Wrapper
    -------------------------------------------------------------------------- */
-.cs-transform__stepper {
-  margin-block-end: var(--cs-space-xl);
-}
-
-.cs-transform__stepper-track {
-  display: flex;
-  justify-content: space-between;
+.cs-transform__carousel {
   position: relative;
-  max-width: 640px;
+  max-width: 900px;
   margin-inline: auto;
 }
 
-/* Rail behind steps */
-.cs-transform__stepper-rail {
-  position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: rgba(0, 0, 0, 0.07);
-  z-index: 0;
-  border-radius: 1px;
+/* --------------------------------------------------------------------------
+   Scroll-Snap Track
+   -------------------------------------------------------------------------- */
+.cs-transform__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  gap: 0;
 }
 
-.cs-transform__stepper-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--ct-deep-teal), var(--ct-warm-gold));
-  border-radius: 1px;
-  transition: width 600ms var(--cs-ease-out);
+/* Hide scrollbar */
+.cs-transform__track::-webkit-scrollbar {
+  display: none;
 }
 
-/* Step button */
-.cs-transform__step {
-  position: relative;
-  z-index: var(--cs-z-base);
+.cs-transform__track {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* --------------------------------------------------------------------------
+   Slide
+   -------------------------------------------------------------------------- */
+.cs-transform__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  min-width: 0;
+}
+
+.cs-transform__slide-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--cs-space-xs);
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-family: var(--cs-font-family);
-  -webkit-tap-highlight-color: transparent;
-  outline-offset: 4px;
-}
-
-.cs-transform__step:focus-visible {
-  outline: 2px solid var(--ct-deep-teal);
-  border-radius: var(--cs-radius-sm);
-}
-
-/* Node circle */
-.cs-transform__step-node {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--cs-radius-full);
-  border: 2px solid rgba(0, 0, 0, 0.12);
-  background: var(--ct-card-bg);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ct-text-secondary);
-  transition:
-    background 500ms var(--cs-ease-out),
-    border-color 500ms var(--cs-ease-out),
-    color 500ms var(--cs-ease-out),
-    box-shadow 500ms var(--cs-ease-out),
-    transform 500ms var(--cs-ease-out);
-}
-
-.cs-transform__step--active .cs-transform__step-node {
-  background: var(--ct-warm-gold);
-  border-color: var(--ct-warm-gold);
-  color: #fff;
-  box-shadow: 0 0 0 4px rgba(196, 151, 59, 0.15), 0 2px 8px rgba(196, 151, 59, 0.25);
-  transform: scale(1.08);
-}
-
-.cs-transform__step--completed .cs-transform__step-node {
-  background: var(--ct-deep-teal);
-  border-color: var(--ct-deep-teal);
-  color: #fff;
-}
-
-/* Step label */
-.cs-transform__step-label {
-  font-size: var(--cs-font-size-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ct-text-secondary);
-  transition: color 400ms var(--cs-ease-out);
-  white-space: nowrap;
-}
-
-.cs-transform__step--active .cs-transform__step-label {
-  color: var(--ct-deep-teal);
-}
-
-.cs-transform__step--completed .cs-transform__step-label {
-  color: var(--ct-deep-teal);
-}
-
-/* --------------------------------------------------------------------------
-   Detail Panels — grid overlay for crossfade
-   -------------------------------------------------------------------------- */
-.cs-transform__details {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-}
-
-.cs-transform__detail {
-  grid-area: 1 / 1;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 500ms var(--cs-ease-out), visibility 0s 500ms;
-  pointer-events: none;
-}
-
-.cs-transform__detail--active {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 500ms var(--cs-ease-out), visibility 0s 0s;
-  pointer-events: auto;
-}
-
-/* Inner grid: illustration left, content right */
-.cs-transform__detail-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--cs-space-xl);
-  align-items: center;
-  max-width: 1040px;
+  text-align: center;
+  max-width: 640px;
   margin-inline: auto;
-}
-
-@media screen and (min-width: 750px) {
-  .cs-transform__detail-grid {
-    grid-template-columns: 340px 1fr;
-    gap: var(--cs-space-2xl);
-  }
-}
-
-@media screen and (min-width: 990px) {
-  .cs-transform__detail-grid {
-    grid-template-columns: 380px 1fr;
-  }
+  padding: var(--cs-space-lg) var(--cs-space-md);
 }
 
 /* --------------------------------------------------------------------------
-   Illustration Frame
+   Time Badge
    -------------------------------------------------------------------------- */
-.cs-transform__detail-visual {
-  display: flex;
-  justify-content: center;
+.cs-transform__time-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--cs-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ct-deep-teal);
+  background: var(--ct-card-bg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 3px solid var(--ct-warm-gold);
+  border-radius: var(--cs-radius-full);
+  padding: 0.4em 1.2em 0.4em 1em;
+  margin-block-end: var(--cs-space-lg);
+  box-shadow: var(--cs-shadow-sm);
 }
 
+/* --------------------------------------------------------------------------
+   Illustration Frame (carousel version)
+   -------------------------------------------------------------------------- */
 .cs-transform__illust-frame {
-  width: 220px;
-  height: 220px;
+  width: 200px;
+  height: 200px;
   border-radius: var(--cs-radius-full);
   background: rgba(13, 79, 71, 0.025);
   border: 1px solid rgba(13, 79, 71, 0.06);
@@ -775,6 +695,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-block-end: var(--cs-space-lg);
   animation: ct-float 5s ease-in-out infinite;
 }
 
@@ -790,26 +711,15 @@
 
 @media screen and (min-width: 750px) {
   .cs-transform__illust-frame {
-    width: 300px;
-    height: 300px;
-  }
-}
-
-@media screen and (min-width: 990px) {
-  .cs-transform__illust-frame {
-    width: 340px;
-    height: 340px;
+    width: 260px;
+    height: 260px;
   }
 }
 
 /* --------------------------------------------------------------------------
-   Detail Content
+   Slide Headline
    -------------------------------------------------------------------------- */
-.cs-transform__detail-content {
-  min-width: 0;
-}
-
-.cs-transform__detail-headline {
+.cs-transform__slide-headline {
   font-size: var(--cs-font-size-xl);
   font-weight: 700;
   color: var(--ct-text-primary);
@@ -818,74 +728,63 @@
   letter-spacing: -0.02em;
 }
 
-/* Benefits */
-.cs-transform__benefits {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 var(--cs-space-md);
+/* --------------------------------------------------------------------------
+   Ingredient Pills
+   -------------------------------------------------------------------------- */
+.cs-transform__pills {
   display: flex;
-  flex-direction: column;
-  gap: var(--cs-space-sm);
-}
-
-.cs-transform__benefit {
-  display: flex;
-  align-items: baseline;
-  gap: var(--cs-space-sm);
   flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--cs-space-xs);
+  margin-block-end: var(--cs-space-md);
 }
 
-.cs-transform__benefit::before {
-  content: '';
-  width: 5px;
-  height: 5px;
-  border-radius: var(--cs-radius-full);
-  background: var(--ct-soft-teal);
-  flex-shrink: 0;
-  margin-top: 0.55em;
-  align-self: flex-start;
-}
-
-.cs-transform__benefit-text {
-  font-size: var(--cs-font-size-sm);
-  color: var(--ct-text-secondary);
-  line-height: 1.55;
-  flex: 1;
-  min-width: 0;
-}
-
-.cs-transform__ingredient-pill {
+.cs-transform__pill {
   display: inline-flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 0.2em 0.6em;
+  padding: 0.3em 0.8em;
   border-radius: var(--cs-radius-full);
   background: var(--ct-pill-bg);
   color: var(--ct-soft-teal);
   border: 1px solid var(--ct-pill-border);
   white-space: nowrap;
-  flex-shrink: 0;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
-/* Science Callout */
-.cs-transform__science-callout {
-  background: var(--ct-science-bg);
-  border-radius: var(--cs-radius-md);
-  padding: var(--cs-space-md);
-  margin-block-start: var(--cs-space-xs);
+/* --------------------------------------------------------------------------
+   Storytelling Paragraph
+   -------------------------------------------------------------------------- */
+.cs-transform__story {
+  font-size: var(--cs-font-size-sm);
+  color: var(--ct-text-secondary);
+  line-height: 1.65;
+  margin: 0 0 var(--cs-space-md);
+  max-width: 520px;
 }
 
-.cs-transform__science-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ct-deep-teal);
-  margin-block-end: var(--cs-space-xs);
+/* --------------------------------------------------------------------------
+   Science Callout
+   -------------------------------------------------------------------------- */
+.cs-transform__science {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cs-space-sm);
+  background: var(--ct-science-bg);
+  border-radius: var(--cs-radius-md);
+  border-left: 3px solid var(--ct-soft-teal);
+  padding: var(--cs-space-md);
+  margin-block-end: var(--cs-space-lg);
+  text-align: left;
+  max-width: 520px;
+}
+
+.cs-transform__science-icon {
+  flex-shrink: 0;
+  color: var(--ct-soft-teal);
+  margin-top: 2px;
 }
 
 .cs-transform__science-text {
@@ -903,13 +802,16 @@
   margin-block-start: 6px;
   font-style: normal;
   opacity: 0.8;
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
-   CTA
+   CTA Button
    -------------------------------------------------------------------------- */
 .cs-transform__cta-wrap {
-  margin-block-start: var(--cs-space-lg);
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .cs-transform__cta {
@@ -946,41 +848,123 @@
   transform: translateY(0);
 }
 
+.cs-transform__cta[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation — Arrows + Dots
+   -------------------------------------------------------------------------- */
+.cs-transform__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cs-space-md);
+  margin-block-start: var(--cs-space-lg);
+}
+
+/* Arrow Buttons */
+.cs-transform__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cs-radius-full);
+  background: var(--ct-deep-teal);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background var(--cs-duration-fast) var(--cs-ease-out),
+    opacity var(--cs-duration-fast) var(--cs-ease-out),
+    transform var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-transform__arrow:hover:not([disabled]) {
+  background: var(--ct-soft-teal);
+  transform: scale(1.05);
+}
+
+.cs-transform__arrow[disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.cs-transform__arrow:focus-visible {
+  outline: 2px solid var(--ct-deep-teal);
+  outline-offset: 2px;
+}
+
+/* Dot Pagination */
+.cs-transform__dots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cs-transform__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--cs-radius-full);
+  border: 2px solid var(--ct-text-secondary);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    background var(--cs-duration-fast) var(--cs-ease-out),
+    border-color var(--cs-duration-fast) var(--cs-ease-out),
+    transform var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-transform__dot--active {
+  background: var(--ct-warm-gold);
+  border-color: var(--ct-warm-gold);
+  transform: scale(1.2);
+}
+
+.cs-transform__dot:hover:not(.cs-transform__dot--active) {
+  border-color: var(--ct-deep-teal);
+}
+
+.cs-transform__dot:focus-visible {
+  outline: 2px solid var(--ct-deep-teal);
+  outline-offset: 2px;
+}
+
 /* --------------------------------------------------------------------------
    Mobile Overrides (< 750px)
    -------------------------------------------------------------------------- */
 @media screen and (max-width: 749px) {
-  .cs-transform__stepper-track {
-    max-width: 100%;
-    gap: 0;
+  .cs-transform__slide-inner {
+    padding-inline: var(--cs-space-sm);
   }
 
-  .cs-transform__step {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .cs-transform__step-label {
-    font-size: 9px;
-    letter-spacing: 0.03em;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-
-  .cs-transform__step-node {
-    width: 24px;
-    height: 24px;
-    font-size: 10px;
-  }
-
-  .cs-transform__detail-content {
-    text-align: left;
-  }
-
-  .cs-transform__detail-headline {
+  .cs-transform__slide-headline {
     font-size: var(--cs-font-size-lg);
+  }
+
+  .cs-transform__illust-frame {
+    width: 180px;
+    height: 180px;
+  }
+
+  .cs-transform__arrow {
+    display: none;
+  }
+
+  .cs-transform__story {
+    font-size: var(--cs-font-size-xs);
+  }
+
+  .cs-transform__science {
+    padding: var(--cs-space-sm);
+  }
+
+  .cs-transform__science-text {
+    font-size: var(--cs-font-size-xs);
   }
 }
 
@@ -989,12 +973,9 @@
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .cs-transform__reveal,
-  .cs-transform__detail,
-  .cs-transform__detail--active,
-  .cs-transform__step-node,
-  .cs-transform__step-label,
-  .cs-transform__stepper-fill,
   .cs-transform__cta,
+  .cs-transform__arrow,
+  .cs-transform__dot,
   .cs-transform__illust-frame {
     transition: none !important;
     animation: none !important;
@@ -1002,6 +983,10 @@
 
   .cs-transform__reveal {
     opacity: 1;
+  }
+
+  .cs-transform__track {
+    scroll-behavior: auto;
   }
 }
 </style>
@@ -1048,7 +1033,7 @@ function csTimelineReveal(selector, options = {}) {
 }
 
 /* ============================================================================
-   CS Transform Timeline — Web Component
+   CS Transform Timeline — Swipeable Carousel Web Component
    ============================================================================ */
 
 class CsTransformTimeline extends HTMLElement {
@@ -1056,12 +1041,23 @@ class CsTransformTimeline extends HTMLElement {
     super();
     this._observer = null;
     this._activeIndex = 0;
+    this._scrollTimeout = null;
+    this._onScroll = this._onScroll.bind(this);
     this._onKeydown = this._onKeydown.bind(this);
   }
 
   connectedCallback() {
+    this._track = this.querySelector('[data-cs-track]');
+    this._slides = [...this.querySelectorAll('[data-cs-slide]')];
+    this._dots = [...this.querySelectorAll('[data-cs-dot]')];
+    this._prevBtn = this.querySelector('[data-cs-prev]');
+    this._nextBtn = this.querySelector('[data-cs-next]');
+
+    if (!this._track || !this._slides.length) return;
+
     this._initReveal();
-    this._initStepper();
+    this._initCarousel();
+    this._initCTA();
   }
 
   disconnectedCallback() {
@@ -1069,9 +1065,13 @@ class CsTransformTimeline extends HTMLElement {
       this._observer.disconnect();
       this._observer = null;
     }
-    const tablist = this.querySelector('[role="tablist"]');
-    if (tablist) tablist.removeEventListener('keydown', this._onKeydown);
+    if (this._track) {
+      this._track.removeEventListener('scroll', this._onScroll);
+    }
+    this.removeEventListener('keydown', this._onKeydown);
   }
+
+  /* ── Reveal ─────────────────────────────────────────────────────────── */
 
   _initReveal() {
     this._observer = csTimelineReveal(
@@ -1080,77 +1080,148 @@ class CsTransformTimeline extends HTMLElement {
     );
   }
 
-  _initStepper() {
-    const steps = this.querySelectorAll('[data-cs-step]');
-    const tablist = this.querySelector('[role="tablist"]');
-    if (!steps.length || !tablist) return;
+  /* ── Carousel ───────────────────────────────────────────────────────── */
 
-    steps.forEach((step) => {
-      step.addEventListener('click', () => {
-        const idx = parseInt(step.dataset.csStep, 10);
-        this._goToStep(idx);
+  _initCarousel() {
+    this._track.addEventListener('scroll', this._onScroll, { passive: true });
+
+    if (this._prevBtn) {
+      this._prevBtn.addEventListener('click', () => this._onPrev());
+    }
+    if (this._nextBtn) {
+      this._nextBtn.addEventListener('click', () => this._onNext());
+    }
+
+    this._dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.csDot, 10);
+        this._goToSlide(idx);
       });
     });
 
-    tablist.addEventListener('keydown', this._onKeydown);
+    this.addEventListener('keydown', this._onKeydown);
+
+    this._updateIndicators(0);
+  }
+
+  _onScroll() {
+    clearTimeout(this._scrollTimeout);
+    this._scrollTimeout = setTimeout(() => {
+      const slideWidth = this._slides[0].offsetWidth;
+      if (slideWidth === 0) return;
+      const index = Math.round(this._track.scrollLeft / slideWidth);
+      const clamped = Math.max(0, Math.min(index, this._slides.length - 1));
+      if (clamped !== this._activeIndex) {
+        this._activeIndex = clamped;
+        this._updateIndicators(clamped);
+      }
+    }, 60);
+  }
+
+  _goToSlide(index) {
+    if (index < 0 || index >= this._slides.length) return;
+    const slideWidth = this._slides[0].offsetWidth;
+    this._track.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+    this._activeIndex = index;
+    this._updateIndicators(index);
+  }
+
+  _onPrev() {
+    this._goToSlide(this._activeIndex - 1);
+  }
+
+  _onNext() {
+    this._goToSlide(this._activeIndex + 1);
+  }
+
+  _updateIndicators(index) {
+    const total = this._slides.length;
+
+    this._dots.forEach((dot, i) => {
+      const isActive = i === index;
+      dot.classList.toggle('cs-transform__dot--active', isActive);
+      dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      dot.setAttribute('tabindex', isActive ? '0' : '-1');
+    });
+
+    if (this._prevBtn) {
+      this._prevBtn.disabled = index === 0;
+    }
+    if (this._nextBtn) {
+      this._nextBtn.disabled = index === total - 1;
+    }
   }
 
   _onKeydown(e) {
-    const steps = [...this.querySelectorAll('[data-cs-step]')];
-    const total = steps.length;
-    if (!total) return;
-
-    let next = this._activeIndex;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      next = (this._activeIndex + 1) % total;
-      e.preventDefault();
-    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      next = (this._activeIndex - 1 + total) % total;
-      e.preventDefault();
-    } else if (e.key === 'Home') {
-      next = 0;
-      e.preventDefault();
-    } else if (e.key === 'End') {
-      next = total - 1;
-      e.preventDefault();
-    } else {
+    if (e.target.closest('[data-cs-dot]')) {
+      let next = this._activeIndex;
+      if (e.key === 'ArrowRight') {
+        next = Math.min(this._activeIndex + 1, this._slides.length - 1);
+        e.preventDefault();
+      } else if (e.key === 'ArrowLeft') {
+        next = Math.max(this._activeIndex - 1, 0);
+        e.preventDefault();
+      } else if (e.key === 'Home') {
+        next = 0;
+        e.preventDefault();
+      } else if (e.key === 'End') {
+        next = this._slides.length - 1;
+        e.preventDefault();
+      } else {
+        return;
+      }
+      this._goToSlide(next);
+      this._dots[next].focus();
       return;
     }
 
-    this._goToStep(next);
-    steps[next].focus();
+    if (e.target.closest('.cs-transform__carousel')) {
+      if (e.key === 'ArrowRight') {
+        this._onNext();
+        e.preventDefault();
+      } else if (e.key === 'ArrowLeft') {
+        this._onPrev();
+        e.preventDefault();
+      }
+    }
   }
 
-  _goToStep(index) {
-    const steps = this.querySelectorAll('[data-cs-step]');
-    const panels = this.querySelectorAll('[data-cs-detail]');
-    const fill = this.querySelector('[data-cs-stepper-fill]');
-    const total = steps.length;
-    if (index < 0 || index >= total) return;
+  /* ── Cart Integration ───────────────────────────────────────────────── */
 
-    /* Update steps */
-    steps.forEach((step, i) => {
-      const isActive = i === index;
-      const isCompleted = i < index;
-      step.classList.toggle('cs-transform__step--active', isActive);
-      step.classList.toggle('cs-transform__step--completed', isCompleted);
-      step.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      step.setAttribute('tabindex', isActive ? '0' : '-1');
+  _initCTA() {
+    const buttons = this.querySelectorAll('[data-cs-add-to-cart]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this._addToCart(btn);
+      });
     });
+  }
 
-    /* Update panels */
-    panels.forEach((panel, i) => {
-      const isActive = i === index;
-      panel.classList.toggle('cs-transform__detail--active', isActive);
-      panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-    });
+  async _addToCart(btn) {
+    const variantId = btn.dataset.variantId;
+    const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
 
-    /* Update progress fill */
-    if (fill && total > 1) {
-      fill.style.width = (index / (total - 1)) * 100 + '%';
+    if (!variantId) return;
+
+    btn.disabled = true;
+    const originalText = btn.textContent;
+
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{ id: parseInt(variantId, 10), quantity: quantity }]
+        })
+      });
+
+      if (!response.ok) throw new Error('Cart add failed');
+
+      window.location.href = '/cart';
+    } catch (err) {
+      btn.disabled = false;
     }
-
-    this._activeIndex = index;
   }
 }
 
@@ -1180,23 +1251,17 @@ if (!customElements.get('cs-transform-timeline')) {
       "type": "textarea",
       "id": "subtitle",
       "label": "Alt başlık",
-      "default": "6 bilimsel bileşen, 2 kapsül, her akşam. Vücudunuzun doğal sakinlik mekanizmalarını adım adım nasıl yeniden kuracağınızı keşfedin."
-    },
-    {
-      "type": "text",
-      "id": "cta_text",
-      "label": "CTA Buton Metni",
-      "default": "3 Aylık Paketi Keşfet"
-    },
-    {
-      "type": "url",
-      "id": "cta_url",
-      "label": "CTA Buton Bağlantısı"
+      "default": "6 bilimsel bileşen, 2 kapsül, her akşam. Vücudunuzun doğal sakinlik mekanizmalarını adım adım nasıl desteklediğini keşfedin."
     },
     {
       "type": "product",
       "id": "product",
       "label": "Ürün"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Yedek Bağlantı (ürün seçilmemişse)"
     }
   ],
   "blocks": [
@@ -1208,61 +1273,37 @@ if (!customElements.get('cs-transform-timeline')) {
           "type": "text",
           "id": "time_label",
           "label": "Zaman Etiketi",
-          "default": "İlk Doz"
+          "default": "1. Gün"
         },
         {
           "type": "text",
           "id": "headline",
           "label": "Başlık",
-          "default": "Doğal Sakinliğin İlk Sinyali"
+          "default": "İlk Kapsülden Hissedilen Fark"
         },
         {
           "type": "text",
-          "id": "benefit_1",
-          "label": "Fayda 1",
-          "default": "Apigenin, GABA-A reseptörlerine bağlanarak 30–60 dakikada sakinleştirici etki başlatır"
-        },
-        {
-          "type": "text",
-          "id": "ingredient_1",
-          "label": "Bileşen 1",
-          "default": "Papatya"
-        },
-        {
-          "type": "text",
-          "id": "benefit_2",
-          "label": "Fayda 2",
-          "default": "GABA transaminaz inhibisyonu ile sinir sistemi dengelenir"
-        },
-        {
-          "type": "text",
-          "id": "ingredient_2",
-          "label": "Bileşen 2",
-          "default": "Melisa"
-        },
-        {
-          "type": "text",
-          "id": "benefit_3",
-          "label": "Fayda 3",
-          "default": "Serotonin ve GABA sentezinde kofaktör olarak görev yapar"
-        },
-        {
-          "type": "text",
-          "id": "ingredient_3",
-          "label": "Bileşen 3",
-          "default": "B6"
+          "id": "ingredient_pills",
+          "label": "Bileşen Pilleri (virgülle ayırın)",
+          "default": "Papatya, Melisa, B6"
         },
         {
           "type": "textarea",
-          "id": "science_callout",
-          "label": "Bilimsel Mekanizma",
-          "default": "Apigenin, benzodiazepinlere benzer bir GABA-A bağlanma profili gösterir — ancak bağımlılık riski taşımadan doğal sakinlik sağlar."
+          "id": "storytelling",
+          "label": "Hikaye Anlatımı",
+          "default": "Papatya'daki apigenin, beyindeki GABA-A reseptörlerine bağlanarak doğal bir sakinlik sinyali göndermeyi destekler."
+        },
+        {
+          "type": "textarea",
+          "id": "science_text",
+          "label": "Bilimsel Referans",
+          "default": "Amsterdam et al. (2009) — Papatya ekstresi (1.2% apigenin), anksiyete skorlarında anlamlı iyileşmeyi desteklediği gözlenmiştir."
         },
         {
           "type": "text",
-          "id": "stat_reference",
-          "label": "Kaynak / Referans",
-          "default": "Srivastava et al., Molecular Medicine Reports, 2010"
+          "id": "science_pmid",
+          "label": "PubMed PMID",
+          "default": "19593179"
         },
         {
           "type": "select",
@@ -1275,6 +1316,12 @@ if (!customElements.get('cs-transform-timeline')) {
             { "value": "brain", "label": "Beyin Dengesi" },
             { "value": "harmony", "label": "Botanik Harmoni" }
           ]
+        },
+        {
+          "type": "number",
+          "id": "cart_quantity",
+          "label": "Sepete Eklenecek Adet",
+          "default": 1
         }
       ]
     }
@@ -1286,65 +1333,53 @@ if (!customElements.get('cs-transform-timeline')) {
         {
           "type": "milestone",
           "settings": {
-            "time_label": "İLK DOZ",
-            "headline": "Doğal Sakinliğin İlk Sinyali",
-            "benefit_1": "Apigenin, GABA-A reseptörlerine bağlanarak 30–60 dakikada sakinleştirici etki başlatır",
-            "ingredient_1": "Papatya",
-            "benefit_2": "GABA transaminaz inhibisyonu ile sinir sistemi dengelenir",
-            "ingredient_2": "Melisa",
-            "benefit_3": "Serotonin ve GABA sentezinde kofaktör olarak görev yapar",
-            "ingredient_3": "B6",
-            "science_callout": "Apigenin, benzodiazepinlere benzer bir GABA-A bağlanma profili gösterir — ancak bağımlılık riski taşımadan doğal sakinlik sağlar.",
-            "stat_reference": "Srivastava et al., Molecular Medicine Reports, 2010",
-            "illustration": "molecule"
+            "time_label": "1. GÜN",
+            "headline": "İlk Kapsülden Hissedilen Fark",
+            "ingredient_pills": "Papatya, Melisa, B6",
+            "storytelling": "Papatya'daki apigenin, beyindeki GABA-A reseptörlerine bağlanarak doğal bir sakinlik sinyali göndermeyi destekler. Melisa, GABA metabolizmasını dengelemeye katkıda bulunurken, B6 vitamini serotonin ve GABA üretimini destekler. İlk dozdan itibaren bu üçlü sinerji, gerginliğin yumuşamasına katkıda bulunabilir.",
+            "science_text": "Amsterdam et al. (2009) — Papatya ekstresi (1.2% apigenin), anksiyete skorlarında anlamlı iyileşmeyi desteklediği gözlenmiştir.",
+            "science_pmid": "19593179",
+            "illustration": "molecule",
+            "cart_quantity": 1
           }
         },
         {
           "type": "milestone",
           "settings": {
-            "time_label": "İLK HAFTA",
+            "time_label": "1. HAFTA",
             "headline": "Uyku Kaliteniz Dönüşmeye Başlıyor",
-            "benefit_1": "GABA geri alımı inhibisyonu ile 1 haftada ölçülebilir uyku iyileşmesi",
-            "ingredient_1": "Passiflora",
-            "benefit_2": "İlk adaptojenik yanıt başlar, stres direnci artmaya başlar",
-            "ingredient_2": "Rhodiola",
-            "benefit_3": "Miyelin kılıfı desteği ile sinir iletimi optimize edilir",
-            "ingredient_3": "B12",
-            "science_callout": "Klinik çalışmalar, passiflora ekstresinin 1 hafta içinde uyku kalitesini anlamlı şekilde iyileştirdiğini göstermektedir.",
-            "stat_reference": "Ngan & Conduit, Phytotherapy Research, 2011",
-            "illustration": "wave"
+            "ingredient_pills": "Passiflora, Rhodiola, B12",
+            "storytelling": "Passiflora, GABA geri alımını dengelemeye katkıda bulunarak uyku kalitesini destekler. Rhodiola, adaptojenik özellikleriyle vücudun stres yanıtını düzenlemeye başlarken, B12 sinir sistemi fonksiyonlarını destekler. Bir hafta içinde uyku düzeninizin iyileşmeye başladığını fark edebilirsiniz.",
+            "science_text": "Ngan & Conduit (2011) — 7 günlük passiflora kullanımı, uyku kalitesinde anlamlı iyileşmeyi desteklediği gözlenmiştir.",
+            "science_pmid": "21294203",
+            "illustration": "wave",
+            "cart_quantity": 1
           }
         },
         {
           "type": "milestone",
           "settings": {
             "time_label": "1. AY",
-            "headline": "Kortizol Dengeniz Yeniden Kuruldu",
-            "benefit_1": "HPA eksen regülasyonu ile kortizol seviyeleri normalleşir",
-            "ingredient_1": "Rhodiola",
-            "benefit_2": "Anksiyolitik etkinlik, 4 haftalık denemelerde benzodiazepinlerle karşılaştırılabilir",
-            "ingredient_2": "Passiflora",
-            "benefit_3": "Tüm B-vitamin kofaktörleri tam kapasiteyle çalışır",
-            "ingredient_3": "B6 + B12",
-            "science_callout": "Rhodiola rosea ekstresi (2×50mg/gün) ile yapılan 20 günlük çalışma, yorgunlukta anlamlı azalma ve genel iyilik halinde artış göstermiştir.",
-            "stat_reference": "Darbinyan et al., Phytomedicine, 2000",
-            "illustration": "brain"
+            "headline": "Stres Yanıtınız Dengeleniyor",
+            "ingredient_pills": "Rhodiola, Passiflora, Melisa",
+            "storytelling": "Rhodiola'nın adaptojenik etkisi, HPA aksını düzenleyerek kortizol seviyelerinin dengelenmesini destekler. Passiflora'nın anksiyolitik özellikleri tam etkinliğine ulaşırken, Melisa anksiyete ve uykusuzluk belirtilerinin hafiflemesine katkıda bulunur. Bir ay sonunda strese karşı daha dayanıklı hissedebilirsiniz.",
+            "science_text": "Olsson et al. (2009) — Rhodiola rosea, stres altında kortizol yanıtını azaltmayı ve mental performansı desteklediği gözlenmiştir.",
+            "science_pmid": "19016404",
+            "illustration": "brain",
+            "cart_quantity": 1
           }
         },
         {
           "type": "milestone",
           "settings": {
             "time_label": "3. AY",
-            "headline": "Yeni Normal: Sakin ve Dengeli",
-            "benefit_1": "Tam adaptojenik döngü tamamlanır, kronik stres direnci kurulur",
-            "ingredient_1": "Rhodiola",
-            "benefit_2": "Sirkadiyen ritim optimizasyonu ile kalıcı uyku düzeni sağlanır",
-            "ingredient_2": "Passiflora",
-            "benefit_3": "6 bileşenin sinerjik etkisi ile kalıcı sakinlik ve denge",
-            "ingredient_3": "Tam Formül",
-            "science_callout": "Tam adaptojenik etki için 3 ay düzenli kullanım önerilir — kalıcı kortizol direnci ancak bu sürede oluşur.",
-            "stat_reference": "EFSA Panel on Dietetic Products, 2012",
-            "illustration": "harmony"
+            "headline": "Yeni Dengeniz: Sakin ve Dayanıklı",
+            "ingredient_pills": "Rhodiola, Papatya, Passiflora, Melisa, B6, B12",
+            "storytelling": "Üç aylık düzenli kullanımla adaptojenik döngü tamamlanır. Rhodiola'nın tam adaptojenik etkisi, Papatya ve Passiflora'nın sinerjik sakinleştirici desteği, Melisa'nın denge katkısı ve B vitaminlerinin nörotransmiter desteği birlikte çalışarak yeni bir denge oluşturmayı destekler.",
+            "science_text": "Cases et al. (2011) — 15 günlük Melisa kullanımı, anksiyetede %18 ve uykusuzlukta %42 azalmayı desteklediği gözlenmiştir.",
+            "science_pmid": "22207903",
+            "illustration": "harmony",
+            "cart_quantity": 3
           }
         }
       ]
