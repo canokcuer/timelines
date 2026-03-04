@@ -14,7 +14,7 @@
   <div class="cs-timeline__container">
 
     {%- comment -%} ── Section Header ──────────────────────────────── {%- endcomment -%}
-    <header class="cs-timeline__header cs-transform__header cs-transform__reveal">
+    <header class="cs-timeline__header cs-transform__header">
       {%- if section.settings.kicker != blank -%}
         <span class="cs-timeline__kicker cs-transform__kicker">
           {{ section.settings.kicker }}
@@ -33,7 +33,7 @@
     </header>
 
     {%- comment -%} ── Stepper Navigation ──────────────────────────── {%- endcomment -%}
-    <div class="cs-transform__stepper cs-transform__reveal" role="tablist" aria-label="Dönüşüm adımları">
+    <div class="cs-transform__stepper" role="tablist" aria-label="Dönüşüm adımları">
       <div class="cs-transform__stepper-track">
         <div class="cs-transform__stepper-rail" aria-hidden="true">
           <div class="cs-transform__stepper-fill" data-cs-stepper-fill></div>
@@ -546,6 +546,15 @@
 
 .cs-transform__reveal--visible {
   opacity: 1;
+}
+
+/* Fallback: if JS doesn't run within 3s, show everything */
+@keyframes ct-reveal-fallback {
+  to { opacity: 1; }
+}
+
+.cs-transform__reveal:not(.cs-transform__reveal--visible) {
+  animation: ct-reveal-fallback 0s 3s forwards;
 }
 
 /* --------------------------------------------------------------------------
