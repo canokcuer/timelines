@@ -11,7 +11,6 @@
   class="cs-timeline cs-transform"
   aria-label="{{ section.settings.kicker | default: 'Dönüşüm Yolculuğu' }}"
   data-cs-transform
-  data-bundle-url="{{ section.settings.bundle_url | default: '#wellness-architect' }}"
   style="--ct-padding-top: {{ section.settings.padding_top }}px; --ct-padding-bottom: {{ section.settings.padding_bottom }}px; --ct-header-gap: {{ section.settings.header_gap }}px; --ct-stepper-gap: {{ section.settings.stepper_gap }}px;"
 >
   <div class="cs-timeline__container">
@@ -1836,7 +1835,7 @@
                 </div>
               {%- endif -%}
 
-              {%- comment -%} CTA Button — adds to cart, navigates to Bundle Builder {%- endcomment -%}
+              {%- comment -%} CTA Button — adds to cart, opens Bundle Builder {%- endcomment -%}
               <div class="cs-transform__cta-wrap">
                 {%- assign product = section.settings.product -%}
                 {%- if product != blank -%}
@@ -1844,6 +1843,7 @@
                     type="button"
                     class="cs-transform__cta"
                     data-cs-open-bundle
+                    data-product-handle="{{ product.handle }}"
                     data-variant-id="{{ product.selected_or_first_available_variant.id }}"
                     data-cart-quantity="{% if forloop.last %}3{% else %}1{% endif %}"
                   >
@@ -2767,7 +2767,6 @@ class CsTransformTimeline extends HTMLElement {
   /* ── Bundle Builder Integration ────────────────────────────────────── */
 
   _initCTA() {
-    this._bundleUrl = this.closest('[data-cs-transform]')?.dataset.bundleUrl || '';
     const buttons = this.querySelectorAll('[data-cs-open-bundle]');
     buttons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
@@ -2778,29 +2777,31 @@ class CsTransformTimeline extends HTMLElement {
   }
 
   _openBundle(btn) {
+    const handle = btn.dataset.productHandle;
     const variantId = btn.dataset.variantId;
     const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
-
     if (!variantId) return;
-    btn.disabled = true;
 
+    /* 1. Add to Shopify cart with correct quantity */
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         items: [{ id: parseInt(variantId, 10), quantity: quantity }]
       })
-    })
-    .then(function() {
-      if (this._bundleUrl) {
-        window.location.href = this._bundleUrl;
-      } else {
-        btn.disabled = false;
-      }
-    }.bind(this))
-    .catch(function() {
-      btn.disabled = false;
     });
+
+    /* 2. Open VBB dock (adds 1 item to VBB state + opens on mobile) */
+    if (typeof window.openBundleBuilder === 'function') {
+      window.openBundleBuilder(handle);
+    }
+
+    /* 3. On desktop, scroll to VBB section */
+    if (window.innerWidth >= 750) {
+      var vbb = document.getElementById('wellness-architect')
+             || document.querySelector('.wellness-architect');
+      if (vbb) vbb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 
@@ -2841,11 +2842,6 @@ if (!customElements.get('cs-transform-timeline')) {
       "type": "url",
       "id": "cta_url",
       "label": "CTA Yedek Bağlantı (ürün seçilmemişse)"
-    },
-    {
-      "type": "url",
-      "id": "bundle_url",
-      "label": "Bundle Builder Sayfası (masaüstü yönlendirme)"
     },
     {
       "type": "range",
