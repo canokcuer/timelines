@@ -1836,7 +1836,7 @@
                 </div>
               {%- endif -%}
 
-              {%- comment -%} CTA Button — opens Visual Bundle Builder dock {%- endcomment -%}
+              {%- comment -%} CTA Button — adds to cart, navigates to Bundle Builder {%- endcomment -%}
               <div class="cs-transform__cta-wrap">
                 {%- assign product = section.settings.product -%}
                 {%- if product != blank -%}
@@ -1844,10 +1844,8 @@
                     type="button"
                     class="cs-transform__cta"
                     data-cs-open-bundle
-                    data-product-handle="{{ product.handle }}"
                     data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-                    data-cart-quantity="{{ block.settings.cart_quantity | default: 1 }}"
-                    aria-label="Yolculuğuna Başla — {{ block.settings.cart_quantity | default: 1 }} adet"
+                    data-cart-quantity="{% if forloop.last %}3{% else %}1{% endif %}"
                   >
                     Yolculuğuna Başla
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
@@ -1858,7 +1856,6 @@
                   <a
                     href="{{ section.settings.cta_url | default: '#' }}"
                     class="cs-transform__cta"
-                    aria-label="Yolculuğuna Başla"
                   >
                     Yolculuğuna Başla
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
@@ -2770,6 +2767,7 @@ class CsTransformTimeline extends HTMLElement {
   /* ── Bundle Builder Integration ────────────────────────────────────── */
 
   _initCTA() {
+    this._bundleUrl = this.closest('[data-cs-transform]')?.dataset.bundleUrl || '';
     const buttons = this.querySelectorAll('[data-cs-open-bundle]');
     buttons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
@@ -2779,36 +2777,30 @@ class CsTransformTimeline extends HTMLElement {
     });
   }
 
-  async _openBundle(btn) {
-    const handle = btn.dataset.productHandle;
+  _openBundle(btn) {
     const variantId = btn.dataset.variantId;
     const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
 
     if (!variantId) return;
     btn.disabled = true;
 
-    try {
-      const res = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: [{ id: parseInt(variantId, 10), quantity: quantity }]
-        })
-      });
-      if (!res.ok) throw new Error();
-
-      const isMobile = window.innerWidth < 750;
-      if (isMobile && typeof window.openBundleBuilder === 'function') {
-        window.openBundleBuilder();
-        btn.disabled = false;
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: [{ id: parseInt(variantId, 10), quantity: quantity }]
+      })
+    })
+    .then(function() {
+      if (this._bundleUrl) {
+        window.location.href = this._bundleUrl;
       } else {
-        const section = btn.closest('[data-cs-transform]');
-        const bundleUrl = section ? section.dataset.bundleUrl : null;
-        window.location.href = bundleUrl || '#wellness-architect';
+        btn.disabled = false;
       }
-    } catch {
+    }.bind(this))
+    .catch(function() {
       btn.disabled = false;
-    }
+    });
   }
 }
 
@@ -3027,12 +3019,6 @@ if (!customElements.get('cs-transform-timeline')) {
             { "value": "tc-ripple", "label": "TheChill: Stres Dalgası" },
             { "value": "tc-zen", "label": "TheChill: İç Huzur" }
           ]
-        },
-        {
-          "type": "number",
-          "id": "cart_quantity",
-          "label": "Sepete Eklenecek Adet",
-          "default": 1
         }
       ]
     }
@@ -3061,7 +3047,6 @@ if (!customElements.get('cs-transform-timeline')) {
             "science_ref_3": "Field et al. (2022) — 100mg/gün B6, GABAerjik nöral inhibisyonu güçlendirerek anksiyetede anlamlı azalma sağlamıştır.",
             "science_pmid_3": "35851507",
             "illustration": "molecule",
-            "cart_quantity": 1
           }
         },
         {
@@ -3084,7 +3069,6 @@ if (!customElements.get('cs-transform-timeline')) {
             "science_ref_3": "Cases et al. (2011) — 600mg/gün Melisa (Cyracos®), 15 günde anksiyete belirtilerinde %18 ve uykusuzlukta %42 azalma sağlamıştır.",
             "science_pmid_3": "22207903",
             "illustration": "neuron",
-            "cart_quantity": 1
           }
         },
         {
@@ -3107,7 +3091,6 @@ if (!customElements.get('cs-transform-timeline')) {
             "science_ref_3": "Calderón-Ospina & Nava-Mesa (2020) — B6 ve B12'nin sinir sistemindeki sinerjik etkileri: miyelin sentezi, nörotransmiter üretimi ve nöroprotektif mekanizmalar.",
             "science_pmid_3": "31490017",
             "illustration": "brain",
-            "cart_quantity": 1
           }
         },
         {
@@ -3130,7 +3113,6 @@ if (!customElements.get('cs-transform-timeline')) {
             "science_ref_3": "Keefe et al. (2018) — Papatya ekstresi, tükürük kortizol profilini normalize ederek sabah-akşam ritmine katkıda bulunmuştur.",
             "science_pmid_3": "29080520",
             "illustration": "harmony",
-            "cart_quantity": 3
           }
         }
       ]
