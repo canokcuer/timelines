@@ -11,6 +11,7 @@
   class="cs-timeline cs-transform"
   aria-label="{{ section.settings.kicker | default: 'Dönüşüm Yolculuğu' }}"
   data-cs-transform
+  style="--ct-padding-top: {{ section.settings.padding_top }}px; --ct-padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   <div class="cs-timeline__container">
 
@@ -1957,7 +1958,7 @@
   --cs-border-gold: rgba(255, 223, 0, 0.3);
   --cs-border-teal: rgba(16, 132, 116, 0.3);
 
-  --cs-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --cs-font-family: Inter, sans-serif;
   --cs-font-size-xs: clamp(0.6875rem, 0.625rem + 0.25vw, 0.75rem);
   --cs-font-size-sm: clamp(0.75rem, 0.6875rem + 0.25vw, 0.875rem);
   --cs-font-size-base: clamp(0.875rem, 0.8125rem + 0.25vw, 1rem);
@@ -2048,7 +2049,7 @@
 
 .cs-timeline__title {
   font-size: var(--cs-font-size-2xl);
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.12;
   margin: 0 0 var(--cs-space-md);
@@ -2095,24 +2096,27 @@
    ============================================================================ */
 
 .cs-transform {
-  --ct-deep-teal: #0D4F47;
+  --ct-deep-teal: #00352F;
   --ct-soft-teal: #108474;
   --ct-warm-gold: #C4973B;
-  --ct-text-primary: #1a1a1a;
-  --ct-text-secondary: #6B6B6B;
+  --ct-text-primary: #333333;
+  --ct-text-secondary: #7B7B7B;
   --ct-card-bg: #ffffff;
-  --ct-science-bg: #E8F4F2;
-  --ct-pill-bg: rgba(16, 132, 116, 0.1);
-  --ct-pill-border: rgba(16, 132, 116, 0.25);
+  --ct-science-bg: #f0f9f7;
+  --ct-pill-bg: rgba(16, 132, 116, 0.08);
+  --ct-pill-border: rgba(16, 132, 116, 0.2);
+  --ct-btn-bg: #333333;
+  --ct-btn-text: #FAFAFA;
 }
 
 /* --------------------------------------------------------------------------
    Section Root
    -------------------------------------------------------------------------- */
 .cs-transform {
-  background: linear-gradient(180deg, #f9f6f2 0%, #f0ebe4 100%);
+  background: #ffffff;
   color: var(--ct-text-primary);
-  padding-block: var(--cs-space-3xl) var(--cs-space-2xl);
+  padding-top: var(--ct-padding-top, 40px);
+  padding-bottom: var(--ct-padding-bottom, 40px);
   overflow: hidden;
   position: relative;
 }
@@ -2140,7 +2144,7 @@
   left: calc(var(--cs-space-md) + 16px);
   right: calc(var(--cs-space-md) + 16px);
   height: 3px;
-  background: rgba(13, 79, 71, 0.12);
+  background: rgba(0, 53, 47, 0.12);
   border-radius: 2px;
   z-index: 0;
 }
@@ -2177,7 +2181,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--cs-radius-full);
-  border: 2.5px solid rgba(13, 79, 71, 0.2);
+  border: 2.5px solid rgba(0, 53, 47, 0.2);
   background: var(--ct-card-bg);
   font-family: var(--cs-font-family);
   font-size: 13px;
@@ -2314,8 +2318,8 @@
   width: 200px;
   height: 200px;
   border-radius: var(--cs-radius-full);
-  background: rgba(13, 79, 71, 0.025);
-  border: 1px solid rgba(13, 79, 71, 0.06);
+  background: rgba(0, 53, 47, 0.02);
+  border: 1px solid rgba(0, 53, 47, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2519,8 +2523,9 @@
   cursor: pointer;
   min-height: 44px;
   min-width: 44px;
-  background: var(--ct-deep-teal);
-  color: #ffffff;
+  background: var(--ct-btn-bg);
+  color: var(--ct-btn-text);
+  border: 2px solid var(--ct-btn-bg);
   transition:
     background var(--cs-duration-fast) var(--cs-ease-out),
     transform var(--cs-duration-fast) var(--cs-ease-out),
@@ -2528,9 +2533,10 @@
 }
 
 .cs-transform__cta:hover {
-  background: var(--ct-soft-teal);
+  background: transparent;
+  color: var(--ct-btn-bg);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(13, 79, 71, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .cs-transform__cta:active {
@@ -2561,8 +2567,8 @@
   width: 40px;
   height: 40px;
   border-radius: var(--cs-radius-full);
-  background: var(--ct-deep-teal);
-  color: #ffffff;
+  background: var(--ct-btn-bg);
+  color: var(--ct-btn-text);
   border: none;
   cursor: pointer;
   flex-shrink: 0;
@@ -2573,7 +2579,7 @@
 }
 
 .cs-transform__arrow:hover:not([disabled]) {
-  background: var(--ct-soft-teal);
+  background: var(--ct-deep-teal);
   transform: scale(1.05);
 }
 
@@ -2993,7 +2999,7 @@ if (!customElements.get('cs-transform-timeline')) {
 
 {% schema %}
 {
-  "name": "TheChill Dönüşüm Yolculuğu",
+  "name": "Dönüşüm Yolculuğu v2",
   "class": "cs-transform-section",
   "settings": [
     {
@@ -3023,6 +3029,26 @@ if (!customElements.get('cs-transform-timeline')) {
       "type": "url",
       "id": "cta_url",
       "label": "CTA Yedek Bağlantı (ürün seçilmemişse)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Üst Boşluk (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Alt Boşluk (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
     }
   ],
   "blocks": [
@@ -3168,7 +3194,7 @@ if (!customElements.get('cs-transform-timeline')) {
   ],
   "presets": [
     {
-      "name": "TheChill Dönüşüm Yolculuğu",
+      "name": "Dönüşüm Yolculuğu v2",
       "blocks": [
         {
           "type": "milestone",
