@@ -11,7 +11,7 @@
   class="cs-timeline cs-transform"
   aria-label="{{ section.settings.kicker | default: 'Dönüşüm Yolculuğu' }}"
   data-cs-transform
-  style="--ct-padding-top: {{ section.settings.padding_top }}px; --ct-padding-bottom: {{ section.settings.padding_bottom }}px;"
+  style="--ct-padding-top: {{ section.settings.padding_top }}px; --ct-padding-bottom: {{ section.settings.padding_bottom }}px; --ct-header-gap: {{ section.settings.header_gap }}px; --ct-stepper-gap: {{ section.settings.stepper_gap }}px;"
 >
   <div class="cs-timeline__container">
 
@@ -1988,7 +1988,7 @@
    -------------------------------------------------------------------------- */
 .cs-timeline__header {
   text-align: center;
-  margin-block-end: var(--cs-space-xl);
+  margin-block-end: var(--ct-header-gap, 32px);
 }
 
 .cs-timeline__kicker {
@@ -2087,7 +2087,7 @@
   justify-content: space-between;
   align-items: flex-start;
   max-width: 600px;
-  margin: 0 auto var(--cs-space-xl);
+  margin: 0 auto var(--ct-stepper-gap, 32px);
   padding-inline: var(--cs-space-md);
 }
 
@@ -2782,8 +2782,9 @@ class CsTransformTimeline extends HTMLElement {
     const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
 
     if (typeof window.openBundleBuilder === 'function') {
-      for (let i = 0; i < quantity; i++) {
-        window.openBundleBuilder(handle);
+      window.openBundleBuilder(handle);
+      for (let i = 1; i < quantity; i++) {
+        setTimeout(() => window.openBundleBuilder(handle), i * 350);
       }
     } else if (handle) {
       window.location.href = '/products/' + handle;
@@ -2828,6 +2829,26 @@ if (!customElements.get('cs-transform-timeline')) {
       "type": "url",
       "id": "cta_url",
       "label": "CTA Yedek Bağlantı (ürün seçilmemişse)"
+    },
+    {
+      "type": "range",
+      "id": "header_gap",
+      "label": "Başlık → Stepper Arası (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "stepper_gap",
+      "label": "Stepper → İçerik Arası (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
     },
     {
       "type": "range",
