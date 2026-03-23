@@ -1835,34 +1835,23 @@
                 </div>
               {%- endif -%}
 
-              {%- comment -%} CTA Button {%- endcomment -%}
+              {%- comment -%} CTA Button — opens Visual Bundle Builder dock {%- endcomment -%}
               <div class="cs-transform__cta-wrap">
                 {%- assign product = section.settings.product -%}
-                {%- if product != blank and product.available -%}
+                {%- if product != blank -%}
                   <button
                     type="button"
                     class="cs-transform__cta"
-                    data-cs-add-to-cart
-                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                    data-cs-open-bundle
+                    data-product-handle="{{ product.handle }}"
                     data-cart-quantity="{{ block.settings.cart_quantity | default: 1 }}"
-                    aria-label="Yolculuğuna Başla — {{ block.settings.cart_quantity | default: 1 }} adet sepete ekle"
+                    aria-label="Yolculuğuna Başla — {{ block.settings.cart_quantity | default: 1 }} adet"
                   >
                     Yolculuğuna Başla
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
                       <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </button>
-                {%- elsif product != blank -%}
-                  <a
-                    href="{{ product.url }}"
-                    class="cs-transform__cta"
-                    aria-label="Yolculuğuna Başla — Ürün sayfasına git"
-                  >
-                    Yolculuğuna Başla
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
-                      <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </a>
                 {%- else -%}
                   <a
                     href="{{ section.settings.cta_url | default: '#' }}"
@@ -1882,42 +1871,6 @@
         {%- endfor -%}
       </div>
 
-      {%- comment -%} ── Navigation ─────────────────────────────── {%- endcomment -%}
-      <div class="cs-transform__nav">
-        <button
-          type="button"
-          class="cs-transform__arrow cs-transform__arrow--prev"
-          aria-label="Önceki adım"
-          data-cs-prev
-          disabled
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-            <path d="M12.5 15l-5-5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        <div class="cs-transform__dots" aria-label="Slayt seçimi">
-          {%- for block in section.blocks -%}
-            <button
-              type="button"
-              class="cs-transform__dot{% if forloop.first %} cs-transform__dot--active{% endif %}"
-              aria-label="Slayt {{ forloop.index }}: {{ block.settings.time_label }}"
-              data-cs-dot="{{ forloop.index0 }}"
-            ></button>
-          {%- endfor -%}
-        </div>
-
-        <button
-          type="button"
-          class="cs-transform__arrow cs-transform__arrow--next"
-          aria-label="Sonraki adım"
-          data-cs-next
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-            <path d="M7.5 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
 
     </div>
 
@@ -2548,86 +2501,6 @@
   cursor: not-allowed;
 }
 
-/* --------------------------------------------------------------------------
-   Navigation — Arrows + Dots
-   -------------------------------------------------------------------------- */
-.cs-transform__nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--cs-space-md);
-  margin-block-start: var(--cs-space-lg);
-}
-
-/* Arrow Buttons */
-.cs-transform__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--cs-radius-full);
-  background: var(--ct-btn-bg);
-  color: var(--ct-btn-text);
-  border: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition:
-    background var(--cs-duration-fast) var(--cs-ease-out),
-    opacity var(--cs-duration-fast) var(--cs-ease-out),
-    transform var(--cs-duration-fast) var(--cs-ease-out);
-}
-
-.cs-transform__arrow:hover:not([disabled]) {
-  background: var(--ct-deep-teal);
-  transform: scale(1.05);
-}
-
-.cs-transform__arrow[disabled] {
-  opacity: 0.3;
-  cursor: default;
-}
-
-.cs-transform__arrow:focus-visible {
-  outline: 2px solid var(--ct-deep-teal);
-  outline-offset: 2px;
-}
-
-/* Dot Pagination */
-.cs-transform__dots {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.cs-transform__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--cs-radius-full);
-  border: 2px solid var(--ct-text-secondary);
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  transition:
-    background var(--cs-duration-fast) var(--cs-ease-out),
-    border-color var(--cs-duration-fast) var(--cs-ease-out),
-    transform var(--cs-duration-fast) var(--cs-ease-out);
-}
-
-.cs-transform__dot--active {
-  background: var(--ct-warm-gold);
-  border-color: var(--ct-warm-gold);
-  transform: scale(1.2);
-}
-
-.cs-transform__dot:hover:not(.cs-transform__dot--active) {
-  border-color: var(--ct-deep-teal);
-}
-
-.cs-transform__dot:focus-visible {
-  outline: 2px solid var(--ct-deep-teal);
-  outline-offset: 2px;
-}
 
 /* --------------------------------------------------------------------------
    Mobile Overrides (< 750px)
@@ -2644,10 +2517,6 @@
   .cs-transform__illust-frame {
     width: 180px;
     height: 180px;
-  }
-
-  .cs-transform__arrow {
-    display: none;
   }
 
   .cs-transform__story {
@@ -2691,8 +2560,6 @@
 @media (prefers-reduced-motion: reduce) {
   .cs-transform__reveal,
   .cs-transform__cta,
-  .cs-transform__arrow,
-  .cs-transform__dot,
   .cs-transform__illust-frame,
   .cs-transform__step-node,
   .cs-transform__step-label,
@@ -2769,11 +2636,8 @@ class CsTransformTimeline extends HTMLElement {
   connectedCallback() {
     this._track = this.querySelector('[data-cs-track]');
     this._slides = [...this.querySelectorAll('[data-cs-slide]')];
-    this._dots = [...this.querySelectorAll('[data-cs-dot]')];
     this._steps = [...this.querySelectorAll('[data-cs-step]')];
     this._stepperFill = this.querySelector('[data-cs-stepper-fill]');
-    this._prevBtn = this.querySelector('[data-cs-prev]');
-    this._nextBtn = this.querySelector('[data-cs-next]');
 
     if (!this._track || !this._slides.length) return;
 
@@ -2818,21 +2682,6 @@ class CsTransformTimeline extends HTMLElement {
 
   _initCarousel() {
     this._track.addEventListener('scroll', this._onScroll, { passive: true });
-
-    if (this._prevBtn) {
-      this._prevBtn.addEventListener('click', () => this._onPrev());
-    }
-    if (this._nextBtn) {
-      this._nextBtn.addEventListener('click', () => this._onNext());
-    }
-
-    this._dots.forEach((dot) => {
-      dot.addEventListener('click', () => {
-        const idx = parseInt(dot.dataset.csDot, 10);
-        this._goToSlide(idx);
-      });
-    });
-
     this.addEventListener('keydown', this._onKeydown);
 
     this._updateIndicators(0);
@@ -2860,29 +2709,8 @@ class CsTransformTimeline extends HTMLElement {
     this._updateIndicators(index);
   }
 
-  _onPrev() {
-    this._goToSlide(this._activeIndex - 1);
-  }
-
-  _onNext() {
-    this._goToSlide(this._activeIndex + 1);
-  }
-
   _updateIndicators(index) {
     const total = this._slides.length;
-
-    /* Dots */
-    this._dots.forEach((dot, i) => {
-      dot.classList.toggle('cs-transform__dot--active', i === index);
-    });
-
-    /* Arrows */
-    if (this._prevBtn) {
-      this._prevBtn.disabled = index === 0;
-    }
-    if (this._nextBtn) {
-      this._nextBtn.disabled = index === total - 1;
-    }
 
     /* Stepper */
     this._steps.forEach((step, i) => {
@@ -2925,69 +2753,40 @@ class CsTransformTimeline extends HTMLElement {
       return;
     }
 
-    /* Dot keyboard */
-    if (e.target.closest('[data-cs-dot]')) {
-      let next = this._activeIndex;
-      if (e.key === 'ArrowRight') {
-        next = Math.min(this._activeIndex + 1, this._slides.length - 1);
-        e.preventDefault();
-      } else if (e.key === 'ArrowLeft') {
-        next = Math.max(this._activeIndex - 1, 0);
-        e.preventDefault();
-      } else {
-        return;
-      }
-      this._goToSlide(next);
-      this._dots[next].focus();
-      return;
-    }
-
     /* Carousel region keyboard */
     if (e.target.closest('.cs-transform__carousel')) {
       if (e.key === 'ArrowRight') {
-        this._onNext();
+        this._goToSlide(this._activeIndex + 1);
         e.preventDefault();
       } else if (e.key === 'ArrowLeft') {
-        this._onPrev();
+        this._goToSlide(this._activeIndex - 1);
         e.preventDefault();
       }
     }
   }
 
-  /* ── Cart Integration ───────────────────────────────────────────────── */
+  /* ── Bundle Builder Integration ────────────────────────────────────── */
 
   _initCTA() {
-    const buttons = this.querySelectorAll('[data-cs-add-to-cart]');
+    const buttons = this.querySelectorAll('[data-cs-open-bundle]');
     buttons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        this._addToCart(btn);
+        this._openBundle(btn);
       });
     });
   }
 
-  async _addToCart(btn) {
-    const variantId = btn.dataset.variantId;
+  _openBundle(btn) {
+    const handle = btn.dataset.productHandle;
     const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
 
-    if (!variantId) return;
-
-    btn.disabled = true;
-
-    try {
-      const response = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: [{ id: parseInt(variantId, 10), quantity: quantity }]
-        })
-      });
-
-      if (!response.ok) throw new Error('Cart add failed');
-
-      window.location.href = '/cart';
-    } catch (err) {
-      btn.disabled = false;
+    if (typeof window.openBundleBuilder === 'function') {
+      for (let i = 0; i < quantity; i++) {
+        window.openBundleBuilder(handle);
+      }
+    } else if (handle) {
+      window.location.href = '/products/' + handle;
     }
   }
 }
