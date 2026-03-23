@@ -1844,7 +1844,6 @@
                     class="cs-transform__cta"
                     data-cs-open-bundle
                     data-product-handle="{{ product.handle }}"
-                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
                     data-cart-quantity="{% if forloop.last %}3{% else %}1{% endif %}"
                   >
                     Yolculuğuna Başla
@@ -2777,23 +2776,24 @@ class CsTransformTimeline extends HTMLElement {
   }
 
   _openBundle(btn) {
-    const handle = btn.dataset.productHandle;
-    const variantId = btn.dataset.variantId;
-    const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
-    if (!variantId) return;
+    var handle = btn.dataset.productHandle;
+    var quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
+    if (!handle) return;
 
-    /* 1. Add to Shopify cart with correct quantity */
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        items: [{ id: parseInt(variantId, 10), quantity: quantity }]
-      })
-    });
-
-    /* 2. Open VBB dock (adds 1 item to VBB state + opens on mobile) */
+    /* 1. Add to VBB + open dock (VBB handles Shopify cart internally) */
     if (typeof window.openBundleBuilder === 'function') {
       window.openBundleBuilder(handle);
+
+      /* 2. For step 4 (qty 3): click VBB's own + button to reach target */
+      if (quantity > 1) {
+        setTimeout(function() {
+          var card = document.querySelector('.wa-product-card[data-product-handle="' + handle + '"]');
+          if (!card) return;
+          var plus = document.querySelector('[data-qty-plus="' + card.dataset.productId + '"]');
+          if (!plus) return;
+          for (var i = 1; i < quantity; i++) plus.click();
+        }, 600);
+      }
     }
 
     /* 3. On desktop, scroll to VBB section */
