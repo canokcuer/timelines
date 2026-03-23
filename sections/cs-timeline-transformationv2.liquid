@@ -1753,7 +1753,7 @@
                     <li class="cs-transform__benefit">
                       <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
                       {%- if block.settings.benefit_pill_1 != blank -%}
-                        <span class="cs-transform__pill cs-transform__pill--inline">{{ block.settings.benefit_pill_1 }}</span>
+                        <span class="cs-transform__pill">{{ block.settings.benefit_pill_1 }}</span>
                       {%- endif -%}
                     </li>
                   {%- endif -%}
@@ -1761,7 +1761,7 @@
                     <li class="cs-transform__benefit">
                       <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
                       {%- if block.settings.benefit_pill_2 != blank -%}
-                        <span class="cs-transform__pill cs-transform__pill--inline">{{ block.settings.benefit_pill_2 }}</span>
+                        <span class="cs-transform__pill">{{ block.settings.benefit_pill_2 }}</span>
                       {%- endif -%}
                     </li>
                   {%- endif -%}
@@ -1769,7 +1769,7 @@
                     <li class="cs-transform__benefit">
                       <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
                       {%- if block.settings.benefit_pill_3 != blank -%}
-                        <span class="cs-transform__pill cs-transform__pill--inline">{{ block.settings.benefit_pill_3 }}</span>
+                        <span class="cs-transform__pill">{{ block.settings.benefit_pill_3 }}</span>
                       {%- endif -%}
                     </li>
                   {%- endif -%}
@@ -1831,7 +1831,6 @@
                     class="cs-transform__cta"
                     data-cs-open-bundle
                     data-product-handle="{{ product.handle }}"
-                    data-cart-quantity="1"
                   >
                     Yolculuğuna Başla
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
@@ -2335,10 +2334,20 @@
 /* --------------------------------------------------------------------------
    Ingredient Pill (inline, next to benefit text)
    -------------------------------------------------------------------------- */
-.cs-transform__pill--inline {
-  margin-left: 0.4em;
+.cs-transform__pill {
+  display: inline-flex;
+  align-items: center;
   font-size: 10px;
+  font-weight: 700;
   padding: 0.2em 0.6em;
+  border-radius: var(--cs-radius-full);
+  background: var(--ct-pill-bg);
+  color: var(--ct-soft-teal);
+  border: 1px solid var(--ct-pill-border);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-left: 0.4em;
   vertical-align: middle;
 }
 
