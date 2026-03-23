@@ -1776,19 +1776,6 @@
                 </ul>
               {%- endif -%}
 
-              {%- comment -%} Ingredient Pills (legacy / summary) {%- endcomment -%}
-              {%- if block.settings.ingredient_pills != blank -%}
-                <div class="cs-transform__pills" aria-label="Bileşenler">
-                  {%- assign pills = block.settings.ingredient_pills | split: ',' -%}
-                  {%- for pill in pills -%}
-                    {%- assign trimmed = pill | strip -%}
-                    {%- if trimmed != blank -%}
-                      <span class="cs-transform__pill">{{ trimmed }}</span>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-
               {%- comment -%} Storytelling {%- endcomment -%}
               {%- if block.settings.storytelling != blank -%}
                 <p class="cs-transform__story">
@@ -1844,7 +1831,7 @@
                     class="cs-transform__cta"
                     data-cs-open-bundle
                     data-product-handle="{{ product.handle }}"
-                    data-cart-quantity="{% if forloop.last %}3{% else %}1{% endif %}"
+                    data-cart-quantity="1"
                   >
                     Yolculuğuna Başla
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
@@ -2346,31 +2333,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   Ingredient Pills
+   Ingredient Pill (inline, next to benefit text)
    -------------------------------------------------------------------------- */
-.cs-transform__pills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--cs-space-xs);
-  margin-block-end: var(--cs-space-md);
-}
-
-.cs-transform__pill {
-  display: inline-flex;
-  align-items: center;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 0.3em 0.8em;
-  border-radius: var(--cs-radius-full);
-  background: var(--ct-pill-bg);
-  color: var(--ct-soft-teal);
-  border: 1px solid var(--ct-pill-border);
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
 .cs-transform__pill--inline {
   margin-left: 0.4em;
   font-size: 10px;
@@ -2777,26 +2741,14 @@ class CsTransformTimeline extends HTMLElement {
 
   _openBundle(btn) {
     var handle = btn.dataset.productHandle;
-    var quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
     if (!handle) return;
 
-    /* 1. Add to VBB + open dock (VBB handles Shopify cart internally) */
+    /* Add to VBB + open dock (VBB handles Shopify cart internally) */
     if (typeof window.openBundleBuilder === 'function') {
       window.openBundleBuilder(handle);
-
-      /* 2. For step 4 (qty 3): click VBB's own + button to reach target */
-      if (quantity > 1) {
-        setTimeout(function() {
-          var card = document.querySelector('.wa-product-card[data-product-handle="' + handle + '"]');
-          if (!card) return;
-          var plus = document.querySelector('[data-qty-plus="' + card.dataset.productId + '"]');
-          if (!plus) return;
-          for (var i = 1; i < quantity; i++) plus.click();
-        }, 600);
-      }
     }
 
-    /* 3. On desktop, scroll to VBB section */
+    /* On desktop, scroll to VBB section */
     if (window.innerWidth >= 750) {
       var vbb = document.getElementById('wellness-architect')
              || document.querySelector('.wellness-architect');
@@ -2900,12 +2852,6 @@ if (!customElements.get('cs-transform-timeline')) {
           "id": "headline",
           "label": "Başlık",
           "default": "Doğal Sakinliğin İlk Sinyali"
-        },
-        {
-          "type": "text",
-          "id": "ingredient_pills",
-          "label": "Bileşen Pilleri (virgülle ayırın)",
-          "default": "Papatya, Melisa, B6"
         },
         {
           "type": "textarea",
@@ -3028,7 +2974,6 @@ if (!customElements.get('cs-transform-timeline')) {
           "settings": {
             "time_label": "1. GÜN",
             "headline": "Doğal Sakinliğin İlk Sinyali",
-            "ingredient_pills": "Papatya, Melisa, B6",
             "benefit_1": "Apigenin, GABA-A reseptörlerine bağlanarak sakinleştirici bir sinyal başlatmayı destekler",
             "benefit_pill_1": "Papatya",
             "benefit_2": "GABA transaminaz inhibisyonu yoluyla sinir sisteminin rahatlamasına katkıda bulunabilir",
@@ -3050,7 +2995,6 @@ if (!customElements.get('cs-transform-timeline')) {
           "settings": {
             "time_label": "1. HAFTA",
             "headline": "Sinir Sisteminiz Dengelenmeye Başlıyor",
-            "ingredient_pills": "B6, B12, Melisa",
             "benefit_1": "B6, GABA ve serotonin üretim yollarını destekleyerek nörotransmiter uyumuna katkıda bulunabilir",
             "benefit_pill_1": "B6",
             "benefit_2": "B12, sinir hücrelerinin sağlıklı iletişimini destekleyerek iletim kalitesine katkıda bulunabilir",
@@ -3072,7 +3016,6 @@ if (!customElements.get('cs-transform-timeline')) {
           "settings": {
             "time_label": "1. AY",
             "headline": "Stres Yanıtınız Yumuşamaya Başlıyor",
-            "ingredient_pills": "Rhodiola, Passiflora, B6 + B12",
             "benefit_1": "Adaptojenik özellikleriyle HPA eksen regülasyonuna katkıda bulunarak kortizol seviyelerini destekleyebilir",
             "benefit_pill_1": "Rhodiola",
             "benefit_2": "Anksiyolitik özellikleriyle günlük gerginliğin hafiflemesine yardımcı olabilir",
@@ -3094,7 +3037,6 @@ if (!customElements.get('cs-transform-timeline')) {
           "settings": {
             "time_label": "3. AY",
             "headline": "Yeni Haliniz: Sakin ve Dayanıklı",
-            "ingredient_pills": "Rhodiola, Papatya, Passiflora, Melisa, B6, B12",
             "benefit_1": "Uzun süreli kullanımla adaptojenik döngünün tamamlanmasına katkıda bulunabilir",
             "benefit_pill_1": "Rhodiola",
             "benefit_2": "Düzenli kullanımla sirkadiyen ritmin doğal işleyişini destekleyebilir",
