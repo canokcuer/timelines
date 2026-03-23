@@ -11,6 +11,7 @@
   class="cs-timeline cs-transform"
   aria-label="{{ section.settings.kicker | default: 'Dönüşüm Yolculuğu' }}"
   data-cs-transform
+  data-bundle-url="{{ section.settings.bundle_url | default: '#wellness-architect' }}"
   style="--ct-padding-top: {{ section.settings.padding_top }}px; --ct-padding-bottom: {{ section.settings.padding_bottom }}px; --ct-header-gap: {{ section.settings.header_gap }}px; --ct-stepper-gap: {{ section.settings.stepper_gap }}px;"
 >
   <div class="cs-timeline__container">
@@ -1844,6 +1845,7 @@
                     class="cs-transform__cta"
                     data-cs-open-bundle
                     data-product-handle="{{ product.handle }}"
+                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
                     data-cart-quantity="{{ block.settings.cart_quantity | default: 1 }}"
                     aria-label="Yolculuğuna Başla — {{ block.settings.cart_quantity | default: 1 }} adet"
                   >
@@ -2777,17 +2779,35 @@ class CsTransformTimeline extends HTMLElement {
     });
   }
 
-  _openBundle(btn) {
+  async _openBundle(btn) {
     const handle = btn.dataset.productHandle;
+    const variantId = btn.dataset.variantId;
     const quantity = parseInt(btn.dataset.cartQuantity, 10) || 1;
 
-    if (typeof window.openBundleBuilder === 'function') {
-      window.openBundleBuilder(handle);
-      for (let i = 1; i < quantity; i++) {
-        setTimeout(() => window.openBundleBuilder(handle), i * 350);
+    if (!variantId) return;
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{ id: parseInt(variantId, 10), quantity: quantity }]
+        })
+      });
+      if (!res.ok) throw new Error();
+
+      const isMobile = window.innerWidth < 750;
+      if (isMobile && typeof window.openBundleBuilder === 'function') {
+        window.openBundleBuilder();
+        btn.disabled = false;
+      } else {
+        const section = btn.closest('[data-cs-transform]');
+        const bundleUrl = section ? section.dataset.bundleUrl : null;
+        window.location.href = bundleUrl || '#wellness-architect';
       }
-    } else if (handle) {
-      window.location.href = '/products/' + handle;
+    } catch {
+      btn.disabled = false;
     }
   }
 }
@@ -2829,6 +2849,11 @@ if (!customElements.get('cs-transform-timeline')) {
       "type": "url",
       "id": "cta_url",
       "label": "CTA Yedek Bağlantı (ürün seçilmemişse)"
+    },
+    {
+      "type": "url",
+      "id": "bundle_url",
+      "label": "Bundle Builder Sayfası (masaüstü yönlendirme)"
     },
     {
       "type": "range",
