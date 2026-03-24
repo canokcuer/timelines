@@ -23,20 +23,25 @@ The section is **"Dönüşüm Yolculuğu v2"** (`cs-timeline-transformationv2.li
 
 Citations appear inline next to each benefit's ingredient pill as `Author, Year` chips linking to PubMed.
 
-**Important:** The citation text format must follow this pattern for the chip to display correctly:
+**Important:** The citation text format must follow this pattern:
 
 ```
 Author et al. (Year) — Description text here
 ```
 
-The chip extracts everything before `(` as the author name and the number inside `()` as the year. Examples:
+The chip shows everything **before ` — `** (space-emdash-space). Examples:
 
 | Field | What to enter | Chip shows |
 |-------|--------------|------------|
-| **Kaynak 1** | `Jongkees et al. (2015) — Tirozin takviyesi stres altında...` | `Jongkees et al. , 2015` |
+| **Kaynak 1** | `Jongkees et al. (2015) — Tirozin takviyesi stres altında...` | `Jongkees et al. (2015)` |
 | **PMID 1** | `26424423` | (used for PubMed link URL) |
-| **Kaynak 2** | `Mashayekh et al. (2011) — 4 haftalık Ginkgo biloba...` | `Mashayekh et al. , 2011` |
+| **Kaynak 2** | `Mashayekh et al. (2011) — 4 haftalık Ginkgo biloba...` | `Mashayekh et al. (2011)` |
 | **PMID 2** | `21061003` | (used for PubMed link URL) |
+
+**Fallbacks:**
+- If no ` — ` separator → full text is shown as chip label
+- If ref field is empty but PMID is set → chip shows "PubMed"
+- If PMID is empty → no chip shown at all
 
 **Citation 1 → pairs with Benefit 1, Citation 2 → Benefit 2, Citation 3 → Benefit 3.**
 

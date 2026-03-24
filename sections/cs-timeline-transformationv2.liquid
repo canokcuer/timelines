@@ -1753,7 +1753,9 @@
                           <span class="cs-transform__pill">{{ block.settings.benefit_pill_1 }}</span>
                         {%- endif -%}
                         {%- if block.settings.science_pmid_1 != blank -%}
-                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ block.settings.science_ref_1 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_1 | split: '(' | last | split: ')' | first }}</a>
+                          {%- assign cite_label_1 = block.settings.science_ref_1 | split: ' — ' | first -%}
+                          {%- if cite_label_1 == blank -%}{%- assign cite_label_1 = 'PubMed' -%}{%- endif -%}
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ cite_label_1 }}</a>
                         {%- endif -%}
                       </span>
                     </li>
@@ -1766,7 +1768,9 @@
                           <span class="cs-transform__pill">{{ block.settings.benefit_pill_2 }}</span>
                         {%- endif -%}
                         {%- if block.settings.science_pmid_2 != blank -%}
-                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ block.settings.science_ref_2 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_2 | split: '(' | last | split: ')' | first }}</a>
+                          {%- assign cite_label_2 = block.settings.science_ref_2 | split: ' — ' | first -%}
+                          {%- if cite_label_2 == blank -%}{%- assign cite_label_2 = 'PubMed' -%}{%- endif -%}
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ cite_label_2 }}</a>
                         {%- endif -%}
                       </span>
                     </li>
@@ -1779,7 +1783,9 @@
                           <span class="cs-transform__pill">{{ block.settings.benefit_pill_3 }}</span>
                         {%- endif -%}
                         {%- if block.settings.science_pmid_3 != blank -%}
-                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ block.settings.science_ref_3 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_3 | split: '(' | last | split: ')' | first }}</a>
+                          {%- assign cite_label_3 = block.settings.science_ref_3 | split: ' — ' | first -%}
+                          {%- if cite_label_3 == blank -%}{%- assign cite_label_3 = 'PubMed' -%}{%- endif -%}
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ cite_label_3 }}</a>
                         {%- endif -%}
                       </span>
                     </li>
