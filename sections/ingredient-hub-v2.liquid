@@ -188,12 +188,6 @@
                         </div>
                       {%- endif -%}
 
-                      {%- if block.settings.cite_label != blank and block.settings.cite_pmid != blank -%}
-                        {%- assign cite_parts = block.settings.cite_label | split: ' — ' -%}
-                        <a class="coa-panel__cite-chip coa-panel__prov-item--3" href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.cite_pmid }}/" target="_blank" rel="noopener noreferrer">
-                          {{ cite_parts[0] }}
-                        </a>
-                      {%- endif -%}
                     </div>
                   </div>
 
@@ -385,6 +379,8 @@
   .coa-panel__cite-inline {
     display: inline-flex;
     align-items: center;
+    align-self: flex-start;
+    width: auto;
     font-size: 10px;
     font-weight: 500;
     padding: 2px 7px;
@@ -643,33 +639,6 @@
     line-height: 1.3;
   }
 
-  .coa-panel__cite-chip {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 9999px;
-    border: 1px solid rgba(0,0,0,0.1);
-    color: #7B7B7B;
-    opacity: 0;
-    transform: translateY(6px);
-    text-decoration: none;
-    line-height: 1.3;
-    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, opacity 400ms ease 600ms, transform 400ms ease 600ms;
-  }
-
-  .coa-panel__body.is-open .coa-panel__prov-item--3 {
-    opacity: 0.6;
-    transform: translateY(0);
-    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, opacity 400ms ease 600ms, transform 400ms ease 600ms;
-  }
-
-  .coa-panel__cite-chip:hover {
-    background-color: #108474;
-    color: #ffffff;
-    border-color: #108474;
-    opacity: 1;
-  }
 
   /* Footer */
   .coa-panel__footer {
@@ -890,10 +859,8 @@
 
     .coa-panel__supplier-pill,
     .coa-panel__certs,
-    .coa-panel__cite-chip,
     .coa-panel__body.is-open .coa-panel__prov-item--1,
-    .coa-panel__body.is-open .coa-panel__prov-item--2,
-    .coa-panel__body.is-open .coa-panel__prov-item--3 {
+    .coa-panel__body.is-open .coa-panel__prov-item--2 {
       transition: none;
       opacity: 1;
       transform: none;
