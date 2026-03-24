@@ -97,167 +97,102 @@
                 <p class="ingredient-showcase__description">{{ block.settings.description }}</p>
               {%- endif -%}
 
-              {%- if block.settings.cite_pmid != blank -%}
-                {%- assign cite_chip_label = block.settings.cite_label | split: ' — ' | first -%}
-                {%- if cite_chip_label == blank -%}{%- assign cite_chip_label = 'PubMed' -%}{%- endif -%}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.cite_pmid }}/" target="_blank" rel="noopener" class="ingredient-showcase__cite">{{ cite_chip_label }}</a>
-              {%- endif -%}
+              {%- if block.settings.hero_label != blank -%}
+                {%- assign coa_hero_val = block.settings.hero_value | default: 99 -%}
+                {%- assign coa_offset = 226 | minus: coa_hero_val | times: 226 | divided_by: 100 -%}
+                {%- comment -%}offset = 226 - (226 * value / 100){%- endcomment -%}
+                {%- assign coa_offset_correct = 226 | times: coa_hero_val | divided_by: 100 -%}
+                {%- assign coa_offset_final = 226 | minus: coa_offset_correct -%}
 
-              {%- if block.settings.coa_1 != blank -%}
-                {%- assign coa_style = block.settings.coa_style | default: 'list' -%}
-                <div class="ingredient-showcase__coa">
-                  <button class="ingredient-showcase__coa-trigger" data-coa-toggle>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12h6M9 16h6M13 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V9l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Analiz Sertifikasını İncele
-                    <span class="coa-chevron">▾</span>
-                  </button>
-                  <div class="ingredient-showcase__coa-body">
-                    {%- case coa_style -%}
-                      {%- when 'bars' -%}
-                        {%- comment -%} Style A — Progress Bars {%- endcomment -%}
-                        <div class="coa-a">
-                          {%- if block.settings.coa_1 != blank -%}
-                            <div class="coa-a__row">
-                              <div class="coa-a__header">
-                                <span class="coa-a__label">{{ block.settings.coa_1 }}</span>
-                                <span class="coa-a__value">{{ block.settings.coa_val_1 }}%</span>
-                              </div>
-                              <div class="coa-a__track">
-                                <div class="coa-a__fill" style="--bar-w:{{ block.settings.coa_val_1 }}%"></div>
-                              </div>
-                            </div>
+                <button class="coa-panel__trigger" data-coa-toggle>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 12h6M9 16h6M13 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V9l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Analiz Sertifikasını İncele
+                  <span class="coa-panel__chevron">&#9662;</span>
+                </button>
+
+                <div class="coa-panel__body">
+                  <div class="coa-panel__grid">
+                    <!-- Column 1: Hero Metric -->
+                    <div class="coa-panel__hero">
+                      <svg class="coa-panel__ring" width="80" height="80" viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="4"/>
+                        <circle class="coa-panel__ring-fg" cx="40" cy="40" r="36" fill="none" stroke="#108474" stroke-width="4" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" data-target-offset="{{ coa_offset_final }}" transform="rotate(-90 40 40)"/>
+                        <text x="40" y="38" text-anchor="middle" dominant-baseline="central" fill="#171717" font-size="24" font-weight="700">{{ coa_hero_val }}</text>
+                        <text x="40" y="54" text-anchor="middle" dominant-baseline="central" fill="#171717" font-size="12" font-weight="400">{{ block.settings.hero_unit }}</text>
+                      </svg>
+                      <span class="coa-panel__hero-label">{{ block.settings.hero_label }}</span>
+                      {%- if block.settings.hero_standard != blank -%}
+                        <span class="coa-panel__hero-standard">{{ block.settings.hero_standard }}</span>
+                      {%- endif -%}
+                    </div>
+
+                    <!-- Column 2: Safety Checks -->
+                    <div class="coa-panel__safety">
+                      {%- if block.settings.safety_1_label != blank -%}
+                        <div class="coa-panel__safety-row coa-panel__safety-row--1">
+                          <span class="coa-panel__safety-icon coa-panel__safety-icon--shield">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#108474" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                          </span>
+                          <span class="coa-panel__safety-text">
+                            <span class="coa-panel__safety-label">{{ block.settings.safety_1_label }}</span>
+                            <span class="coa-panel__safety-value">{{ block.settings.safety_1_value }}</span>
+                          </span>
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.safety_2_label != blank -%}
+                        <div class="coa-panel__safety-row coa-panel__safety-row--2">
+                          <span class="coa-panel__safety-icon coa-panel__safety-icon--micro">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="#3a7d5c" stroke-width="1.5"/><path d="M12 11v4M8 21h8M12 15v6M6 18h12" stroke="#3a7d5c" stroke-width="1.5" stroke-linecap="round"/></svg>
+                          </span>
+                          <span class="coa-panel__safety-text">
+                            <span class="coa-panel__safety-label">{{ block.settings.safety_2_label }}</span>
+                            <span class="coa-panel__safety-value">{{ block.settings.safety_2_value }}</span>
+                          </span>
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.safety_3_label != blank -%}
+                        <div class="coa-panel__safety-row coa-panel__safety-row--3">
+                          <span class="coa-panel__safety-icon coa-panel__safety-icon--cert">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#b8976a" stroke-width="1.5"/><path d="M8 7h8M8 11h8M8 15h4" stroke="#b8976a" stroke-width="1.5" stroke-linecap="round"/></svg>
+                          </span>
+                          <span class="coa-panel__safety-text">
+                            <span class="coa-panel__safety-label">{{ block.settings.safety_3_label }}</span>
+                            <span class="coa-panel__safety-value">{{ block.settings.safety_3_value }}</span>
+                          </span>
+                        </div>
+                      {%- endif -%}
+                    </div>
+
+                    <!-- Column 3: Provenance & Source -->
+                    <div class="coa-panel__provenance">
+                      {%- if block.settings.supplier_name != blank -%}
+                        <span class="coa-panel__supplier-pill coa-panel__prov-item--1">
+                          {{ block.settings.supplier_name }}{%- if block.settings.supplier_country != blank %} &middot; {{ block.settings.supplier_country }}{%- endif -%}
+                        </span>
+                      {%- endif -%}
+
+                      {%- if block.settings.cert_1 != blank or block.settings.cert_2 != blank -%}
+                        <div class="coa-panel__certs coa-panel__prov-item--2">
+                          {%- if block.settings.cert_1 != blank -%}
+                            <span class="coa-panel__cert-pill">{{ block.settings.cert_1 }}</span>
                           {%- endif -%}
-                          {%- if block.settings.coa_2 != blank -%}
-                            <div class="coa-a__row">
-                              <div class="coa-a__header">
-                                <span class="coa-a__label">{{ block.settings.coa_2 }}</span>
-                                <span class="coa-a__value">{{ block.settings.coa_val_2 }}%</span>
-                              </div>
-                              <div class="coa-a__track">
-                                <div class="coa-a__fill" style="--bar-w:{{ block.settings.coa_val_2 }}%"></div>
-                              </div>
-                            </div>
-                          {%- endif -%}
-                          {%- if block.settings.coa_3 != blank -%}
-                            <div class="coa-a__row">
-                              <div class="coa-a__header">
-                                <span class="coa-a__label">{{ block.settings.coa_3 }}</span>
-                                <span class="coa-a__value">{{ block.settings.coa_val_3 }}%</span>
-                              </div>
-                              <div class="coa-a__track">
-                                <div class="coa-a__fill" style="--bar-w:{{ block.settings.coa_val_3 }}%"></div>
-                              </div>
-                            </div>
-                          {%- endif -%}
-                          {%- if block.settings.coa_4 != blank -%}
-                            <div class="coa-a__row">
-                              <div class="coa-a__header">
-                                <span class="coa-a__label">{{ block.settings.coa_4 }}</span>
-                                <span class="coa-a__value">{{ block.settings.coa_val_4 }}%</span>
-                              </div>
-                              <div class="coa-a__track">
-                                <div class="coa-a__fill" style="--bar-w:{{ block.settings.coa_val_4 }}%"></div>
-                              </div>
-                            </div>
+                          {%- if block.settings.cert_2 != blank -%}
+                            <span class="coa-panel__cert-pill">{{ block.settings.cert_2 }}</span>
                           {%- endif -%}
                         </div>
-                      {%- when 'cards' -%}
-                        {%- comment -%} Style B — Card Grid {%- endcomment -%}
-                        <div class="coa-b">
-                          {%- if block.settings.coa_1 != blank -%}
-                            <div class="coa-b__card" style="--coa-b-i:0">{{ block.settings.coa_1 }}</div>
-                          {%- endif -%}
-                          {%- if block.settings.coa_2 != blank -%}
-                            <div class="coa-b__card" style="--coa-b-i:1">{{ block.settings.coa_2 }}</div>
-                          {%- endif -%}
-                          {%- if block.settings.coa_3 != blank -%}
-                            <div class="coa-b__card" style="--coa-b-i:2">{{ block.settings.coa_3 }}</div>
-                          {%- endif -%}
-                          {%- if block.settings.coa_4 != blank -%}
-                            <div class="coa-b__card" style="--coa-b-i:3">{{ block.settings.coa_4 }}</div>
-                          {%- endif -%}
-                        </div>
-                      {%- when 'badge' -%}
-                        {%- comment -%} Style C — Certificate Badge {%- endcomment -%}
-                        <div class="coa-c">
-                          <div class="coa-c__seal" aria-hidden="true">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                              <circle cx="12" cy="10" r="7" stroke="#b8976a" stroke-width="1.3"/>
-                              <path d="M9 10l2 2 4-4" stroke="#b8976a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                              <path d="M8.5 16l-1 5.5 2.5-1.5L12 21.5l2-1.5 2.5 1.5-1-5.5" stroke="#b8976a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                          </div>
-                          <div class="coa-c__details">
-                            {%- if block.settings.coa_1 != blank -%}
-                              <p class="coa-c__line coa-c__line--first">{{ block.settings.coa_1 }}</p>
-                            {%- endif -%}
-                            {%- if block.settings.coa_2 != blank -%}
-                              <p class="coa-c__line">{{ block.settings.coa_2 }}</p>
-                            {%- endif -%}
-                            {%- if block.settings.coa_3 != blank -%}
-                              <p class="coa-c__line">{{ block.settings.coa_3 }}</p>
-                            {%- endif -%}
-                            {%- if block.settings.coa_4 != blank -%}
-                              <p class="coa-c__line">{{ block.settings.coa_4 }}</p>
-                            {%- endif -%}
-                          </div>
-                        </div>
-                      {%- when 'compare' -%}
-                        {%- comment -%} Style D — Comparison Bars {%- endcomment -%}
-                        <div class="coa-d">
-                          {%- if block.settings.coa_1 != blank -%}
-                            <div class="coa-d__metric">
-                              <div class="coa-d__title">{{ block.settings.coa_1 }}</div>
-                              <div class="coa-d__row">
-                                <span class="coa-d__label coa-d__label--sector">Sektör Ort.</span>
-                                <div class="coa-d__track">
-                                  <div class="coa-d__fill coa-d__fill--sector" style="--bar-w:{{ block.settings.coa_val_1 }}%"></div>
-                                </div>
-                              </div>
-                              <div class="coa-d__row">
-                                <span class="coa-d__label coa-d__label--cyra">{{ block.settings.coa_2 }}</span>
-                                <div class="coa-d__track">
-                                  <div class="coa-d__fill coa-d__fill--cyra" style="--bar-w:{{ block.settings.coa_val_2 }}%"></div>
-                                </div>
-                              </div>
-                            </div>
-                          {%- endif -%}
-                          {%- if block.settings.coa_3 != blank -%}
-                            <div class="coa-d__metric">
-                              <div class="coa-d__title">{{ block.settings.coa_3 }}</div>
-                              <div class="coa-d__row">
-                                <span class="coa-d__label coa-d__label--sector">Sektör Ort.</span>
-                                <div class="coa-d__track">
-                                  <div class="coa-d__fill coa-d__fill--sector" style="--bar-w:{{ block.settings.coa_val_3 }}%"></div>
-                                </div>
-                              </div>
-                              <div class="coa-d__row">
-                                <span class="coa-d__label coa-d__label--cyra">{{ block.settings.coa_4 }}</span>
-                                <div class="coa-d__track">
-                                  <div class="coa-d__fill coa-d__fill--cyra" style="--bar-w:{{ block.settings.coa_val_4 }}%"></div>
-                                </div>
-                              </div>
-                            </div>
-                          {%- endif -%}
-                        </div>
-                      {%- when 'list' -%}
-                        {%- comment -%} Style E — Annotated List {%- endcomment -%}
-                        <ul class="coa-e">
-                          {%- if block.settings.coa_1 != blank -%}
-                            <li class="coa-e__item">{{ block.settings.coa_1 }}</li>
-                          {%- endif -%}
-                          {%- if block.settings.coa_2 != blank -%}
-                            <li class="coa-e__item">{{ block.settings.coa_2 }}</li>
-                          {%- endif -%}
-                          {%- if block.settings.coa_3 != blank -%}
-                            <li class="coa-e__item">{{ block.settings.coa_3 }}</li>
-                          {%- endif -%}
-                          {%- if block.settings.coa_4 != blank -%}
-                            <li class="coa-e__item">{{ block.settings.coa_4 }}</li>
-                          {%- endif -%}
-                        </ul>
-                    {%- endcase -%}
-                    <p class="coa-footer">Daha fazla detay için <a href="mailto:info@cyrasoul.com">info@cyrasoul.com</a></p>
+                      {%- endif -%}
+
+                      {%- if block.settings.cite_label != blank and block.settings.cite_pmid != blank -%}
+                        {%- assign cite_parts = block.settings.cite_label | split: ' — ' -%}
+                        <a class="coa-panel__cite-chip coa-panel__prov-item--3" href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.cite_pmid }}/" target="_blank" rel="noopener noreferrer">
+                          {{ cite_parts[0] }}
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  </div>
+
+                  <div class="coa-panel__footer">
+                    Daha fazla detay için <a href="mailto:info@cyrasoul.com">info@cyrasoul.com</a>
                   </div>
                 </div>
               {%- endif -%}
@@ -440,303 +375,294 @@
     max-width: 300px;
   }
 
-  /* Citation chip */
-  .ingredient-showcase__cite {
+  /* ── CoA Smart Panel ── */
+
+  /* Trigger button */
+  .coa-panel__trigger {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 7px 16px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--text-color, #171717);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 200ms ease, border-color 200ms ease;
+    line-height: 1.3;
+  }
+
+  .coa-panel__trigger:hover {
+    background-color: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.2);
+  }
+
+  .coa-panel__trigger svg {
+    flex-shrink: 0;
+  }
+
+  .coa-panel__chevron {
+    font-size: 10px;
+    transition: transform 300ms ease;
+    display: inline-block;
+  }
+
+  .coa-panel__trigger.is-open .coa-panel__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Panel body */
+  .coa-panel__body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 500ms cubic-bezier(0.22,1,0.36,1);
+    width: 100%;
+  }
+
+  .coa-panel__body.is-open {
+    max-height: 600px;
+  }
+
+  .coa-panel__body.is-open .coa-panel__grid {
+    background: rgba(0,0,0,0.015);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .coa-panel__grid {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: left;
+    background: rgba(0,0,0,0.015);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    border-radius: 0 0 10px 10px;
+  }
+
+  /* Column 1: Hero Metric */
+  .coa-panel__hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .coa-panel__ring {
+    display: block;
+  }
+
+  .coa-panel__ring-fg {
+    stroke-dashoffset: 226;
+    transition: none;
+  }
+
+  .coa-panel__body.is-open .coa-panel__ring-fg {
+    transition: stroke-dashoffset 1000ms ease-out;
+  }
+
+  .coa-panel__hero-label {
+    font-size: 12px;
+    opacity: 0.55;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .coa-panel__hero-standard {
+    display: inline-block;
+    font-size: 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 9999px;
+    padding: 2px 8px;
+    opacity: 0.5;
+    line-height: 1.3;
+  }
+
+  /* Column 2: Safety Checks */
+  .coa-panel__safety {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .coa-panel__safety-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .coa-panel__safety-row:last-child {
+    border-bottom: none;
+  }
+
+  .coa-panel__body.is-open .coa-panel__safety-row--1 {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease 200ms, transform 400ms ease 200ms;
+  }
+
+  .coa-panel__body.is-open .coa-panel__safety-row--2 {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease 350ms, transform 400ms ease 350ms;
+  }
+
+  .coa-panel__body.is-open .coa-panel__safety-row--3 {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease 500ms, transform 400ms ease 500ms;
+  }
+
+  .coa-panel__safety-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .coa-panel__safety-icon--shield {
+    background-color: rgba(16,132,116,0.08);
+  }
+
+  .coa-panel__safety-icon--micro {
+    background-color: rgba(58,125,92,0.08);
+  }
+
+  .coa-panel__safety-icon--cert {
+    background-color: rgba(184,151,106,0.08);
+  }
+
+  .coa-panel__safety-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .coa-panel__safety-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    opacity: 0.75;
+    line-height: 1.3;
+  }
+
+  .coa-panel__safety-value {
+    font-size: 11.5px;
+    font-weight: 400;
+    opacity: 0.5;
+    line-height: 1.3;
+  }
+
+  /* Column 3: Provenance & Source */
+  .coa-panel__provenance {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .coa-panel__supplier-pill {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 500;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 9999px;
+    padding: 4px 12px;
+    line-height: 1.3;
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .coa-panel__body.is-open .coa-panel__prov-item--1 {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease 300ms, transform 400ms ease 300ms;
+  }
+
+  .coa-panel__certs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .coa-panel__body.is-open .coa-panel__prov-item--2 {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease 450ms, transform 400ms ease 450ms;
+  }
+
+  .coa-panel__cert-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    background: rgba(16,132,116,0.06);
+    color: #108474;
+    border-radius: 9999px;
+    padding: 2px 8px;
+    line-height: 1.3;
+  }
+
+  .coa-panel__cite-chip {
+    display: inline-block;
     font-size: 10px;
     font-weight: 500;
     padding: 2px 7px;
     border-radius: 9999px;
-    background: transparent;
+    border: 1px solid rgba(0,0,0,0.1);
     color: #7B7B7B;
-    opacity: 0.6;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(6px);
     text-decoration: none;
-    white-space: nowrap;
-    margin-top: 10px;
-    transition: all 200ms ease;
+    line-height: 1.3;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, opacity 400ms ease 600ms, transform 400ms ease 600ms;
   }
-  .ingredient-showcase__cite:hover {
-    opacity: 1;
-    background: #108474;
+
+  .coa-panel__body.is-open .coa-panel__prov-item--3 {
+    opacity: 0.6;
+    transform: translateY(0);
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, opacity 400ms ease 600ms, transform 400ms ease 600ms;
+  }
+
+  .coa-panel__cite-chip:hover {
+    background-color: #108474;
     color: #ffffff;
     border-color: #108474;
+    opacity: 1;
   }
 
-  /* CoA shared wrapper */
-  .ingredient-showcase__coa { margin-top: 14px; width: 100%; max-width: 380px; }
-  .ingredient-showcase__coa-trigger {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: inherit; font-size: 0.75rem; font-weight: 600;
-    color: var(--text-color, #171717); opacity: 0.5;
-    cursor: pointer; padding: 6px 0; border: none; background: none;
-    transition: opacity 200ms ease; -webkit-tap-highlight-color: transparent;
-  }
-  .ingredient-showcase__coa-trigger:hover { opacity: 0.85; }
-  .ingredient-showcase__coa-trigger svg { opacity: 0.6; }
-  .coa-chevron { display: inline-block; transition: transform 300ms ease; font-size: 0.625rem; }
-  .ingredient-showcase__coa-trigger.is-open .coa-chevron { transform: rotate(180deg); }
-  .ingredient-showcase__coa-body {
-    overflow: hidden; max-height: 0;
-    transition: max-height 400ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .ingredient-showcase__coa-body.is-open { max-height: 500px; }
-  .coa-footer {
-    font-size: 0.6875rem; color: var(--text-color, #171717); opacity: 0.35;
-    margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.06);
-  }
-  .coa-footer a { color: inherit; text-decoration: underline; }
-
-  /* Style A — Progress Bars */
-  .coa-a {
-    padding-top: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .coa-a__row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .coa-a__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-  .coa-a__label {
-    font-size: 12px;
-    line-height: 1.3;
-    color: inherit;
-    opacity: 0.7;
-  }
-  .coa-a__value {
-    font-size: 12px;
-    line-height: 1.3;
-    color: inherit;
-    opacity: 0.5;
-  }
-  .coa-a__track {
-    width: 100%;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.06);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .coa-a__fill {
-    height: 100%;
-    width: 0;
-    border-radius: 3px;
-    background: linear-gradient(90deg, #108474, #0aab8f);
-    transition: width 800ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .ingredient-showcase__coa-body.is-open .coa-a__fill {
-    width: var(--bar-w, 0%);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .coa-a__fill { transition: none; }
-  }
-
-  /* Style B — Card Grid */
-  @keyframes coa-b-fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 0.7; transform: translateY(0); }
-  }
-  .coa-b {
-    padding-top: 12px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .coa-b__card {
-    padding: 10px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.015);
-    font-size: 12.5px;
-    line-height: 1.45;
-    color: inherit;
-    opacity: 0;
-    transition: transform 200ms ease, box-shadow 200ms ease;
-  }
-  .ingredient-showcase__coa-body.is-open .coa-b__card {
-    animation: coa-b-fadeIn 350ms ease forwards;
-    animation-delay: calc(var(--coa-b-i, 0) * 60ms);
-  }
-  .coa-b__card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .coa-b__card { animation: none !important; }
-    .ingredient-showcase__coa-body.is-open .coa-b__card { opacity: 0.7; }
-  }
-
-  /* Style C — Certificate Badge */
-  @keyframes coa-c-seal {
-    from { opacity: 0; transform: scale(0.8) rotate(-10deg); }
-    to   { opacity: 1; transform: scale(1) rotate(0deg); }
-  }
-  .coa-c {
-    padding-top: 14px;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: flex-start;
-  }
-  .coa-c__seal {
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #fef3e2, #fce8c8);
-    border: 1px solid rgba(184, 151, 106, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-  }
-  .ingredient-showcase__coa-body.is-open .coa-c__seal {
-    animation: coa-c-seal 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-  .coa-c__details {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .coa-c__line {
-    font-size: 12.5px;
-    line-height: 1.55;
-    color: inherit;
-    opacity: 0.65;
-    margin: 0;
-    border-left: 2px solid rgba(184, 151, 106, 0.25);
-    padding-left: 10px;
-  }
-  .coa-c__line--first {
-    border-left-color: rgba(184, 151, 106, 0.6);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .coa-c__seal { animation: none !important; }
-    .ingredient-showcase__coa-body.is-open .coa-c__seal { opacity: 1; }
-  }
-
-  /* Style D — Comparison Bars */
-  .coa-d {
-    padding-top: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-  .coa-d__metric {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .coa-d__title {
-    font-size: 12.5px;
-    font-weight: 700;
-    line-height: 1.3;
-    color: inherit;
-    opacity: 0.75;
-    margin-bottom: 8px;
-  }
-  .coa-d__row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .coa-d__label {
+  /* Footer */
+  .coa-panel__footer {
     font-size: 11px;
-    font-weight: 600;
-    min-width: 90px;
-    flex-shrink: 0;
-    line-height: 1.3;
-    white-space: nowrap;
-  }
-  .coa-d__label--sector {
-    color: #999;
-  }
-  .coa-d__label--cyra {
-    color: #108474;
-    font-weight: 700;
-  }
-  .coa-d__track {
-    flex: 1;
-    height: 10px;
-    background: rgba(0, 0, 0, 0.04);
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  .coa-d__fill {
-    height: 100%;
-    width: 0;
-    border-radius: 5px;
-  }
-  .coa-d__fill--sector {
-    background: #d4d4d4;
-    transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1) 0ms;
-  }
-  .coa-d__fill--cyra {
-    background: linear-gradient(90deg, #108474, #0aab8f);
-    transition: width 800ms cubic-bezier(0.22, 1, 0.36, 1) 300ms;
-  }
-  .ingredient-showcase__coa-body.is-open .coa-d__fill--sector {
-    width: var(--bar-w, 0%);
-  }
-  .ingredient-showcase__coa-body.is-open .coa-d__fill--cyra {
-    width: var(--bar-w, 0%);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .coa-d__fill--sector,
-    .coa-d__fill--cyra { transition: none; }
+    opacity: 0.3;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 12px;
+    margin-top: 16px;
+    text-align: center;
   }
 
-  /* Style E — Annotated List */
-  .coa-e {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 12px;
-    margin: 0;
-    padding-left: 0;
-  }
-  .coa-e__item {
-    font-size: 13px;
-    line-height: 1.5;
+  .coa-panel__footer a {
     color: inherit;
-    opacity: 0.65;
-    padding-left: 18px;
-    position: relative;
-    transition: opacity 0.2s ease;
+    text-decoration: underline;
   }
-  .coa-e__item:hover { opacity: 0.9; }
-  .coa-e__item::before {
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    position: absolute;
-    left: 0;
-    top: 7px;
-  }
-  .coa-e__item:nth-child(1)::before { background-color: #108474; }
-  .coa-e__item:nth-child(2)::before { background-color: #e25c4f; }
-  .coa-e__item:nth-child(3)::before { background-color: #3a7d5c; }
-  .coa-e__item:nth-child(4)::before { background-color: #b8976a; }
-  @keyframes coa-e-slideIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  .is-open .coa-e__item:nth-child(1) { animation: coa-e-slideIn 300ms ease forwards; animation-delay: 0ms; }
-  .is-open .coa-e__item:nth-child(2) { animation: coa-e-slideIn 300ms ease forwards; animation-delay: 80ms; }
-  .is-open .coa-e__item:nth-child(3) { animation: coa-e-slideIn 300ms ease forwards; animation-delay: 160ms; }
-  .is-open .coa-e__item:nth-child(4) { animation: coa-e-slideIn 300ms ease forwards; animation-delay: 240ms; }
-  @media (prefers-reduced-motion: reduce) {
-    .coa-e__item { animation: none !important; opacity: 0.65; }
+
+  /* ── CoA Desktop ── */
+  @media screen and (min-width: 768px) {
+    .coa-panel__grid {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
   }
 
   /* Navigation */
@@ -915,6 +841,38 @@
     .ingredient-showcase__tab {
       transition: none;
     }
+
+    .coa-panel__body {
+      transition: none;
+    }
+
+    .coa-panel__ring-fg {
+      transition: none !important;
+    }
+
+    .coa-panel__safety-row,
+    .coa-panel__body.is-open .coa-panel__safety-row--1,
+    .coa-panel__body.is-open .coa-panel__safety-row--2,
+    .coa-panel__body.is-open .coa-panel__safety-row--3 {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .coa-panel__supplier-pill,
+    .coa-panel__certs,
+    .coa-panel__cite-chip,
+    .coa-panel__body.is-open .coa-panel__prov-item--1,
+    .coa-panel__body.is-open .coa-panel__prov-item--2,
+    .coa-panel__body.is-open .coa-panel__prov-item--3 {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .coa-panel__chevron {
+      transition: none;
+    }
   }
 {% endstylesheet %}
 
@@ -994,13 +952,31 @@
         self.onKeyDown(e);
       });
 
-      this.section.addEventListener('click', function (e) {
-        var coaTrigger = e.target.closest('[data-coa-toggle]');
-        if (coaTrigger) {
+      /* CoA Smart Panel toggle */
+      this.section.addEventListener('click', function(e) {
+        var trigger = e.target.closest('[data-coa-toggle]');
+        if (trigger) {
           e.preventDefault();
-          coaTrigger.classList.toggle('is-open');
-          var body = coaTrigger.nextElementSibling;
-          if (body) body.classList.toggle('is-open');
+          trigger.classList.toggle('is-open');
+          var body = trigger.nextElementSibling;
+          if (body) {
+            body.classList.toggle('is-open');
+            /* Animate ring stroke-dashoffset when opening */
+            if (body.classList.contains('is-open')) {
+              var rings = body.querySelectorAll('.coa-panel__ring-fg');
+              rings.forEach(function(ring) {
+                var targetOffset = ring.getAttribute('data-target-offset');
+                if (targetOffset !== null) {
+                  ring.style.strokeDashoffset = targetOffset;
+                }
+              });
+            } else {
+              var rings = body.querySelectorAll('.coa-panel__ring-fg');
+              rings.forEach(function(ring) {
+                ring.style.strokeDashoffset = '226';
+              });
+            }
+          }
         }
       });
     };
@@ -1273,83 +1249,110 @@
         {
           "type": "text",
           "id": "cite_pmid",
-          "label": "PubMed ID",
-          "info": "ör. 32083522"
+          "label": "PubMed ID"
         },
         {
           "type": "header",
-          "content": "Analiz Sertifikası"
+          "content": "Analiz Sertifikası — Hero Metrik"
+        },
+        {
+          "type": "range",
+          "id": "hero_value",
+          "label": "Ana değer",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 99
         },
         {
           "type": "select",
-          "id": "coa_style",
-          "label": "CoA Gösterim Stili",
-          "default": "list",
+          "id": "hero_unit",
+          "label": "Birim",
+          "default": "%",
           "options": [
-            { "value": "bars", "label": "A — Progress Bar" },
-            { "value": "cards", "label": "B — Kart Grid" },
-            { "value": "badge", "label": "C — Rozet" },
-            { "value": "compare", "label": "D — Karşılaştırma" },
-            { "value": "list", "label": "E — Liste" }
+            { "value": "%", "label": "%" },
+            { "value": "ppm", "label": "ppm" },
+            { "value": "mg/kg", "label": "mg/kg" },
+            { "value": "cfu/g", "label": "cfu/g" },
+            { "value": "x", "label": "x (oran)" },
+            { "value": "Da", "label": "Da" }
           ]
         },
         {
           "type": "text",
-          "id": "coa_1",
-          "label": "CoA Veri 1",
-          "info": "ör. Saflık: %99.95"
-        },
-        {
-          "type": "range",
-          "id": "coa_val_1",
-          "label": "CoA Değer 1 (%)",
-          "info": "Bar/karşılaştırma stilleri için doluluk yüzdesi",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "default": 95
+          "id": "hero_label",
+          "label": "Açıklama",
+          "info": "ör. GC Analizi ile Doğrulanmış Saflık"
         },
         {
           "type": "text",
-          "id": "coa_2",
-          "label": "CoA Veri 2"
+          "id": "hero_standard",
+          "label": "Test standardı",
+          "info": "ör. USP42"
         },
         {
-          "type": "range",
-          "id": "coa_val_2",
-          "label": "CoA Değer 2 (%)",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "default": 95
+          "type": "header",
+          "content": "Analiz Sertifikası — Güvenlik"
         },
         {
           "type": "text",
-          "id": "coa_3",
-          "label": "CoA Veri 3"
-        },
-        {
-          "type": "range",
-          "id": "coa_val_3",
-          "label": "CoA Değer 3 (%)",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "default": 95
+          "id": "safety_1_label",
+          "label": "Kontrol 1 başlık",
+          "info": "ör. Ağır Metaller"
         },
         {
           "type": "text",
-          "id": "coa_4",
-          "label": "CoA Veri 4"
+          "id": "safety_1_value",
+          "label": "Kontrol 1 değer",
+          "info": "ör. Tümü < 0.1 ppm"
         },
         {
-          "type": "range",
-          "id": "coa_val_4",
-          "label": "CoA Değer 4 (%)",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "default": 95
+          "type": "text",
+          "id": "safety_2_label",
+          "label": "Kontrol 2 başlık"
+        },
+        {
+          "type": "text",
+          "id": "safety_2_value",
+          "label": "Kontrol 2 değer"
+        },
+        {
+          "type": "text",
+          "id": "safety_3_label",
+          "label": "Kontrol 3 başlık"
+        },
+        {
+          "type": "text",
+          "id": "safety_3_value",
+          "label": "Kontrol 3 değer"
+        },
+        {
+          "type": "header",
+          "content": "Analiz Sertifikası — Kaynak"
+        },
+        {
+          "type": "text",
+          "id": "supplier_name",
+          "label": "Tedarikçi adı",
+          "info": "ör. ITALGEL"
+        },
+        {
+          "type": "text",
+          "id": "supplier_country",
+          "label": "Ülke",
+          "info": "ör. İtalya"
+        },
+        {
+          "type": "text",
+          "id": "cert_1",
+          "label": "Sertifika 1",
+          "info": "ör. USDA Organic"
+        },
+        {
+          "type": "text",
+          "id": "cert_2",
+          "label": "Sertifika 2",
+          "info": "ör. ISO 22000"
         }
       ]
     }
