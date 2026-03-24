@@ -1742,31 +1742,46 @@
                 {{ block.settings.headline }}
               </h3>
 
-              {%- comment -%} Benefit Bullets with Ingredient Pills {%- endcomment -%}
+              {%- comment -%} Benefit Bullets with Ingredient Pills + Inline Citations {%- endcomment -%}
               {%- if block.settings.benefit_1 != blank or block.settings.benefit_2 != blank or block.settings.benefit_3 != blank -%}
                 <ul class="cs-transform__benefits" aria-label="Faydalar">
                   {%- if block.settings.benefit_1 != blank -%}
                     <li class="cs-transform__benefit">
                       <span class="cs-transform__benefit-text">{{ block.settings.benefit_1 }}</span>
-                      {%- if block.settings.benefit_pill_1 != blank -%}
-                        <span class="cs-transform__pill">{{ block.settings.benefit_pill_1 }}</span>
-                      {%- endif -%}
+                      <span class="cs-transform__benefit-tags">
+                        {%- if block.settings.benefit_pill_1 != blank -%}
+                          <span class="cs-transform__pill">{{ block.settings.benefit_pill_1 }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.science_pmid_1 != blank -%}
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ block.settings.science_ref_1 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_1 | split: '(' | last | split: ')' | first }}</a>
+                        {%- endif -%}
+                      </span>
                     </li>
                   {%- endif -%}
                   {%- if block.settings.benefit_2 != blank -%}
                     <li class="cs-transform__benefit">
                       <span class="cs-transform__benefit-text">{{ block.settings.benefit_2 }}</span>
-                      {%- if block.settings.benefit_pill_2 != blank -%}
-                        <span class="cs-transform__pill">{{ block.settings.benefit_pill_2 }}</span>
-                      {%- endif -%}
+                      <span class="cs-transform__benefit-tags">
+                        {%- if block.settings.benefit_pill_2 != blank -%}
+                          <span class="cs-transform__pill">{{ block.settings.benefit_pill_2 }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.science_pmid_2 != blank -%}
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ block.settings.science_ref_2 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_2 | split: '(' | last | split: ')' | first }}</a>
+                        {%- endif -%}
+                      </span>
                     </li>
                   {%- endif -%}
                   {%- if block.settings.benefit_3 != blank -%}
                     <li class="cs-transform__benefit">
                       <span class="cs-transform__benefit-text">{{ block.settings.benefit_3 }}</span>
-                      {%- if block.settings.benefit_pill_3 != blank -%}
-                        <span class="cs-transform__pill">{{ block.settings.benefit_pill_3 }}</span>
-                      {%- endif -%}
+                      <span class="cs-transform__benefit-tags">
+                        {%- if block.settings.benefit_pill_3 != blank -%}
+                          <span class="cs-transform__pill">{{ block.settings.benefit_pill_3 }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.science_pmid_3 != blank -%}
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__cite">{{ block.settings.science_ref_3 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_3 | split: '(' | last | split: ')' | first }}</a>
+                        {%- endif -%}
+                      </span>
                     </li>
                   {%- endif -%}
                 </ul>
@@ -1777,26 +1792,6 @@
                 <p class="cs-transform__story">
                   {{ block.settings.storytelling }}
                 </p>
-              {%- endif -%}
-
-              {%- comment -%} Science References (3 per slide) {%- endcomment -%}
-              {%- if block.settings.science_pmid_1 != blank or block.settings.science_pmid_2 != blank or block.settings.science_pmid_3 != blank -%}
-                <div class="cs-transform__science-chips">
-                  <svg class="cs-transform__science-chips-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M6 2v4L4 9v1h8V9l-2-3V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M4 13h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                    <circle cx="8" cy="9" r="1" fill="currentColor"/>
-                  </svg>
-                  {%- if block.settings.science_pmid_1 != blank -%}
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__science-chip">{{ block.settings.science_ref_1 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_1 | split: '(' | last | split: ')' | first }}</a>
-                  {%- endif -%}
-                  {%- if block.settings.science_pmid_2 != blank -%}
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__science-chip">{{ block.settings.science_ref_2 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_2 | split: '(' | last | split: ')' | first }}</a>
-                  {%- endif -%}
-                  {%- if block.settings.science_pmid_3 != blank -%}
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__science-chip">{{ block.settings.science_ref_3 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_3 | split: '(' | last | split: ')' | first }}</a>
-                  {%- endif -%}
-                </div>
               {%- endif -%}
 
               {%- comment -%} CTA Button — adds to cart, opens Bundle Builder {%- endcomment -%}
@@ -2258,12 +2253,8 @@
     max-width: none;
   }
 
-  .cs-transform__science-chips {
-    justify-content: flex-start;
-  }
-
   .cs-transform__cta-wrap {
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .cs-transform__story {
@@ -2352,45 +2343,40 @@
 }
 
 /* --------------------------------------------------------------------------
-   Science Citation Chips
+   Benefit Tags (ingredient pill + inline citation)
    -------------------------------------------------------------------------- */
-.cs-transform__science-chips {
+.cs-transform__benefit-tags {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-block-end: var(--cs-space-md);
+  gap: 4px;
+  margin-top: 4px;
 }
 
-.cs-transform__science-chips-icon {
-  color: var(--ct-soft-teal);
-  opacity: 0.6;
-  flex-shrink: 0;
-}
-
-.cs-transform__science-chip {
+.cs-transform__cite {
   display: inline-flex;
   align-items: center;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  padding: 0.3em 0.7em;
+  padding: 0.2em 0.55em;
   border-radius: var(--cs-radius-full);
-  background: var(--ct-science-bg);
+  background: transparent;
   color: var(--ct-text-secondary);
-  border: 1px solid rgba(16, 132, 116, 0.12);
+  opacity: 0.6;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   text-decoration: none;
   white-space: nowrap;
   transition:
     background var(--cs-duration-fast) var(--cs-ease-out),
     color var(--cs-duration-fast) var(--cs-ease-out),
-    border-color var(--cs-duration-fast) var(--cs-ease-out);
+    opacity var(--cs-duration-fast) var(--cs-ease-out);
 }
 
-.cs-transform__science-chip:hover {
+.cs-transform__cite:hover {
   background: var(--ct-soft-teal);
   color: #ffffff;
   border-color: var(--ct-soft-teal);
+  opacity: 1;
 }
 
 /* --------------------------------------------------------------------------
