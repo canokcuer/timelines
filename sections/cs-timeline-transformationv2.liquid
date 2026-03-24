@@ -1791,25 +1791,28 @@
                   <ul class="cs-transform__science-refs">
                     {%- if block.settings.science_ref_1 != blank -%}
                       <li class="cs-transform__science-ref-item">
-                        <p class="cs-transform__science-text">{{ block.settings.science_ref_1 }}</p>
                         {%- if block.settings.science_pmid_1 != blank -%}
-                          <cite class="cs-transform__science-ref">PMID: {{ block.settings.science_pmid_1 }}</cite>
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__science-link">{{ block.settings.science_ref_1 }}</a>
+                        {%- else -%}
+                          <p class="cs-transform__science-text">{{ block.settings.science_ref_1 }}</p>
                         {%- endif -%}
                       </li>
                     {%- endif -%}
                     {%- if block.settings.science_ref_2 != blank -%}
                       <li class="cs-transform__science-ref-item">
-                        <p class="cs-transform__science-text">{{ block.settings.science_ref_2 }}</p>
                         {%- if block.settings.science_pmid_2 != blank -%}
-                          <cite class="cs-transform__science-ref">PMID: {{ block.settings.science_pmid_2 }}</cite>
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__science-link">{{ block.settings.science_ref_2 }}</a>
+                        {%- else -%}
+                          <p class="cs-transform__science-text">{{ block.settings.science_ref_2 }}</p>
                         {%- endif -%}
                       </li>
                     {%- endif -%}
                     {%- if block.settings.science_ref_3 != blank -%}
                       <li class="cs-transform__science-ref-item">
-                        <p class="cs-transform__science-text">{{ block.settings.science_ref_3 }}</p>
                         {%- if block.settings.science_pmid_3 != blank -%}
-                          <cite class="cs-transform__science-ref">PMID: {{ block.settings.science_pmid_3 }}</cite>
+                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__science-link">{{ block.settings.science_ref_3 }}</a>
+                        {%- else -%}
+                          <p class="cs-transform__science-text">{{ block.settings.science_ref_3 }}</p>
                         {%- endif -%}
                       </li>
                     {%- endif -%}
@@ -2388,14 +2391,19 @@
   margin: 0;
 }
 
-.cs-transform__science-ref {
+.cs-transform__science-link {
   display: block;
-  font-size: 10px;
+  font-size: var(--cs-font-size-xs);
+  font-style: italic;
+  color: var(--ct-text-secondary);
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color var(--cs-duration-fast) var(--cs-ease-out);
+}
+
+.cs-transform__science-link:hover {
   color: var(--ct-soft-teal);
-  margin-block-start: 4px;
-  font-style: normal;
-  opacity: 0.8;
-  font-weight: 600;
+  text-decoration: underline;
 }
 
 /* --------------------------------------------------------------------------
