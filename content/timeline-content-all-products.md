@@ -5,6 +5,50 @@
 
 ---
 
+## How to Enter Content in Shopify
+
+The section is **"Dönüşüm Yolculuğu v2"** (`cs-timeline-transformationv2.liquid`). Each milestone block has these fields:
+
+### Benefit Fields
+| Field | What to enter | Example |
+|-------|--------------|---------|
+| **Fayda 1** | Benefit text in Turkish | Beyninize dopamin yapım malzemesi sağlayarak... |
+| **Fayda 1 Bileşeni** | Short ingredient name (shown as pill) | L-Tirozin |
+| **Fayda 2** | Second benefit text | ... |
+| **Fayda 2 Bileşeni** | Second ingredient pill | Ginkgo Biloba |
+| **Fayda 3** | Third benefit text | ... |
+| **Fayda 3 Bileşeni** | Third ingredient pill | B12 |
+
+### Citation Fields (shown as clickable chips next to pills)
+
+Citations appear inline next to each benefit's ingredient pill as `Author, Year` chips linking to PubMed.
+
+**Important:** The citation text format must follow this pattern for the chip to display correctly:
+
+```
+Author et al. (Year) — Description text here
+```
+
+The chip extracts everything before `(` as the author name and the number inside `()` as the year. Examples:
+
+| Field | What to enter | Chip shows |
+|-------|--------------|------------|
+| **Kaynak 1** | `Jongkees et al. (2015) — Tirozin takviyesi stres altında...` | `Jongkees et al. , 2015` |
+| **PMID 1** | `26424423` | (used for PubMed link URL) |
+| **Kaynak 2** | `Mashayekh et al. (2011) — 4 haftalık Ginkgo biloba...` | `Mashayekh et al. , 2011` |
+| **PMID 2** | `21061003` | (used for PubMed link URL) |
+
+**Citation 1 → pairs with Benefit 1, Citation 2 → Benefit 2, Citation 3 → Benefit 3.**
+
+### Other Fields
+| Field | What to enter |
+|-------|--------------|
+| **Zaman Etiketi** | `1. GÜN`, `1. HAFTA`, `1. AY`, `3. AY` (shown in stepper) |
+| **Başlık** | Milestone headline |
+| **İllüstrasyon** | Select SVG from dropdown (product-specific options available) |
+
+---
+
 ## DailyGlow — Cilt Işıltısı & Enerji
 
 ### 1. GÜN — Antioksidan Kalkanın İlk Aktivasyonu

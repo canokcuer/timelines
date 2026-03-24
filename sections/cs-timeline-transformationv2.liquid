@@ -5,7 +5,7 @@
   Each slide: 3 benefit bullets, 3 scientific references, CTA.
 {% endcomment %}
 
-<cs-transform-timeline>
+<cs-transform-v2>
 <section
   id="cs-transform-{{ section.id }}"
   class="cs-timeline cs-transform"
@@ -1794,7 +1794,9 @@
                 </p>
               {%- endif -%}
 
-              {%- comment -%} CTA Button — adds to cart, opens Bundle Builder {%- endcomment -%}
+              </div>{%- comment -%} end .cs-transform__slide-content {%- endcomment -%}
+
+              {%- comment -%} CTA Button — full width, centered below both columns {%- endcomment -%}
               <div class="cs-transform__cta-wrap">
                 {%- assign product = section.settings.product -%}
                 {%- if product != blank -%}
@@ -1821,7 +1823,6 @@
                   </a>
                 {%- endif -%}
               </div>
-              </div>{%- comment -%} end .cs-transform__slide-content {%- endcomment -%}
 
             </div>
           </div>
@@ -1833,7 +1834,7 @@
 
   </div>
 </section>
-</cs-transform-timeline>
+</cs-transform-v2>
 
 <style>
 /* ============================================================================
@@ -2232,10 +2233,15 @@
 @media screen and (min-width: 750px) {
   .cs-transform__slide-inner {
     flex-direction: row;
+    flex-wrap: wrap;
     text-align: left;
     align-items: flex-start;
     max-width: 860px;
     gap: var(--cs-space-xl);
+  }
+
+  .cs-transform__cta-wrap {
+    flex-basis: 100%;
   }
 
   .cs-transform__illust-frame {
@@ -2251,10 +2257,6 @@
 
   .cs-transform__benefits {
     max-width: none;
-  }
-
-  .cs-transform__cta-wrap {
-    justify-content: center;
   }
 
   .cs-transform__story {
@@ -2551,7 +2553,7 @@ function csTimelineReveal(selector, options = {}) {
    CS Transform Timeline — Hybrid Stepper + Carousel Web Component
    ============================================================================ */
 
-class CsTransformTimeline extends HTMLElement {
+class CsTransformV2 extends HTMLElement {
   constructor() {
     super();
     this._observer = null;
@@ -2723,15 +2725,15 @@ class CsTransformTimeline extends HTMLElement {
   }
 }
 
-if (!customElements.get('cs-transform-timeline')) {
-  customElements.define('cs-transform-timeline', CsTransformTimeline);
+if (!customElements.get('cs-transform-v2')) {
+  customElements.define('cs-transform-v2', CsTransformV2);
 }
 </script>
 
 {% schema %}
 {
   "name": "Dönüşüm Yolculuğu v2",
-  "class": "cs-transform-section",
+  "class": "cs-transform-v2-section",
   "settings": [
     {
       "type": "text",
