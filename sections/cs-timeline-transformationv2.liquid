@@ -1736,6 +1736,7 @@
                 {%- endcase -%}
               </div>
 
+              <div class="cs-transform__slide-content">
               {%- comment -%} Headline {%- endcomment -%}
               <h3 class="cs-transform__slide-headline">
                 {{ block.settings.headline }}
@@ -1779,44 +1780,22 @@
               {%- endif -%}
 
               {%- comment -%} Science References (3 per slide) {%- endcomment -%}
-              {%- if block.settings.science_ref_1 != blank or block.settings.science_ref_2 != blank or block.settings.science_ref_3 != blank -%}
-                <div class="cs-transform__science-list">
-                  <span class="cs-transform__science-list-icon" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M6 2v4L4 9v1h8V9l-2-3V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M4 13h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                      <circle cx="8" cy="9" r="1" fill="currentColor"/>
-                    </svg>
-                  </span>
-                  <ul class="cs-transform__science-refs">
-                    {%- if block.settings.science_ref_1 != blank -%}
-                      <li class="cs-transform__science-ref-item">
-                        {%- if block.settings.science_pmid_1 != blank -%}
-                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__science-link">{{ block.settings.science_ref_1 }}</a>
-                        {%- else -%}
-                          <p class="cs-transform__science-text">{{ block.settings.science_ref_1 }}</p>
-                        {%- endif -%}
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.science_ref_2 != blank -%}
-                      <li class="cs-transform__science-ref-item">
-                        {%- if block.settings.science_pmid_2 != blank -%}
-                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__science-link">{{ block.settings.science_ref_2 }}</a>
-                        {%- else -%}
-                          <p class="cs-transform__science-text">{{ block.settings.science_ref_2 }}</p>
-                        {%- endif -%}
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.science_ref_3 != blank -%}
-                      <li class="cs-transform__science-ref-item">
-                        {%- if block.settings.science_pmid_3 != blank -%}
-                          <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__science-link">{{ block.settings.science_ref_3 }}</a>
-                        {%- else -%}
-                          <p class="cs-transform__science-text">{{ block.settings.science_ref_3 }}</p>
-                        {%- endif -%}
-                      </li>
-                    {%- endif -%}
-                  </ul>
+              {%- if block.settings.science_pmid_1 != blank or block.settings.science_pmid_2 != blank or block.settings.science_pmid_3 != blank -%}
+                <div class="cs-transform__science-chips">
+                  <svg class="cs-transform__science-chips-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M6 2v4L4 9v1h8V9l-2-3V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 13h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    <circle cx="8" cy="9" r="1" fill="currentColor"/>
+                  </svg>
+                  {%- if block.settings.science_pmid_1 != blank -%}
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_1 }}/" target="_blank" rel="noopener" class="cs-transform__science-chip">{{ block.settings.science_ref_1 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_1 | split: '(' | last | split: ')' | first }}</a>
+                  {%- endif -%}
+                  {%- if block.settings.science_pmid_2 != blank -%}
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_2 }}/" target="_blank" rel="noopener" class="cs-transform__science-chip">{{ block.settings.science_ref_2 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_2 | split: '(' | last | split: ')' | first }}</a>
+                  {%- endif -%}
+                  {%- if block.settings.science_pmid_3 != blank -%}
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.science_pmid_3 }}/" target="_blank" rel="noopener" class="cs-transform__science-chip">{{ block.settings.science_ref_3 | split: '—' | first | split: '(' | first | strip }}, {{ block.settings.science_ref_3 | split: '(' | last | split: ')' | first }}</a>
+                  {%- endif -%}
                 </div>
               {%- endif -%}
 
@@ -1847,6 +1826,7 @@
                   </a>
                 {%- endif -%}
               </div>
+              </div>{%- comment -%} end .cs-transform__slide-content {%- endcomment -%}
 
             </div>
           </div>
@@ -2255,9 +2235,39 @@
 }
 
 @media screen and (min-width: 750px) {
+  .cs-transform__slide-inner {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    max-width: 860px;
+    gap: var(--cs-space-xl);
+  }
+
   .cs-transform__illust-frame {
-    width: 260px;
-    height: 260px;
+    width: 240px;
+    height: 240px;
+    margin-block-end: 0;
+  }
+
+  .cs-transform__slide-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cs-transform__benefits {
+    max-width: none;
+  }
+
+  .cs-transform__science-chips {
+    justify-content: flex-start;
+  }
+
+  .cs-transform__cta-wrap {
+    justify-content: flex-start;
+  }
+
+  .cs-transform__story {
+    max-width: none;
   }
 }
 
@@ -2342,68 +2352,45 @@
 }
 
 /* --------------------------------------------------------------------------
-   Science References (3 per slide — bullet list)
+   Science Citation Chips
    -------------------------------------------------------------------------- */
-.cs-transform__science-list {
+.cs-transform__science-chips {
   display: flex;
-  align-items: flex-start;
-  gap: var(--cs-space-sm);
-  background: var(--ct-science-bg);
-  border-radius: var(--cs-radius-md);
-  border-left: 3px solid var(--ct-soft-teal);
-  padding: var(--cs-space-md);
-  margin-block-end: var(--cs-space-lg);
-  text-align: left;
-  max-width: 520px;
-  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-block-end: var(--cs-space-md);
 }
 
-.cs-transform__science-list-icon {
+.cs-transform__science-chips-icon {
+  color: var(--ct-soft-teal);
+  opacity: 0.6;
   flex-shrink: 0;
-  color: var(--ct-soft-teal);
-  margin-top: 2px;
 }
 
-.cs-transform__science-refs {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--cs-space-sm);
-}
-
-.cs-transform__science-ref-item {
-  padding-bottom: var(--cs-space-xs);
-  border-bottom: 1px solid rgba(16, 132, 116, 0.1);
-}
-
-.cs-transform__science-ref-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.cs-transform__science-text {
-  font-size: var(--cs-font-size-xs);
-  font-style: italic;
+.cs-transform__science-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0.3em 0.7em;
+  border-radius: var(--cs-radius-full);
+  background: var(--ct-science-bg);
   color: var(--ct-text-secondary);
-  line-height: 1.5;
-  margin: 0;
-}
-
-.cs-transform__science-link {
-  display: block;
-  font-size: var(--cs-font-size-xs);
-  font-style: italic;
-  color: var(--ct-text-secondary);
-  line-height: 1.5;
+  border: 1px solid rgba(16, 132, 116, 0.12);
   text-decoration: none;
-  transition: color var(--cs-duration-fast) var(--cs-ease-out);
+  white-space: nowrap;
+  transition:
+    background var(--cs-duration-fast) var(--cs-ease-out),
+    color var(--cs-duration-fast) var(--cs-ease-out),
+    border-color var(--cs-duration-fast) var(--cs-ease-out);
 }
 
-.cs-transform__science-link:hover {
-  color: var(--ct-soft-teal);
-  text-decoration: underline;
+.cs-transform__science-chip:hover {
+  background: var(--ct-soft-teal);
+  color: #ffffff;
+  border-color: var(--ct-soft-teal);
 }
 
 /* --------------------------------------------------------------------------
