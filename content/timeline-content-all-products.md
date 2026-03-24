@@ -59,8 +59,8 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. GÜN — Antioksidan Kalkanın İlk Aktivasyonu
 
 **Benefits:**
-1. MSM, cildin en güçlü doğal antioksidanı glutatyonun üretimi için gerekli kükürt yapı taşlarını sağlayarak hücre içi korumayı başlatır → **MSM**
-2. Niasin, cilt hücrelerinin enerji üretim merkezini aktive ederek hem hücre yenilenmesini hem de DNA onarım sürecini başlatır → **Niasin**
+1. MSM, cildin en güçlü doğal antioksidanı glutatyonun üretimi için gerekli kükürt yapı taşlarını sağlayarak hücre içi korumaya katkıda bulunabilir → **MSM**
+2. Niasin, cilt hücrelerinin enerji üretim merkezini harekete geçirerek hem hücre yenilenmesine hem de DNA onarım sürecine destek olabilir → **Niasin**
 3. Selenyum, cilt hücrelerinde güçlü bir antioksidan koruma ağı kurarak cilt bariyerinin sağlıklı çalışmasını ve bütünlüğünü destekler → **Selenyum**
 
 **Kaynaklar:**
@@ -71,9 +71,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. HAFTA — Hücreleriniz Yenilenmeye Başlıyor
 
 **Benefits:**
-1. Çinko, ciltteki kolajen liflerini parçalayan enzimleri dengeleyerek kolajen yıkımını yavaşlatır ve doku yapısını sağlam tutar → **Çinko**
-2. Kore Ginsengi, güneş hasarı görmüş cilt hücrelerinin enerji üretimini yeniden canlandırarak hücre yenilenme sürecini başlatır → **Kore Ginsengi**
-3. Manganez, hücrelerin enerji merkezindeki antioksidan enzimi aktive ederek serbest radikalleri etkisiz hale getirir ve cilt yaşlanmasını yavaşlatır → **Manganez**
+1. Çinko, ciltteki kolajen liflerini parçalayan enzimleri dengeleyerek kolajen yapısının korunmasına yardımcı olabilir ve doku bütünlüğünü destekler → **Çinko**
+2. Kore Ginsengi, güneş hasarı görmüş cilt hücrelerinin enerji üretimini yeniden destekleyerek hücre yenilenme sürecine katkıda bulunabilir → **Kore Ginsengi**
+3. Manganez, hücrelerin enerji merkezindeki antioksidan enzimi destekleyerek serbest radikallerin etkisiz hale getirilmesine yardımcı olabilir ve cilt yaşlanmasına karşı koruma sağlayabilir → **Manganez**
 
 **Kaynaklar:**
 1. Nosrati R et al. (2019) — 47 çalışmanın sistematik incelemesinde çinkonun %62 oranında MMP üretim ve aktivitesini inhibe ettiğini belirledi. `PMID: 31442948`
@@ -83,9 +83,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. AY — Cildiniz İçeriden Işıldamaya Başlıyor
 
 **Benefits:**
-1. Niasin, cildin en dış katmanındaki seramid üretimini 4-5 kat artırarak cilt bariyerini güçlendirir ve nem kaybını belirgin şekilde azaltır → **Niasin**
-2. MSM, keratin yapısındaki güçlü kimyasal bağların oluşumunu destekleyerek saç ve tırnakların daha dayanıklı ve sağlam uzamasını sağlar → **MSM**
-3. Çinko, aşırı yağ üretimini tetikleyen enzimi baskılayarak sebum dengesini düzenler ve cildin daha mat, dengeli görünmesini sağlar → **Çinko**
+1. Niasin, cildin en dış katmanındaki seramid üretimini destekleyerek cilt bariyerine katkıda bulunabilir ve nem kaybının azaltılmasına yardımcı olabilir → **Niasin**
+2. MSM, keratin yapısındaki güçlü kimyasal bağların oluşumunu destekleyerek saç ve tırnakların daha dayanıklı ve sağlam uzamasına katkı sağlayabilir → **MSM**
+3. Çinko, aşırı yağ üretimini tetikleyen enzimi dengeleyerek sebum kontrolüne yardımcı olabilir ve cildin daha mat, dengeli görünmesini destekleyebilir → **Çinko**
 
 **Kaynaklar:**
 1. Tanno O et al. (2000) — Nikotinamidin keratinositlerde seramid sentezini doza bağımlı 4,1-5,5 kat artırarak epidermal bariyeri iyileştirdiğini gösterdi. `PMID: 10971324`
@@ -95,9 +95,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 3. AY — Yeni Haliniz: Işıltılı ve Enerjik
 
 **Benefits:**
-1. Kore Ginsengi, uzun süreli kullanımda yüz kırışıklıklarını azaltır ve kolajen üretimini artırarak cilt yaşlanmasını tersine çevirmeye başlar → **Kore Ginsengi**
-2. Selenyum, cildin antioksidan savunma sistemini tam kapasiteye ulaştırarak kronik güneş hasarına karşı kapsamlı ve kalıcı koruma sağlar → **Selenyum**
-3. Tüm bileşenlerin birlikte çalışmasıyla cilt yoğunluğu ve kalınlığı artar, yüzey pürüzsüzleşir ve genel cilt kalitesi gözle görülür şekilde yükselir → **Tam Formül**
+1. Kore Ginsengi, uzun süreli kullanımda yüz kırışıklıklarının azaltılmasına yardımcı olabilir ve kolajen üretimini destekleyerek cilt yenilenmesine katkıda bulunabilir → **Kore Ginsengi**
+2. Selenyum, cildin antioksidan savunma sistemini destekleyerek kronik güneş hasarına karşı kapsamlı ve kalıcı korumaya katkı sağlayabilir → **Selenyum**
+3. Tüm bileşenlerin birlikte çalışmasıyla cilt yoğunluğu ve kalınlığı desteklenebilir, yüzey pürüzsüzlüğüne katkıda bulunabilir ve genel cilt kalitesinin iyileşmesine yardımcı olabilir → **Tam Formül**
 
 **Kaynaklar:**
 1. Cho S et al. (2009) — 24 haftalık kırmızı ginseng takviyesinin yüz kırışıklıklarını anlamlı ölçüde azaltıp tip I prokolajen sentezini artırdığını gösterdi. `PMID: 20041778`
@@ -111,9 +111,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. GÜN — Gece Onarımının İlk Sinyali
 
 **Benefits:**
-1. L-Theanine, beyindeki rahatlamayla ilişkili alfa dalgalarını artırarak zihni sakinleştirir ama uyuşukluk yapmadan gevşemenizi sağlar → **L-Theanine**
-2. Papatyadaki apigenin, beyindeki sakinleştirici reseptörlere doğal yoldan bağlanarak sinir sistemini yatıştırır ve yumuşak bir uyku hissi oluşturur → **Papatya**
-3. Melisa, vücudun dinlenme modunu aktive ederek uyku öncesinde kalp hızını düşürür ve stres yanıtını yatıştırır → **Melisa**
+1. L-Theanine, beyindeki rahatlamayla ilişkili alfa dalgalarını destekleyerek zihni sakinleştirmeye yardımcı olabilir, uyuşukluk yapmadan gevşemenize katkıda bulunabilir → **L-Theanine**
+2. Papatyadaki apigenin, beyindeki sakinleştirici reseptörlere doğal yoldan bağlanarak sinir sistemini yatıştırmaya yardımcı olabilir ve yumuşak bir uyku geçişini destekleyebilir → **Papatya**
+3. Melisa, vücudun dinlenme moduna geçişini destekleyerek uyku öncesinde kalp hızının düzenlenmesine ve stres yanıtının yatışmasına katkıda bulunabilir → **Melisa**
 
 **Kaynaklar:**
 1. Nobre et al. (2008) — 50 mg L-theanine alımının 45-105 dakika içinde alfa dalga aktivitesini anlamlı ölçüde artırdığı EEG ile gösterildi. `PMID: 18296328`
@@ -123,9 +123,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. HAFTA — Kolajen Sentezi Devreye Giriyor
 
 **Benefits:**
-1. Kolajen peptidleri, cilt hücrelerine doğrudan sinyal göndererek yeni hücre üretimini ve kolajen ağının yeniden yapılanmasını uyarır → **Kolajen Peptidleri**
-2. C Vitamini, kolajen üretiminde anahtar enzimi aktive ederek kolajen liflerinin sağlam ve dayanıklı bir yapıda oluşmasını sağlar → **C Vitamini**
-3. Hyaluronik asit, cilt hücrelerindeki hidrasyon reseptörlerini aktive ederek derinlemesine nemlendirme sürecini içeriden başlatır → **Hyaluronik Asit**
+1. Kolajen peptidleri, cilt hücrelerine doğrudan sinyal göndererek yeni hücre üretimini ve kolajen ağının yeniden yapılanmasını destekleyebilir → **Kolajen Peptidleri**
+2. C Vitamini, kolajen üretiminde anahtar enzimi destekleyerek kolajen liflerinin sağlam ve dayanıklı bir yapıda oluşmasına katkı sağlayabilir → **C Vitamini**
+3. Hyaluronik asit, cilt hücrelerindeki hidrasyon reseptörlerini destekleyerek derinlemesine nemlendirme sürecine içeriden katkıda bulunabilir → **Hyaluronik Asit**
 
 **Kaynaklar:**
 1. Shigemura et al. (2009) — Pro-Hyp (200 nmol/mL), fare deri fibroblastlarının kolajen jel üzerinde büyümesini doza bağımlı olarak anlamlı şekilde artırdı. `PMID: 19128041`
@@ -135,9 +135,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. AY — Derin Uyku Döngüsü Yerleşmeye Başlıyor
 
 **Benefits:**
-1. Papatya, düzenli kullanımda klinik uyku kalitesi ölçümlerini anlamlı şekilde iyileştirir ve gece boyunca kesintisiz derin uyku sağlar → **Papatya**
-2. L-Theanine, 4 haftada stres hormonu kortizolü düşürür ve uykuya dalma süresini kısaltarak gece boyunca daha derin dinlenme sağlar → **L-Theanine**
-3. Kolajen peptidleri, 4 haftada ciltteki kolajen yoğunluğunu ölçülebilir şekilde artırır ve kolajen ağındaki yapısal bozulmayı azaltır → **Kolajen Peptidleri**
+1. Papatya, düzenli kullanımda klinik uyku kalitesi ölçümlerinin iyileşmesine yardımcı olabilir ve gece boyunca kesintisiz derin uykuyu destekleyebilir → **Papatya**
+2. L-Theanine, 4 haftada stres hormonu kortizolün dengelenmesine yardımcı olabilir ve uykuya dalma süresinin kısalmasına katkıda bulunarak daha derin dinlenmeyi destekleyebilir → **L-Theanine**
+3. Kolajen peptidleri, 4 haftada ciltteki kolajen yoğunluğunun artmasına katkı sağlayabilir ve kolajen ağındaki yapısal bozulmanın azaltılmasına yardımcı olabilir → **Kolajen Peptidleri**
 
 **Kaynaklar:**
 1. Adib-Hajbaghery & Mousavi (2017) — 200 mg papatya ekstresi 28 gün alan yaşlılarda PUKİ skorları plaseboya kıyasla anlamlı ölçüde iyileşti. `PMID: 29154054`
@@ -147,9 +147,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 3. AY — Yeni Haliniz: Dinlenmiş ve Işıltılı
 
 **Benefits:**
-1. C Vitamini, ciltte güçlü bir antioksidan deposu oluşturarak güneş kaynaklı hasara karşı koruyucu bariyer sağlar ve erken yaşlanmayı önler → **C Vitamini**
-2. Hyaluronik asit, 12 haftada cildin nem düzeyini ve esnekliğini artırırken yüzeyden nem kaybını anlamlı düzeyde azaltır → **Hyaluronik Asit**
-3. Tüm bileşenler birlikte çalışarak uyku kalitesini ve kolajen üretimini karşılıklı güçlendirir; gece onarım döngüsü en yüksek verimliliğe ulaşır → **Tam Formül**
+1. C Vitamini, ciltte güçlü bir antioksidan desteği oluşturarak güneş kaynaklı hasara karşı koruyucu bariyere katkıda bulunabilir ve erken yaşlanma belirtilerinin azaltılmasına yardımcı olabilir → **C Vitamini**
+2. Hyaluronik asit, 12 haftada cildin nem düzeyini ve esnekliğini destekleyebilir, yüzeyden nem kaybının azaltılmasına katkı sağlayabilir → **Hyaluronik Asit**
+3. Tüm bileşenler birlikte çalışarak uyku kalitesini ve kolajen üretimini karşılıklı destekleyebilir; gece onarım döngüsünün verimli çalışmasına katkıda bulunabilir → **Tam Formül**
 
 **Kaynaklar:**
 1. Pullar et al. (2017) — Dermal C Vitamini konsantrasyonunun kolajen sentezi, antioksidan koruma ve UV fotoproteksiyonuyla doğrudan ilişkili olduğu gösterildi. `PMID: 28805671`
@@ -163,9 +163,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. GÜN — Bilişsel Kıvılcımın İlk Işığı
 
 **Benefits:**
-1. Beyninize dopamin yapım malzemesi sağlayarak ilk dozdan itibaren odaklanma ve motivasyon için gerekli kimyasal sinyalleri güçlendirir → **L-Tirozin**
-2. Beyne giden ince damarları genişleterek daha fazla oksijen ve enerji taşınmasını sağlar; ilk günden zihinsel berraklığı destekler → **Ginkgo Biloba**
-3. Hücrelerin gen aktivasyonunu düzenleyen kritik metilasyon döngüsünü başlatır; beyin hücrelerinin doğru çalışması için temel oluşturur → **B12**
+1. Beyninize dopamin yapım malzemesi sağlayarak ilk dozdan itibaren odaklanma ve motivasyon için gerekli kimyasal sinyalleri destekleyebilir → **L-Tirozin**
+2. Beyne giden ince damarları genişleterek daha fazla oksijen ve enerji taşınmasına katkıda bulunabilir; ilk günden zihinsel berraklığı destekler → **Ginkgo Biloba**
+3. Hücrelerin gen aktivasyonunu düzenleyen kritik metilasyon döngüsüne katkı sağlayabilir; beyin hücrelerinin doğru çalışması için temel oluşturabilir → **B12**
 
 **Kaynaklar:**
 1. Jongkees et al. (2015) — Tirozin takviyesi stres ve bilişsel talep altında dopamin sentezini destekleyerek kısa süreli kognitif performansı anlamlı şekilde artırdı. `PMID: 26424423`
@@ -175,9 +175,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. HAFTA — Nöral Devreleriniz Güçleniyor
 
 **Benefits:**
-1. Beynin öğrenme ve karar merkezlerinde sinir hücresi büyüme faktörünü aktive ederek yeni bağlantı kurma kapasitesini artırır → **Kore Ginsengi**
-2. Vücudun doğal rahatlama ve odaklanma sistemi olan endokannabinoid dengesini yükselterek sinir hücreleri arası iletişimi güçlendirir → **Maca**
-3. Yoğun zihinsel çalışmada tükenen dopamin ve noradrenalin depolarını yenileyerek dikkat ve kısa süreli bellek performansını korur → **L-Tirozin**
+1. Beynin öğrenme ve karar merkezlerinde sinir hücresi büyüme faktörünü destekleyerek yeni bağlantı kurma kapasitesine katkıda bulunabilir → **Kore Ginsengi**
+2. Vücudun doğal rahatlama ve odaklanma sistemi olan endokannabinoid dengesini destekleyerek sinir hücreleri arası iletişime katkı sağlayabilir → **Maca**
+3. Yoğun zihinsel çalışmada tükenen dopamin ve noradrenalin depolarını yenileyerek dikkat ve kısa süreli bellek performansını destekleyebilir → **L-Tirozin**
 
 **Kaynaklar:**
 1. Zhong et al. (2020) — Ginsenozid Rg1, yaşlanma modelinde FGF2-Akt ve BDNF-TrkB sinyal yollarını restore ederek Morris su labirenti performansını anlamlı ölçüde iyileştirdi. `PMID: 32410834`
@@ -187,9 +187,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. AY — Odak ve Hafızanız Zirveye Yaklaşıyor
 
 **Benefits:**
-1. Hafıza kimyasalı asetilkolinin üretimini ve salınımını düzenleyerek bilgiyi akılda tutma ve işleme kapasitesini güçlendirir → **Ginkgo Biloba**
-2. Sinirleri saran koruyucu miyelin tabakasını sağlıklı tutarak sinyal iletim hızını artırır; düşünce netliğini destekler → **B12**
-3. Stres hormon eksenini dengeleyerek kortizolü kontrol altında tutar; gün boyu süren zihinsel enerji ve dayanıklılık sağlar → **Maca**
+1. Hafıza kimyasalı asetilkolinin üretimini ve salınımını destekleyerek bilgiyi akılda tutma ve işleme kapasitesine katkıda bulunabilir → **Ginkgo Biloba**
+2. Sinirleri saran koruyucu miyelin tabakasını sağlıklı tutarak sinyal iletim hızına katkı sağlayabilir; düşünce netliğini destekler → **B12**
+3. Stres hormon eksenini dengeleyerek kortizolü kontrol altında tutmaya yardımcı olabilir; gün boyu süren zihinsel enerji ve dayanıklılığı destekleyebilir → **Maca**
 
 **Kaynaklar:**
 1. Nathan (2000) — Ginkgo Biloba'nın kolinerjik sistem üzerinde doğrudan etkileri akut ve kronik bilişsel iyileşmeyi açıklar. `PMID: 11090296`
@@ -199,9 +199,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 3. AY — Yeni Haliniz: Keskin ve Enerjik
 
 **Benefits:**
-1. Düzenli kullanımla bilişsel test performanslarını yükselterek zihinsel keskinliği uzun vadede — 96 haftaya kadar — korur → **Kore Ginsengi**
-2. 12 haftalık düzenli kullanımda enerji, ruh hali ve genel yaşam kalitesinde klinik çalışmalarla kanıtlanmış belirgin iyileşme sağlar → **Maca**
-3. Tüm bileşenler birlikte çalışarak beyin ağlarının uyumunu ve enerji verimliliğini en üst düzeye taşır; formülün tam etkisi ortaya çıkar → **Tam Formül**
+1. Düzenli kullanımla bilişsel test performanslarını destekleyerek zihinsel keskinliği uzun vadede — 96 haftaya kadar — korumaya yardımcı olabilir → **Kore Ginsengi**
+2. 12 haftalık düzenli kullanımda enerji, ruh hali ve genel yaşam kalitesinde klinik çalışmalarla kanıtlanmış belirgin iyileşmeye katkıda bulunabilir → **Maca**
+3. Tüm bileşenler birlikte çalışarak beyin ağlarının uyumunu ve enerji verimliliğini destekleyebilir; formülün tam etkisi ortaya çıkar → **Tam Formül**
 
 **Kaynaklar:**
 1. Heo et al. (2011) — Günlük 4,5-9 g Kore Kızıl Ginsengi Alzheimer hastalarında 24. haftada MMSE skorunu anlamlı ölçüde artırdı; bu iyileşme 96. haftada korundu. `PMID: 23717092`
@@ -215,9 +215,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. GÜN — Karaciğer Enzimlerinin İlk Uyanışı
 
 **Benefits:**
-1. Karaciğerin ana savunma anahtarı Nrf2'yi aktive ederek toksinleri etkisiz hale getiren detoks enzimlerinin üretimini başlatır → **Deve Dikeni**
-2. Karaciğer hücrelerinde iltihap tetikleyen NF-κB sinyalini baskılayarak karaciğerdeki kronik mikro iltihaplanmayı ilk günden azaltır → **Zerdeçal**
-3. Safra kanallarının kasılma hareketini artırarak safra akışını hızlandırır; yağ sindirimi ve toksin atılımını ilk dozdan destekler → **Karahindiba**
+1. Karaciğerin ana savunma anahtarı Nrf2'yi destekleyerek toksinleri etkisiz hale getiren detoks enzimlerinin üretimine katkı sağlayabilir → **Deve Dikeni**
+2. Karaciğer hücrelerinde iltihap tetikleyen NF-κB sinyalini baskılayarak karaciğerdeki kronik mikro iltihaplanmayı ilk günden azaltmaya yardımcı olabilir → **Zerdeçal**
+3. Safra kanallarının kasılma hareketini destekleyerek safra akışına katkıda bulunabilir; yağ sindirimi ve toksin atılımını ilk dozdan destekler → **Karahindiba**
 
 **Kaynaklar:**
 1. Vargas-Mendoza et al. (2020) — Silymarin flavolignanlarının Nrf2 nükleer translokasyonunu sağlayarak antioksidan ve Faz II detoks enzim ekspresyonunu artırdığını gösteren kapsamlı derleme. `PMID: 32423098`
@@ -227,9 +227,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. HAFTA — Arındırma Süreçleri Hızlanıyor
 
 **Benefits:**
-1. Karaciğer hücrelerinde safra üretimini doğrudan uyararak bazal seviyenin %151,5'ine kadar artış sağlar; sindirim belirgin şekilde rahatlar → **Enginar**
-2. Moringa izotiyosiyanatları vücudun ana antioksidan savunma yolağını aktive ederek güçlü detoks enzimlerinin üretimini tetikler → **Moringa**
-3. Karaciğer hücre zarlarını fosfolipidlerle güçlendirerek toksinlerin hücreye verdiği oksidatif hasarı engeller; hücre bütünlüğünü korur → **Deve Dikeni**
+1. Karaciğer hücrelerinde safra üretimini doğrudan destekleyerek bazal seviyenin %151,5'ine kadar artışa katkı sağlayabilir; sindirim belirgin şekilde rahatlamaya yardımcı olabilir → **Enginar**
+2. Moringa izotiyosiyanatları vücudun ana antioksidan savunma yolağını destekleyerek güçlü detoks enzimlerinin üretimine katkıda bulunabilir → **Moringa**
+3. Karaciğer hücre zarlarını fosfolipidlerle destekleyerek toksinlerin hücreye verdiği oksidatif hasarı azaltmaya yardımcı olabilir; hücre bütünlüğünü korumaya katkı sağlayabilir → **Deve Dikeni**
 
 **Kaynaklar:**
 1. Kirchhoff et al. (1994) — Enginar ekstresinin randomize çift-kör çapraz çalışmada 60. dakikada safra sekresyonunu bazale göre %151,5 artırdığını gösteren insan pilot çalışması. `PMID: 23195882`
@@ -239,9 +239,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 1. AY — Karaciğer Fonksiyonlarınız Normalleşiyor
 
 **Benefits:**
-1. Karaciğer hasar göstergelerini (ALT ve AST) klinik olarak anlamlı düzeyde düşürerek karaciğer sağlığındaki iyileşmeyi somut rakamlarla ortaya koyar → **Zerdeçal**
-2. Doğal idrar söktürücü etkisiyle 5 saat içinde böbrekler üzerinden metabolik atık ve toksinlerin vücuttan uzaklaştırılmasını hızlandırır → **Karahindiba**
-3. Kolesterol üretim enzimini doğal yoldan baskılayarak toplam kolesterolü ve kötü huylu LDL kolesterolü ölçülebilir biçimde düşürür → **Enginar**
+1. Karaciğer hasar göstergelerini (ALT ve AST) klinik olarak anlamlı düzeyde azaltmaya yardımcı olabilir; karaciğer sağlığındaki iyileşmeyi somut rakamlarla destekleyebilir → **Zerdeçal**
+2. Doğal idrar söktürücü etkisiyle 5 saat içinde böbrekler üzerinden metabolik atık ve toksinlerin vücuttan uzaklaştırılmasına katkıda bulunabilir → **Karahindiba**
+3. Kolesterol üretim enzimini doğal yoldan baskılayarak toplam kolesterolü ve kötü huylu LDL kolesterolü ölçülebilir biçimde azaltmaya yardımcı olabilir → **Enginar**
 
 **Kaynaklar:**
 1. Jalali et al. (2020) — 14 randomize kontrollü çalışmanın meta-analizinde curcumin suplementasyonunun NAFLD hastalarında ALT ve AST'yi anlamlı düşürdüğünü gösteren sistematik derleme. `PMID: 31987259`
@@ -251,9 +251,9 @@ The chip shows everything **before ` — `** (space-emdash-space). Examples:
 ### 3. AY — Yeni Haliniz: Temiz ve Yenilenmiş
 
 **Benefits:**
-1. Karaciğerin beş temel antioksidan enzimini doza bağlı şekilde normale yakın seviyelere geri kazandırarak tam savunma kapasitesini yeniler → **Moringa**
-2. Karaciğer hücrelerinin protein üretim kapasitesini %60 artırarak yenilenme ve onarım sürecini belirgin şekilde hızlandırır → **Deve Dikeni**
-3. Tüm bileşenler sinerjik çalışarak karaciğer enzimleri, yağ profili ve oksidatif stres belirteçlerini birlikte iyileştirir; tam karaciğer döngüsü optimize olur → **Tam Formül**
+1. Karaciğerin beş temel antioksidan enzimini doza bağlı şekilde normale yakın seviyelere geri kazandırmaya yardımcı olabilir; tam savunma kapasitesini destekleyebilir → **Moringa**
+2. Karaciğer hücrelerinin protein üretim kapasitesini destekleyerek yenilenme ve onarım sürecine katkıda bulunabilir → **Deve Dikeni**
+3. Tüm bileşenler sinerjik çalışarak karaciğer enzimleri, yağ profili ve oksidatif stres belirteçlerini birlikte destekleyebilir; tam karaciğer döngüsünün optimize olmasına katkı sağlayabilir → **Tam Formül**
 
 **Kaynaklar:**
 1. Singh et al. (2014) — CCl₄ ile indüklenen hepatotoksisite modelinde Moringa oleifera yaprak ekstresinin karaciğer SOD, CAT, GSH, GR ve GPx düzeylerini doza bağımlı olarak normale döndürdüğünü gösteren in vivo çalışma. `PMID: 26785072`
