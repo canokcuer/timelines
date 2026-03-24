@@ -75,11 +75,6 @@
           >
             <div class="cs-transform__slide-inner">
 
-              {%- comment -%} Time Badge {%- endcomment -%}
-              <div class="cs-transform__time-badge">
-                {{ block.settings.time_label }}
-              </div>
-
               {%- comment -%} SVG Illustration {%- endcomment -%}
               <div class="cs-transform__illust-frame">
                 {%- case block.settings.illustration -%}
@@ -2225,28 +2220,9 @@
   text-align: center;
   max-width: 640px;
   margin-inline: auto;
-  padding: var(--cs-space-lg) var(--cs-space-md);
+  padding: var(--cs-space-sm) var(--cs-space-md);
 }
 
-/* --------------------------------------------------------------------------
-   Time Badge
-   -------------------------------------------------------------------------- */
-.cs-transform__time-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--cs-font-size-xs);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ct-deep-teal);
-  background: var(--ct-card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-left: 3px solid var(--ct-warm-gold);
-  border-radius: var(--cs-radius-full);
-  padding: 0.4em 1.2em 0.4em 1em;
-  margin-block-end: var(--cs-space-lg);
-  box-shadow: var(--cs-shadow-sm);
-}
 
 /* --------------------------------------------------------------------------
    Illustration Frame
@@ -2822,7 +2798,7 @@ if (!customElements.get('cs-transform-timeline')) {
       "max": 80,
       "step": 4,
       "unit": "px",
-      "default": 32
+      "default": 12
     },
     {
       "type": "range",
