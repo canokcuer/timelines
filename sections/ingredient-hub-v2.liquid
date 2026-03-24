@@ -1,1526 +1,918 @@
-{% comment %}
-  Cyrasoul Ingredient Hub Section
-  Fully editable via Theme Customizer — add/remove ingredients as blocks,
-  edit all text, upload images, manage research links.
-  Self-contained: no external JS/CSS dependencies.
-{% endcomment %}
-
-{% if section.blocks.size > 0 %}
-
-<section class="ih-section" aria-label="İçerik Keşfi">
-  <div class="ih-container">
-
-    <header class="ih-header">
-      <h2 class="ih-title">{{ section.settings.heading }}</h2>
-      <p class="ih-subtitle-text">{{ section.settings.subheading }}</p>
-    </header>
-
-    <div class="ih-layout">
-
-      <!-- Sidebar: Desktop only -->
-      <nav class="ih-sidebar" role="tablist" aria-label="Bileşenler" id="ih-sidebar-tabs"></nav>
-
-      <!-- Pill grid: Mobile only -->
-      <div class="ih-pill-grid" role="tablist" aria-label="Bileşenler" id="ih-pill-tabs"></div>
-
-      <!-- Detail panel -->
-      <div class="ih-detail-wrapper" id="ih-detail-wrapper"></div>
-    </div>
-
-    <!-- Page dots (Mobile) -->
-    <div class="ih-page-dots" id="ih-page-dots" aria-hidden="true"></div>
-
-  </div>
-</section>
-
-<!-- Overlay -->
-<div class="ih-overlay" id="ih-overlay" aria-hidden="true"></div>
-
-<!-- Modal -->
-<div class="ih-modal" id="ih-modal" role="dialog" aria-modal="true" aria-labelledby="ih-modal-title">
-  <div class="ih-modal-drag-bar" id="ih-modal-drag-bar"></div>
-  <div class="ih-modal-header">
-    <div>
-      <div class="ih-modal-title" id="ih-modal-title">Araştırma ve Sertifikalar</div>
-      <div class="ih-modal-ingredient" id="ih-modal-ingredient"></div>
-    </div>
-    <button class="ih-modal-close" id="ih-modal-close" aria-label="Kapat">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-  <div class="ih-modal-body" id="ih-modal-body"></div>
-</div>
-
-<!-- Ingredient data from blocks -->
-<script type="application/json" id="ih-data">
-[
-  {%- assign ih_sep = '' -%}
-  {%- for block in section.blocks -%}
-    {%- if block.type == 'ingredient' -%}
-      {{ ih_sep }}
-      {
-        "key": {{ block.id | json }},
-        "name": {{ block.settings.name | default: "İçerik" | json }},
-        "fullName": {{ block.settings.full_name | default: block.settings.name | default: "İçerik" | json }},
-        "subtitle": {{ block.settings.subtitle | default: "" | json }},
-        "dosage": {{ block.settings.dosage | default: "" | json }},
-        "letter": {{ block.settings.circle_letter | default: "?" | json }},
-        "circleColor": {{ block.settings.circle_color | json }},
-        "imageUrl": {%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 300 | json }}{%- else -%}null{%- endif -%},
-        "tags": [
-          {%- assign ih_tag_sep = '' -%}
-          {%- if block.settings.tag_1 != blank -%}{{ ih_tag_sep }}{{ block.settings.tag_1 | json }}{%- assign ih_tag_sep = ',' -%}{%- endif -%}
-          {%- if block.settings.tag_2 != blank -%}{{ ih_tag_sep }}{{ block.settings.tag_2 | json }}{%- assign ih_tag_sep = ',' -%}{%- endif -%}
-          {%- if block.settings.tag_3 != blank -%}{{ ih_tag_sep }}{{ block.settings.tag_3 | json }}{%- assign ih_tag_sep = ',' -%}{%- endif -%}
-          {%- if block.settings.tag_4 != blank -%}{{ ih_tag_sep }}{{ block.settings.tag_4 | json }}{%- endif -%}
-        ],
-        "description": {{ block.settings.description | default: "" | json }},
-        "research": [
-          {%- assign ih_res_sep = '' -%}
-          {%- if block.settings.research_1_label != blank -%}
-            {{ ih_res_sep }}{ "label": {{ block.settings.research_1_label | json }}, "source": {{ block.settings.research_1_source | default: "" | json }}, "url": {{ block.settings.research_1_url | default: "#" | json }} }
-            {%- assign ih_res_sep = ',' -%}
-          {%- endif -%}
-          {%- if block.settings.research_2_label != blank -%}
-            {{ ih_res_sep }}{ "label": {{ block.settings.research_2_label | json }}, "source": {{ block.settings.research_2_source | default: "" | json }}, "url": {{ block.settings.research_2_url | default: "#" | json }} }
-            {%- assign ih_res_sep = ',' -%}
-          {%- endif -%}
-          {%- if block.settings.research_3_label != blank -%}
-            {{ ih_res_sep }}{ "label": {{ block.settings.research_3_label | json }}, "source": {{ block.settings.research_3_source | default: "" | json }}, "url": {{ block.settings.research_3_url | default: "#" | json }} }
-            {%- assign ih_res_sep = ',' -%}
-          {%- endif -%}
-          {%- if block.settings.research_4_label != blank -%}
-            {{ ih_res_sep }}{ "label": {{ block.settings.research_4_label | json }}, "source": {{ block.settings.research_4_source | default: "" | json }}, "url": {{ block.settings.research_4_url | default: "#" | json }} }
-          {%- endif -%}
-        ],
-        "cert": { "label": {{ block.settings.cert_label | default: "" | json }}, "source": "Sertifika", "url": {{ block.settings.cert_url | default: "#" | json }} },
-        "coaHighlights": [
-          {%- assign ih_coa_sep = '' -%}
-          {%- if block.settings.coa_highlight_1 != blank -%}{{ ih_coa_sep }}{{ block.settings.coa_highlight_1 | json }}{%- assign ih_coa_sep = ',' -%}{%- endif -%}
-          {%- if block.settings.coa_highlight_2 != blank -%}{{ ih_coa_sep }}{{ block.settings.coa_highlight_2 | json }}{%- assign ih_coa_sep = ',' -%}{%- endif -%}
-          {%- if block.settings.coa_highlight_3 != blank -%}{{ ih_coa_sep }}{{ block.settings.coa_highlight_3 | json }}{%- assign ih_coa_sep = ',' -%}{%- endif -%}
-          {%- if block.settings.coa_highlight_4 != blank -%}{{ ih_coa_sep }}{{ block.settings.coa_highlight_4 | json }}{%- endif -%}
-        ],
-        "citeLabel": {{ block.settings.cite_label | default: "" | json }},
-        "citePmid": {{ block.settings.cite_pmid | default: "" | json }}
-      }
-      {%- assign ih_sep = ',' -%}
+{%- if section.blocks.size > 0 -%}
+  {%- assign total_slides = section.blocks.size -%}
+  <section
+    class="ingredient-showcase"
+    data-section-id="{{ section.id }}"
+    style="
+      --bg-color: {{ section.settings.bg_color }};
+      --text-color: {{ section.settings.text_color }};
+      --accent-color: {{ section.settings.accent_color }};
+      --tag-border-color: {{ section.settings.tag_border_color }};
+      --heading-font: inherit;
+      --body-font: inherit;
+      --padding-top: {{ section.settings.padding_top }}px;
+      --padding-bottom: {{ section.settings.padding_bottom }}px;
+    "
+  >
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="ingredient-showcase__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="ingredient-showcase__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="ingredient-showcase__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
     {%- endif -%}
-  {%- endfor -%}
-]
-</script>
 
-<style>
-  /* === RESET (scoped) === */
-  .ih-section *, .ih-section *::before, .ih-section *::after,
-  .ih-modal *, .ih-modal *::before, .ih-modal *::after {
-    margin: 0; padding: 0; box-sizing: border-box;
+    {%- if total_slides > 1 -%}
+      <div class="ingredient-showcase__tabs">
+        {%- for block in section.blocks -%}
+          <button
+            class="ingredient-showcase__tab{% if forloop.first %} ingredient-showcase__tab--active{% endif %}"
+            data-tab="{{ forloop.index0 }}"
+          >
+            {{ block.settings.name }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div
+      class="ingredient-showcase__carousel"
+      role="region"
+      aria-label="{{ section.settings.heading | default: 'İçerik vitrini' }}"
+      aria-roledescription="carousel"
+    >
+      <div class="ingredient-showcase__track" data-track>
+        {%- for block in section.blocks -%}
+          <div
+            class="ingredient-showcase__slide"
+            role="group"
+            aria-roledescription="slide"
+            aria-label="{{ forloop.index }} / {{ total_slides }}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.name != blank -%}
+              <span class="ingredient-showcase__name-chip">{{ block.settings.name }}</span>
+            {%- endif -%}
+
+            {%- if block.settings.image != blank -%}
+              <div class="ingredient-showcase__image-wrap">
+                {{
+                  block.settings.image
+                  | image_url: width: 600
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '200, 300, 400, 600',
+                    sizes: '(min-width: 768px) 300px, 55vw',
+                    class: 'ingredient-showcase__image'
+                }}
+              </div>
+            {%- else -%}
+              <div class="ingredient-showcase__image-wrap">
+                {{ 'product-1' | placeholder_svg_tag: 'ingredient-showcase__image ingredient-showcase__image--placeholder' }}
+              </div>
+            {%- endif -%}
+
+            <div class="ingredient-showcase__content">
+              {%- if block.settings.benefit_1 != blank
+                or block.settings.benefit_2 != blank
+                or block.settings.benefit_3 != blank
+              -%}
+                <div class="ingredient-showcase__benefits">
+                  {%- if block.settings.benefit_1 != blank -%}
+                    <span class="ingredient-showcase__tag">{{ block.settings.benefit_1 }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.benefit_2 != blank -%}
+                    <span class="ingredient-showcase__tag">{{ block.settings.benefit_2 }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.benefit_3 != blank -%}
+                    <span class="ingredient-showcase__tag">{{ block.settings.benefit_3 }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <p class="ingredient-showcase__description">{{ block.settings.description }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.cite_pmid != blank -%}
+                {%- assign cite_chip_label = block.settings.cite_label | split: ' — ' | first -%}
+                {%- if cite_chip_label == blank -%}{%- assign cite_chip_label = 'PubMed' -%}{%- endif -%}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.cite_pmid }}/" target="_blank" rel="noopener" class="ingredient-showcase__cite">{{ cite_chip_label }}</a>
+              {%- endif -%}
+
+              {%- if block.settings.coa_1 != blank -%}
+                <div class="ingredient-showcase__coa">
+                  <button class="ingredient-showcase__coa-trigger" data-coa-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12h6M9 16h6M13 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V9l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Analiz Sertifikasını İncele
+                    <span class="ingredient-showcase__coa-chevron">▾</span>
+                  </button>
+                  <div class="ingredient-showcase__coa-body">
+                    <ul class="ingredient-showcase__coa-list">
+                      {%- if block.settings.coa_1 != blank -%}<li>{{ block.settings.coa_1 }}</li>{%- endif -%}
+                      {%- if block.settings.coa_2 != blank -%}<li>{{ block.settings.coa_2 }}</li>{%- endif -%}
+                      {%- if block.settings.coa_3 != blank -%}<li>{{ block.settings.coa_3 }}</li>{%- endif -%}
+                      {%- if block.settings.coa_4 != blank -%}<li>{{ block.settings.coa_4 }}</li>{%- endif -%}
+                    </ul>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- if total_slides > 1 -%}
+      <div class="ingredient-showcase__nav">
+        <button
+          class="ingredient-showcase__arrow ingredient-showcase__arrow--prev"
+          aria-label="Önceki içerik"
+          data-prev
+          disabled
+        >
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="ingredient-showcase__dots" role="tablist" aria-label="Slayt seçici">
+          {%- for block in section.blocks -%}
+            <button
+              class="ingredient-showcase__dot{% if forloop.first %} ingredient-showcase__dot--active{% endif %}"
+              role="tab"
+              aria-label="İçerik {{ forloop.index }}"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              data-dot="{{ forloop.index0 }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+
+        <button
+          class="ingredient-showcase__arrow ingredient-showcase__arrow--next"
+          aria-label="Sonraki içerik"
+          data-next
+        >
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .ingredient-showcase {
+    background-color: var(--bg-color, #ffffff);
+    color: var(--text-color, #171717);
+    padding-top: var(--padding-top, 40px);
+    padding-bottom: var(--padding-bottom, 40px);
+    font-family: var(--body-font, inherit);
   }
 
-  /* === TOKENS === */
-  .ih-section, .ih-overlay, .ih-modal {
-    --ih-bg: #ffffff;
-    --ih-bg-pure: #ffffff;
-    --ih-text: #2a2a2a;
-    --ih-text-light: #6b6560;
-    --ih-text-muted: #9a938d;
-    --ih-accent: #2a2a2a;
-    --ih-accent-text: #ffffff;
-    --ih-accent-warm: #c4a882;
-    --ih-accent-gold: #b8976a;
-    --ih-border: #e0dbd5;
-    --ih-radius-pill: 30px;
-    --ih-radius-modal-mobile: 20px 20px 0 0;
-    --ih-radius-modal-desktop: 16px;
-    --ih-radius-card: 12px;
-    --ih-transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    --ih-transition-fast: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-    --ih-tag-bg: #2a2a2a;
-    --ih-tag-text: #ffffff;
-    --ih-tag-radius: 20px;
-    --ih-font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --ih-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --ih-shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-    --ih-shadow-md: 0 4px 20px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-    --ih-shadow-lg: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05);
-    --ih-shadow-modal: 0 -8px 40px rgba(0,0,0,0.12);
-  }
-
-  /* === SECTION === */
-  .ih-section {
-    background: var(--ih-bg);
-    font-family: var(--ih-font-body);
-    color: var(--ih-text);
-    padding: 48px 0 56px;
-    position: relative;
-    overflow: hidden;
-  }
-  .ih-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, var(--ih-border) 20%, var(--ih-border) 80%, transparent 100%);
-  }
-  .ih-container {
-    max-width: 940px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* === HEADER === */
-  .ih-header {
+  /* Header */
+  .ingredient-showcase__header {
     text-align: center;
-    margin-bottom: 28px;
-  }
-  .ih-title {
-    font-family: var(--ih-font-display);
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: var(--ih-text);
-    line-height: 1;
-  }
-  .ih-subtitle-text {
-    font-family: var(--ih-font-body);
-    font-size: 14px;
-    color: var(--ih-text-light);
-    margin-top: 10px;
-    font-weight: 400;
-    line-height: 1.2;
+    padding: 0 20px;
+    margin-bottom: 20px;
   }
 
-  /* === LAYOUT === */
-  .ih-layout {
+  .ingredient-showcase__heading {
+    font-family: var(--heading-font, inherit);
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0 0 6px;
+    color: var(--text-color, #171717);
+  }
+
+  .ingredient-showcase__subheading {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-color, #171717);
+    opacity: 0.7;
+    margin: 0;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Tabs — hidden on mobile */
+  .ingredient-showcase__tabs {
+    display: none;
+  }
+
+  /* Carousel */
+  .ingredient-showcase__carousel {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ingredient-showcase__track {
+    display: flex;
+    transition: transform 300ms ease;
+    will-change: transform;
+  }
+
+  .ingredient-showcase__slide {
+    flex: 0 0 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
-  }
-
-  /* === PILL GRID (Mobile — wrapping, all visible) === */
-  .ih-pill-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    padding-bottom: 20px;
-  }
-  .ih-pill-btn {
-    flex-shrink: 0;
-    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    min-height: 44px;
-    border: 1.5px solid var(--ih-border);
-    border-radius: var(--ih-radius-pill);
-    background: var(--ih-bg-pure);
-    color: var(--ih-text);
-    font-family: var(--ih-font-body);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--ih-transition);
-    white-space: nowrap;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-  .ih-pill-btn:hover {
-    border-color: var(--ih-text-muted);
-    background: #f5f2ee;
-  }
-  .ih-pill-btn:focus-visible {
-    box-shadow: 0 0 0 2px var(--ih-bg), 0 0 0 4px var(--ih-accent-warm);
-  }
-  .ih-pill-btn[aria-selected="true"] {
-    background: var(--ih-accent);
-    border-color: var(--ih-accent);
-    color: var(--ih-accent-text);
-    box-shadow: var(--ih-shadow-sm);
-  }
-  .ih-pill-btn[aria-selected="true"] .ih-pill-dot {
-    background: var(--ih-accent-warm);
-  }
-  .ih-pill-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--ih-accent-gold);
-    flex-shrink: 0;
-    transition: background var(--ih-transition);
-  }
-
-  /* === SIDEBAR (Desktop only) === */
-  .ih-sidebar {
-    display: none;
-  }
-
-  /* === DETAIL PANEL === */
-  .ih-detail-wrapper {
-    position: relative;
-    min-height: 380px;
-    touch-action: pan-y;
-  }
-  .ih-detail {
-    display: none;
-    opacity: 0;
-    transform: translateY(12px);
-    padding: 8px 0 0;
-  }
-  .ih-detail.ih-active {
-    display: block;
-    animation: ih-fadeSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-  @keyframes ih-fadeSlideIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes ih-fadeSlideOut {
-    from { opacity: 1; transform: translateY(0); }
-    to   { opacity: 0; transform: translateY(-8px); }
-  }
-  .ih-detail-inner {
     text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
   }
 
-  /* === IMAGE === */
-  .ih-image-container {
-    margin: 0 auto 24px;
-    position: relative;
+  /* Content wrapper (benefits + description) — used for desktop grid */
+  .ingredient-showcase__content {
+    display: contents;
   }
-  .ih-image {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 24px rgba(180,160,130,0.15);
-  }
-  .ih-image::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.5);
-    pointer-events: none;
-  }
-  .ih-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-  }
-  .ih-image-letter {
-    font-family: var(--ih-font-display);
-    font-size: 48px;
+
+  /* Name chip — mobile only */
+  .ingredient-showcase__name-chip {
+    display: inline-block;
+    background-color: var(--accent-color, #FFD7BF);
+    color: var(--text-color, #171717);
+    border-radius: 9999px;
+    padding: 8px 22px;
+    font-size: 0.8125rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    position: relative;
-    z-index: 1;
-    letter-spacing: -0.02em;
-  }
-  .ih-image-ring {
-    position: absolute;
-    width: 156px;
-    height: 156px;
-    border-radius: 50%;
-    border: 1px solid var(--ih-border);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.5;
-  }
-
-  /* === NAME ROW + DOSAGE BADGE === */
-  .ih-name-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+    line-height: 1.3;
     margin-bottom: 12px;
   }
-  .ih-dosage {
+
+  /* Image */
+  .ingredient-showcase__image-wrap {
+    width: 55%;
+    max-width: 220px;
+    margin-bottom: 14px;
+  }
+
+  .ingredient-showcase__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .ingredient-showcase__image--placeholder {
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    background-color: #f5f5f5;
+  }
+
+  /* Benefits */
+  .ingredient-showcase__benefits {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+
+  .ingredient-showcase__tag {
     display: inline-block;
-    border: 1.5px solid var(--ih-accent-gold);
-    color: var(--ih-accent-gold);
-    background: var(--ih-bg-pure);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-family: var(--ih-font-body);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
+    border: 1.5px solid var(--tag-border-color, #171717);
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 0.75rem;
     line-height: 1.3;
     white-space: nowrap;
   }
 
-  /* === META === */
-  .ih-ingredient-name {
-    font-family: var(--ih-font-display);
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: var(--ih-text);
-    margin-bottom: 4px;
-    line-height: 1;
-  }
-  .ih-ingredient-subtitle {
-    font-family: var(--ih-font-body);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ih-accent-gold);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+  /* Description */
+  .ingredient-showcase__description {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--text-color, #171717);
+    opacity: 0.75;
+    margin: 0;
+    max-width: 300px;
   }
 
-  /* === TAGS === */
-  .ih-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  .ih-tag {
-    display: inline-block;
-    padding: 5px 14px;
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    border-radius: var(--ih-tag-radius);
-    background: var(--ih-tag-bg);
-    color: var(--ih-tag-text);
-    line-height: 1.4;
-  }
-
-  /* === DESCRIPTION === */
-  .ih-description {
-    font-family: var(--ih-font-body);
-    font-size: 14.5px;
-    line-height: 1.7;
-    color: var(--ih-text-light);
-    max-width: 480px;
-    margin: 0 auto 24px;
-    text-align: center;
-    font-weight: 400;
-  }
-
-  /* === RESEARCH TRIGGER === */
-  .ih-research-trigger {
+  /* Citation chip */
+  .ingredient-showcase__cite {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-family: var(--ih-font-body);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ih-text);
-    text-decoration: none;
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: var(--ih-radius-pill);
-    border: 1.5px solid var(--ih-border);
-    background: var(--ih-bg-pure);
-    transition: all var(--ih-transition);
-    letter-spacing: 0.01em;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .ih-research-trigger:hover {
-    border-color: var(--ih-accent);
-    background: var(--ih-accent);
-    color: var(--ih-accent-text);
-  }
-  .ih-research-trigger:hover .ih-research-icon {
-    transform: translateX(2px);
-  }
-  .ih-research-trigger:hover .ih-research-icon svg path {
-    stroke: var(--ih-accent-text);
-  }
-  .ih-research-icon {
-    display: flex;
-    transition: transform var(--ih-transition-fast);
-  }
-  .ih-research-icon svg {
-    width: 14px;
-    height: 14px;
-  }
-  .ih-research-icon svg path {
-    stroke: var(--ih-text);
-    transition: stroke var(--ih-transition);
-  }
-
-  /* === CITE CHIP === */
-  .ih-cite-chip {
-    display: inline-flex;
-    align-items: center;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 500;
-    padding: 3px 8px;
-    border-radius: 20px;
+    padding: 3px 10px;
+    border-radius: 9999px;
     background: transparent;
-    color: var(--ih-text-muted);
-    border: 1px solid var(--ih-border);
+    color: var(--text-color, #171717);
+    opacity: 0.45;
+    border: 1px solid currentColor;
     text-decoration: none;
     white-space: nowrap;
-    margin-bottom: 16px;
-    transition: all var(--ih-transition-fast);
+    margin-top: 10px;
+    transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease;
   }
-  .ih-cite-chip:hover {
-    background: var(--ih-accent);
-    color: var(--ih-accent-text);
-    border-color: var(--ih-accent);
+  .ingredient-showcase__cite:hover {
+    opacity: 1;
+    background: var(--text-color, #171717);
+    color: #ffffff;
   }
 
-  /* === COA DRAWER === */
-  .ih-coa-drawer {
-    margin-top: 16px;
+  /* CoA drawer */
+  .ingredient-showcase__coa {
+    margin-top: 14px;
     width: 100%;
-    max-width: 480px;
+    max-width: 340px;
   }
-  .ih-coa-trigger {
+  .ingredient-showcase__coa-trigger {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-family: var(--ih-font-body);
-    font-size: 12px;
+    font-family: inherit;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--ih-text-muted);
+    color: var(--text-color, #171717);
+    opacity: 0.5;
     cursor: pointer;
-    padding: 8px 0;
+    padding: 6px 0;
     border: none;
     background: none;
-    transition: color var(--ih-transition-fast);
+    transition: opacity 200ms ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .ih-coa-trigger:hover {
-    color: var(--ih-text);
+  .ingredient-showcase__coa-trigger:hover {
+    opacity: 0.85;
   }
-  .ih-coa-chevron {
+  .ingredient-showcase__coa-trigger svg {
+    opacity: 0.6;
+  }
+  .ingredient-showcase__coa-chevron {
     display: inline-block;
-    transition: transform 0.3s ease;
-    font-size: 10px;
+    transition: transform 300ms ease;
+    font-size: 0.625rem;
   }
-  .ih-coa-chevron.ih-coa-open {
+  .ingredient-showcase__coa-trigger.is-open .ingredient-showcase__coa-chevron {
     transform: rotate(180deg);
   }
-  .ih-coa-content {
+  .ingredient-showcase__coa-body {
     overflow: hidden;
     max-height: 0;
-    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: max-height 400ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .ih-coa-content.ih-coa-expanded {
+  .ingredient-showcase__coa-body.is-open {
     max-height: 300px;
   }
-  .ih-coa-list {
+  .ingredient-showcase__coa-list {
     list-style: none;
-    padding: 12px 0 4px;
+    padding: 10px 0 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
-  .ih-coa-item {
-    font-size: 13px;
-    color: var(--ih-text-light);
+  .ingredient-showcase__coa-list li {
+    font-size: 0.8125rem;
     line-height: 1.5;
-    padding-left: 16px;
+    color: var(--text-color, #171717);
+    opacity: 0.65;
+    padding-left: 14px;
     position: relative;
   }
-  .ih-coa-item::before {
+  .ingredient-showcase__coa-list li::before {
     content: '';
     position: absolute;
     left: 0;
     top: 7px;
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: var(--ih-accent-gold);
+    background: var(--accent-color, #FFD7BF);
+  }
+
+  /* Navigation */
+  .ingredient-showcase__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 0 20px;
+  }
+
+  .ingredient-showcase__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-color, #171717);
+    background: transparent;
+    color: var(--text-color, #171717);
+    cursor: pointer;
+    transition: opacity 200ms ease;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .ingredient-showcase__arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .ingredient-showcase__arrow:not(:disabled):hover {
     opacity: 0.6;
   }
 
-  /* === PAGE DOTS (Mobile) === */
-  .ih-page-dots {
+  .ingredient-showcase__dots {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 6px;
-    margin-top: 20px;
-    padding-bottom: 8px;
-  }
-  .ih-page-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 100px;
-    background: var(--ih-border);
-    transition: all var(--ih-transition);
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  .ih-page-dot.ih-dot-active {
-    width: 24px;
-    height: 6px;
-    background: var(--ih-accent);
   }
 
-  /* === OVERLAY === */
-  .ih-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(20,18,15,0.45);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 9998;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  .ingredient-showcase__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    border: none;
+    padding: 0;
+    background-color: var(--text-color, #171717);
+    opacity: 0.2;
+    cursor: pointer;
+    transition: opacity 200ms ease;
   }
-  .ih-overlay.ih-overlay-visible {
+
+  .ingredient-showcase__dot--active {
     opacity: 1;
   }
 
-  /* === MODAL (Mobile: Bottom Sheet) === */
-  .ih-modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    bottom: 0; left: 0; right: 0;
-    background: var(--ih-bg-pure);
-    border-radius: var(--ih-radius-modal-mobile);
-    padding: 0;
-    max-height: 85vh;
-    overflow-y: auto;
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow: var(--ih-shadow-modal);
-    overscroll-behavior: contain;
-    font-family: var(--ih-font-body);
-    color: var(--ih-text);
-  }
-  .ih-modal.ih-modal-visible {
-    transform: translateY(0);
-  }
-  .ih-modal-drag-bar {
-    width: 36px;
-    height: 4px;
-    background: var(--ih-border);
-    border-radius: 2px;
-    margin: 12px auto 0;
-    cursor: grab;
-  }
-  .ih-modal-header {
-    padding: 20px 24px 0;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background: var(--ih-bg-pure);
-    z-index: 1;
-  }
-  .ih-modal-title {
-    font-family: var(--ih-font-display);
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--ih-text);
-    letter-spacing: -0.03em;
-  }
-  .ih-modal-ingredient {
-    font-family: var(--ih-font-body);
-    font-size: 12px;
-    color: var(--ih-text-muted);
-    margin-top: 2px;
-    font-weight: 400;
-  }
-  .ih-modal-close {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--ih-border);
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all var(--ih-transition-fast);
-    margin-left: 12px;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .ih-modal-close:hover {
-    background: var(--ih-accent);
-    border-color: var(--ih-accent);
-  }
-  .ih-modal-close:hover svg path {
-    stroke: var(--ih-accent-text);
-  }
-  .ih-modal-close svg {
-    width: 14px;
-    height: 14px;
-  }
-  .ih-modal-close svg path {
-    stroke: var(--ih-text);
-    stroke-width: 2;
-    transition: stroke var(--ih-transition-fast);
-  }
-  .ih-modal-body {
-    padding: 24px;
-  }
-  .ih-modal-section-title {
-    font-family: var(--ih-font-body);
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ih-text-muted);
-    margin-bottom: 14px;
-  }
-  .ih-modal-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-  .ih-modal-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    background: var(--ih-bg);
-    border: 1px solid var(--ih-border);
-    border-radius: var(--ih-radius-card);
-    text-decoration: none;
-    color: var(--ih-text);
-    transition: all var(--ih-transition-fast);
-  }
-  .ih-modal-link:hover {
-    border-color: var(--ih-accent-warm);
-    box-shadow: var(--ih-shadow-sm);
-    transform: translateY(-1px);
-  }
-  .ih-modal-link-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .ih-modal-link-icon.ih-icon-research {
-    background: linear-gradient(135deg, #e8f4ec 0%, #d5eadc 100%);
-  }
-  .ih-modal-link-icon.ih-icon-cert {
-    background: linear-gradient(135deg, #fef3e2 0%, #fce8c8 100%);
-  }
-  .ih-modal-link-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-  .ih-modal-link-text {
-    flex: 1;
-    min-width: 0;
-  }
-  .ih-modal-link-label {
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--ih-text);
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .ih-modal-link-source {
-    font-size: 11.5px;
-    color: var(--ih-text-muted);
-    margin-top: 2px;
-  }
-  .ih-modal-link-arrow {
-    flex-shrink: 0;
-    opacity: 0.3;
-    transition: opacity var(--ih-transition-fast);
-  }
-  .ih-modal-link:hover .ih-modal-link-arrow {
-    opacity: 0.7;
-  }
-  .ih-modal-link-arrow svg {
-    width: 14px;
-    height: 14px;
-  }
+  /* ── Desktop ── */
+  @media screen and (min-width: 768px) {
+    .ingredient-showcase__header {
+      margin-bottom: 28px;
+    }
 
-  /* === DESKTOP (>= 768px) === */
-  @media (min-width: 768px) {
-    .ih-section {
-      padding: 64px 0 72px;
+    .ingredient-showcase__heading {
+      font-size: 2.25rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
     }
-    .ih-header {
-      margin-bottom: 36px;
+
+    .ingredient-showcase__subheading {
+      font-size: 1rem;
     }
-    .ih-title {
-      font-size: 40px;
+
+    /* Tab bar — visible on desktop */
+    .ingredient-showcase__tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 40px;
+      margin-bottom: 40px;
     }
-    .ih-subtitle-text {
-      font-size: 15px;
+
+    .ingredient-showcase__tab {
+      padding: 12px 24px;
+      border-radius: 9999px;
+      border: 1px solid #d4d4d4;
+      background: transparent;
+      color: var(--text-color, #171717);
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 200ms ease, border-color 200ms ease;
     }
-    .ih-layout {
-      flex-direction: row;
-      gap: 0;
+
+    .ingredient-showcase__tab:hover {
+      border-color: #999;
     }
-    .ih-pill-grid {
+
+    .ingredient-showcase__tab--active {
+      background-color: var(--accent-color, #FFD7BF);
+      border-color: var(--accent-color, #FFD7BF);
+    }
+
+    /* Hide name chip on desktop — shown via tabs */
+    .ingredient-showcase__name-chip {
       display: none;
     }
-    .ih-sidebar {
+
+    /* Two-column slide — slide stays full-width, grid content is centered */
+    .ingredient-showcase__slide {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 400px);
+      justify-content: center;
+      column-gap: 48px;
+      text-align: left;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .ingredient-showcase__image-wrap {
+      width: 100%;
+      max-width: none;
+      margin-bottom: 0;
+    }
+
+    .ingredient-showcase__content {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      width: 240px;
-      flex-shrink: 0;
-      padding-right: 32px;
-      border-right: 1px solid var(--ih-border);
+      justify-content: center;
     }
-    .ih-sidebar-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      padding: 12px 16px;
-      border: none;
-      border-radius: 8px;
-      background: transparent;
-      color: var(--ih-text-light);
-      font-family: var(--ih-font-body);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all var(--ih-transition);
-      text-align: left;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .ih-sidebar-btn:hover {
-      background: rgba(0,0,0,0.03);
-      color: var(--ih-text);
-    }
-    .ih-sidebar-btn:focus-visible {
-      box-shadow: 0 0 0 2px var(--ih-bg), 0 0 0 4px var(--ih-accent-warm);
-    }
-    .ih-sidebar-btn[aria-selected="true"] {
-      background: var(--ih-accent);
-      color: var(--ih-accent-text);
-      box-shadow: var(--ih-shadow-sm);
-    }
-    .ih-sidebar-btn[aria-selected="true"] .ih-sidebar-dot {
-      background: var(--ih-accent-warm);
-    }
-    .ih-sidebar-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--ih-accent-gold);
-      flex-shrink: 0;
-      transition: background var(--ih-transition);
-    }
-    .ih-sidebar-label {
-      line-height: 1.3;
-    }
-    .ih-detail-wrapper {
-      flex: 1;
-      padding-left: 40px;
-      min-height: 360px;
-    }
-    .ih-detail-inner {
-      text-align: left;
-    }
-    .ih-image-container {
-      margin: 0 0 28px;
-    }
-    .ih-image {
-      width: 120px;
-      height: 120px;
-      margin: 0;
-    }
-    .ih-image-ring {
-      width: 136px;
-      height: 136px;
-    }
-    .ih-image-letter {
-      font-size: 42px;
-    }
-    .ih-name-row {
+
+    .ingredient-showcase__benefits {
       justify-content: flex-start;
+      margin-bottom: 16px;
+      padding: 0;
+      gap: 8px;
     }
-    .ih-ingredient-name {
-      font-size: 30px;
+
+    .ingredient-showcase__tag {
+      padding: 8px 20px;
+      font-size: 0.875rem;
     }
-    .ih-tags {
-      justify-content: flex-start;
+
+    .ingredient-showcase__description {
+      max-width: none;
+      font-size: 0.9375rem;
+      line-height: 1.6;
     }
-    .ih-description {
-      text-align: left;
-      margin: 0 0 28px;
-      max-width: 520px;
-      font-size: 15px;
-    }
-    .ih-page-dots {
-      display: none;
-    }
-    /* Desktop modal: centered */
-    .ih-modal {
-      bottom: auto;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(0.96);
-      border-radius: var(--ih-radius-modal-desktop);
-      width: 90%;
-      max-width: 520px;
-      max-height: 70vh;
-      box-shadow: var(--ih-shadow-lg);
-    }
-    .ih-modal.ih-modal-visible {
-      transform: translate(-50%, -50%) scale(1);
-    }
-    .ih-modal-drag-bar {
+
+    /* Hide mobile nav on desktop */
+    .ingredient-showcase__nav {
       display: none;
     }
   }
 
-  /* === LARGE DESKTOP (>= 1024px) === */
-  @media (min-width: 1024px) {
-    .ih-title {
-      font-size: 44px;
-    }
-    .ih-sidebar {
-      width: 260px;
-      padding-right: 40px;
-    }
-    .ih-detail-wrapper {
-      padding-left: 48px;
+  /* ── Large desktop ── */
+  @media screen and (min-width: 1024px) {
+    .ingredient-showcase__slide {
+      grid-template-columns: 340px minmax(0, 440px);
+      column-gap: 56px;
     }
   }
 
-  /* === SMALL MOBILE (< 380px) === */
-  @media (max-width: 379px) {
-    .ih-title {
-      font-size: 28px;
-    }
-    .ih-pill-btn {
-      padding: 8px 12px;
-      font-size: 12px;
-    }
-    .ih-image {
-      width: 120px;
-      height: 120px;
-    }
-    .ih-image-ring {
-      width: 136px;
-      height: 136px;
-    }
-    .ih-image-letter {
-      font-size: 40px;
-    }
-    .ih-ingredient-name {
-      font-size: 22px;
-    }
-  }
-
-  /* === REDUCED MOTION === */
+  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .ih-section *, .ih-section *::before, .ih-section *::after,
-    .ih-modal *, .ih-overlay {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  /* === SR ONLY === */
-  .ih-sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    border: 0;
-  }
-</style>
-
-<script>
-(function() {
-  'use strict';
-
-  /* ── Data ── */
-  var dataEl = document.getElementById('ih-data');
-  if (!dataEl) return;
-  var ingredients;
-  try { ingredients = JSON.parse(dataEl.textContent); } catch(e) { return; }
-  if (!ingredients || !ingredients.length) return;
-
-  /* ── Gradient helper ── */
-  function makeGradient(hex) {
-    if (!hex) return 'linear-gradient(135deg, #d4a853 0%, #e8c97a 40%, #f0dba0 100%)';
-    hex = hex.replace('#', '');
-    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
-    var r = parseInt(hex.substring(0, 2), 16);
-    var g = parseInt(hex.substring(2, 4), 16);
-    var b = parseInt(hex.substring(4, 6), 16);
-    if (isNaN(r) || isNaN(g) || isNaN(b)) return 'linear-gradient(135deg, #d4a853 0%, #e8c97a 40%, #f0dba0 100%)';
-    var mr = Math.min(255, r + Math.round((255 - r) * 0.3));
-    var mg = Math.min(255, g + Math.round((255 - g) * 0.3));
-    var mb = Math.min(255, b + Math.round((255 - b) * 0.3));
-    var lr = Math.min(255, r + Math.round((255 - r) * 0.55));
-    var lg = Math.min(255, g + Math.round((255 - g) * 0.55));
-    var lb = Math.min(255, b + Math.round((255 - b) * 0.55));
-    function h(v) { var s = v.toString(16); return s.length === 1 ? '0' + s : s; }
-    return 'linear-gradient(135deg, #' + h(r)+h(g)+h(b) + ' 0%, #' + h(mr)+h(mg)+h(mb) + ' 40%, #' + h(lr)+h(lg)+h(lb) + ' 100%)';
-  }
-
-  /* ── DOM ── */
-  var pillGrid    = document.getElementById('ih-pill-tabs');
-  var sidebarNav  = document.getElementById('ih-sidebar-tabs');
-  var detailWrap  = document.getElementById('ih-detail-wrapper');
-  var overlay     = document.getElementById('ih-overlay');
-  var modal       = document.getElementById('ih-modal');
-  var modalBody   = document.getElementById('ih-modal-body');
-  var modalIng    = document.getElementById('ih-modal-ingredient');
-  var modalClose  = document.getElementById('ih-modal-close');
-  var modalDrag   = document.getElementById('ih-modal-drag-bar');
-  var pageDots    = document.getElementById('ih-page-dots');
-
-  var activeIdx   = 0;
-  var animating   = false;
-
-  /* ── SVGs ── */
-  var svgChevron  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
-  var svgExternal = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-  var svgResearch = '<svg viewBox="0 0 24 24" fill="none" stroke="#3a7d5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
-  var svgCert     = '<svg viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-2 5l2-1l2 1l-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l1.5 1.5L15 7"/></svg>';
-
-  /* ── Build pill grid ── */
-  ingredients.forEach(function(ing, i) {
-    var btn = document.createElement('button');
-    btn.className = 'ih-pill-btn';
-    btn.setAttribute('role', 'tab');
-    btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-    btn.setAttribute('aria-controls', 'ih-panel-' + ing.key);
-    btn.setAttribute('id', 'ih-tab-pill-' + ing.key);
-    btn.setAttribute('tabindex', i === 0 ? '0' : '-1');
-    btn.dataset.index = i;
-    btn.innerHTML = '<span class="ih-pill-dot"></span>' + ing.name;
-    pillGrid.appendChild(btn);
-  });
-
-  /* ── Build sidebar ── */
-  ingredients.forEach(function(ing, i) {
-    var btn = document.createElement('button');
-    btn.className = 'ih-sidebar-btn';
-    btn.setAttribute('role', 'tab');
-    btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-    btn.setAttribute('aria-controls', 'ih-panel-' + ing.key);
-    btn.setAttribute('id', 'ih-tab-side-' + ing.key);
-    btn.setAttribute('tabindex', i === 0 ? '0' : '-1');
-    btn.dataset.index = i;
-    btn.innerHTML = '<span class="ih-sidebar-dot"></span><span class="ih-sidebar-label">' + ing.name + '</span>';
-    sidebarNav.appendChild(btn);
-  });
-
-  /* ── Build page dots ── */
-  ingredients.forEach(function(ing, i) {
-    var dot = document.createElement('span');
-    dot.className = 'ih-page-dot' + (i === 0 ? ' ih-dot-active' : '');
-    dot.dataset.index = i;
-    dot.addEventListener('click', function() { select(i, true); });
-    pageDots.appendChild(dot);
-  });
-
-  /* ── Build detail panels ── */
-  ingredients.forEach(function(ing, i) {
-    var panel = document.createElement('div');
-    panel.className = 'ih-detail' + (i === 0 ? ' ih-active' : '');
-    panel.setAttribute('role', 'tabpanel');
-    panel.setAttribute('id', 'ih-panel-' + ing.key);
-    panel.setAttribute('aria-labelledby', 'ih-tab-pill-' + ing.key);
-    panel.dataset.index = i;
-
-    var tags = ing.tags.map(function(t) { return '<span class="ih-tag">' + t + '</span>'; }).join('');
-
-    var gradient = ing.gradient || makeGradient(ing.circleColor);
-    var imageHtml = '<span class="ih-image-letter">' + ing.letter + '</span>';
-    if (ing.imageUrl) {
-      imageHtml += '<img src="' + ing.imageUrl + '" alt="' + ing.name + '" loading="lazy">';
+    .ingredient-showcase__track {
+      transition: none;
     }
 
-    panel.innerHTML =
-      '<div class="ih-detail-inner">' +
-        '<div class="ih-image-container">' +
-          '<div class="ih-image-ring"></div>' +
-          '<div class="ih-image" style="background:' + gradient + '">' +
-            imageHtml +
-          '</div>' +
-        '</div>' +
-        '<div class="ih-name-row">' +
-          '<h3 class="ih-ingredient-name">' + ing.fullName + '</h3>' +
-          (ing.dosage ? '<span class="ih-dosage">' + ing.dosage + '</span>' : '') +
-        '</div>' +
-        '<div class="ih-ingredient-subtitle">' + ing.subtitle + '</div>' +
-        '<div class="ih-tags">' + tags + '</div>' +
-        '<p class="ih-description">' + ing.description + '</p>' +
-        (ing.citePmid ? '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ing.citePmid + '/" target="_blank" rel="noopener" class="ih-cite-chip">' + (ing.citeLabel ? ing.citeLabel.split(' — ')[0] : 'PubMed') + '</a><br>' : '') +
-        '<button class="ih-research-trigger" data-ingredient="' + ing.key + '" aria-haspopup="dialog">' +
-          'Araştırma ve Sertifikalar' +
-          '<span class="ih-research-icon">' + svgChevron + '</span>' +
-        '</button>' +
-        (ing.coaHighlights && ing.coaHighlights.length ? (
-          '<div class="ih-coa-drawer">' +
-            '<button class="ih-coa-trigger">Analiz Sertifikasını İncele <span class="ih-coa-chevron">▾</span></button>' +
-            '<div class="ih-coa-content">' +
-              '<ul class="ih-coa-list">' +
-                ing.coaHighlights.map(function(h) { return '<li class="ih-coa-item">' + h + '</li>'; }).join('') +
-              '</ul>' +
-            '</div>' +
-          '</div>'
-        ) : '') +
-      '</div>';
+    .ingredient-showcase__arrow,
+    .ingredient-showcase__dot,
+    .ingredient-showcase__tab {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
 
-    detailWrap.appendChild(panel);
-  });
+{% javascript %}
+  (function () {
+    function IngredientShowcase(section) {
+      this.section = section;
+      this.track = section.querySelector('[data-track]');
+      this.carousel = section.querySelector('.ingredient-showcase__carousel');
+      this.slides = section.querySelectorAll('.ingredient-showcase__slide');
+      this.prevBtn = section.querySelector('[data-prev]');
+      this.nextBtn = section.querySelector('[data-next]');
+      this.dots = section.querySelectorAll('[data-dot]');
+      this.tabs = section.querySelectorAll('[data-tab]');
+      this.currentIndex = 0;
+      this.totalSlides = this.slides.length;
 
-  /* ── Select ingredient ── */
-  function select(idx, anim) {
-    if (idx < 0 || idx >= ingredients.length || animating) return;
-    var prev = activeIdx;
-    activeIdx = idx;
+      this.touchStartX = 0;
+      this.touchStartY = 0;
+      this.touchStartTime = 0;
+      this.isDragging = false;
+      this.directionLocked = false;
+      this.isHorizontal = false;
 
-    /* Update pills */
-    var pills = pillGrid.querySelectorAll('.ih-pill-btn');
-    pills.forEach(function(p, i) {
-      p.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-      p.setAttribute('tabindex', i === idx ? '0' : '-1');
-    });
+      if (this.totalSlides < 2) return;
 
-    /* Update sidebar */
-    var sides = sidebarNav.querySelectorAll('.ih-sidebar-btn');
-    sides.forEach(function(b, i) {
-      b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-      b.setAttribute('tabindex', i === idx ? '0' : '-1');
-    });
+      this.bindEvents();
+      this.updateState();
+    }
 
-    /* Update page dots */
-    var dots = pageDots.querySelectorAll('.ih-page-dot');
-    dots.forEach(function(d, i) {
-      if (i === idx) { d.classList.add('ih-dot-active'); }
-      else { d.classList.remove('ih-dot-active'); }
-    });
+    IngredientShowcase.prototype.bindEvents = function () {
+      var self = this;
 
-    /* Animate panels */
-    var panels = detailWrap.querySelectorAll('.ih-detail');
-    if (anim && prev !== idx) {
-      animating = true;
-      var old = panels[prev], nw = panels[idx];
-      if (old) {
-        old.style.animation = 'ih-fadeSlideOut 0.2s ease forwards';
-        setTimeout(function() {
-          old.classList.remove('ih-active');
-          old.style.display = 'none';
-          old.style.animation = '';
-          nw.style.display = 'block';
-          nw.classList.add('ih-active');
-          nw.style.animation = 'ih-fadeSlideIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
-          setTimeout(function() { nw.style.animation = ''; animating = false; }, 400);
-        }, 200);
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', function () {
+          self.goTo(self.currentIndex - 1);
+        });
       }
-    } else {
-      panels.forEach(function(p, i) {
-        if (i === idx) {
-          p.style.display = 'block';
-          p.classList.add('ih-active');
-          p.style.opacity = '1';
-          p.style.transform = 'translateY(0)';
+
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', function () {
+          self.goTo(self.currentIndex + 1);
+        });
+      }
+
+      this.dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          var index = parseInt(this.getAttribute('data-dot'), 10);
+          self.goTo(index);
+        });
+      });
+
+      this.tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var index = parseInt(this.getAttribute('data-tab'), 10);
+          self.goTo(index);
+        });
+      });
+
+      this.track.addEventListener('touchstart', function (e) {
+        self.onTouchStart(e);
+      }, { passive: true });
+
+      this.track.addEventListener('touchmove', function (e) {
+        self.onTouchMove(e);
+      }, { passive: false });
+
+      this.track.addEventListener('touchend', function (e) {
+        self.onTouchEnd(e);
+      }, { passive: true });
+
+      this.track.addEventListener('touchcancel', function () {
+        self.onTouchCancel();
+      }, { passive: true });
+
+      this.section.addEventListener('keydown', function (e) {
+        self.onKeyDown(e);
+      });
+
+      this.section.addEventListener('click', function (e) {
+        var coaTrigger = e.target.closest('[data-coa-toggle]');
+        if (coaTrigger) {
+          e.preventDefault();
+          coaTrigger.classList.toggle('is-open');
+          var body = coaTrigger.nextElementSibling;
+          if (body) body.classList.toggle('is-open');
+        }
+      });
+    };
+
+    IngredientShowcase.prototype.getSlideWidth = function () {
+      return this.carousel.offsetWidth;
+    };
+
+    IngredientShowcase.prototype.goTo = function (index) {
+      if (index < 0 || index >= this.totalSlides) return;
+      this.currentIndex = index;
+      this.updateState();
+    };
+
+    IngredientShowcase.prototype.updateState = function () {
+      var offset = -(this.currentIndex * 100);
+      this.track.style.transform = 'translateX(' + offset + '%)';
+
+      if (this.prevBtn) {
+        this.prevBtn.disabled = this.currentIndex === 0;
+      }
+
+      if (this.nextBtn) {
+        this.nextBtn.disabled = this.currentIndex === this.totalSlides - 1;
+      }
+
+      var self = this;
+      this.dots.forEach(function (dot) {
+        var dotIndex = parseInt(dot.getAttribute('data-dot'), 10);
+        var isActive = dotIndex === self.currentIndex;
+        dot.classList.toggle('ingredient-showcase__dot--active', isActive);
+        dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      this.tabs.forEach(function (tab) {
+        var tabIndex = parseInt(tab.getAttribute('data-tab'), 10);
+        tab.classList.toggle('ingredient-showcase__tab--active', tabIndex === self.currentIndex);
+      });
+    };
+
+    IngredientShowcase.prototype.onTouchStart = function (e) {
+      this.touchStartX = e.touches[0].clientX;
+      this.touchStartY = e.touches[0].clientY;
+      this.touchStartTime = Date.now();
+      this.isDragging = true;
+      this.directionLocked = false;
+      this.isHorizontal = false;
+      this.track.style.transition = 'none';
+    };
+
+    IngredientShowcase.prototype.onTouchMove = function (e) {
+      if (!this.isDragging) return;
+
+      var currentX = e.touches[0].clientX;
+      var currentY = e.touches[0].clientY;
+      var deltaX = currentX - this.touchStartX;
+      var deltaY = currentY - this.touchStartY;
+
+      if (!this.directionLocked) {
+        if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5) return;
+        this.directionLocked = true;
+        this.isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+      }
+
+      if (!this.isHorizontal) {
+        this.isDragging = false;
+        this.track.style.transition = '';
+        return;
+      }
+
+      e.preventDefault();
+
+      var slideWidth = this.getSlideWidth();
+      var movePercent = (deltaX / slideWidth) * 100;
+
+      var atStart = this.currentIndex === 0 && deltaX > 0;
+      var atEnd = this.currentIndex === this.totalSlides - 1 && deltaX < 0;
+      if (atStart || atEnd) {
+        movePercent *= 0.25;
+      }
+
+      var baseOffset = -(this.currentIndex * 100);
+      this.track.style.transform = 'translateX(' + (baseOffset + movePercent) + '%)';
+    };
+
+    IngredientShowcase.prototype.onTouchEnd = function (e) {
+      if (!this.isDragging) return;
+      this.isDragging = false;
+      this.track.style.transition = '';
+
+      if (!this.directionLocked || !this.isHorizontal) {
+        this.updateState();
+        return;
+      }
+
+      var deltaX = e.changedTouches[0].clientX - this.touchStartX;
+      var elapsed = Date.now() - this.touchStartTime;
+      var velocity = Math.abs(deltaX) / elapsed;
+      var slideWidth = this.getSlideWidth();
+
+      var swipedEnough = Math.abs(deltaX) > slideWidth * 0.2;
+      var flickedFast = velocity > 0.5 && Math.abs(deltaX) > 30;
+
+      if (swipedEnough || flickedFast) {
+        if (deltaX < 0) {
+          this.goTo(this.currentIndex + 1);
         } else {
-          p.style.display = 'none';
-          p.classList.remove('ih-active');
+          this.goTo(this.currentIndex - 1);
+        }
+      } else {
+        this.updateState();
+      }
+    };
+
+    IngredientShowcase.prototype.onTouchCancel = function () {
+      this.isDragging = false;
+      this.track.style.transition = '';
+      this.updateState();
+    };
+
+    IngredientShowcase.prototype.onKeyDown = function (e) {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.goTo(this.currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.goTo(this.currentIndex + 1);
+      }
+    };
+
+    function init() {
+      document.querySelectorAll('.ingredient-showcase[data-section-id]').forEach(function (el) {
+        if (!el.dataset.initialized) {
+          new IngredientShowcase(el);
+          el.dataset.initialized = 'true';
         }
       });
     }
 
-  }
-
-  /* ── Tab clicks ── */
-  function onTab(e) {
-    var btn = e.target.closest('[role="tab"]');
-    if (!btn) return;
-    select(parseInt(btn.dataset.index, 10), true);
-  }
-  pillGrid.addEventListener('click', onTab);
-  sidebarNav.addEventListener('click', onTab);
-
-  /* ── Keyboard navigation ── */
-  function onKey(e) {
-    var btn = e.target.closest('[role="tab"]');
-    if (!btn) return;
-    var i = parseInt(btn.dataset.index, 10), max = ingredients.length - 1;
-    var next = -1;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { next = i < max ? i + 1 : 0; }
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { next = i > 0 ? i - 1 : max; }
-    else if (e.key === 'Home') { next = 0; }
-    else if (e.key === 'End') { next = max; }
-    if (next < 0) return;
-    e.preventDefault();
-    select(next, true);
-    var isDesk = window.matchMedia('(min-width:768px)').matches;
-    var tabs = isDesk ? sidebarNav.querySelectorAll('.ih-sidebar-btn') : pillGrid.querySelectorAll('.ih-pill-btn');
-    if (tabs[next]) tabs[next].focus();
-  }
-  pillGrid.addEventListener('keydown', onKey);
-  sidebarNav.addEventListener('keydown', onKey);
-
-  /* ── Swipe on detail area ── */
-  var sx = 0, sy = 0, dx = 0, swiping = false;
-  detailWrap.addEventListener('touchstart', function(e) {
-    sx = e.changedTouches[0].clientX;
-    sy = e.changedTouches[0].clientY;
-    dx = 0; swiping = true;
-  }, { passive: true });
-  detailWrap.addEventListener('touchmove', function(e) {
-    if (!swiping) return;
-    var mx = e.changedTouches[0].clientX - sx;
-    var my = e.changedTouches[0].clientY - sy;
-    if (Math.abs(my) > Math.abs(mx) * 1.2) { swiping = false; return; }
-    dx = mx;
-  }, { passive: true });
-  detailWrap.addEventListener('touchend', function() {
-    if (!swiping) return;
-    swiping = false;
-    if (dx < -50 && activeIdx < ingredients.length - 1) select(activeIdx + 1, true);
-    else if (dx > 50 && activeIdx > 0) select(activeIdx - 1, true);
-  }, { passive: true });
-
-  /* ── Modal open ── */
-  function openModal(key) {
-    var ing = null;
-    for (var i = 0; i < ingredients.length; i++) { if (ingredients[i].key === key) { ing = ingredients[i]; break; } }
-    if (!ing) return;
-    modalIng.textContent = ing.fullName;
-
-    var html = '<div class="ih-modal-section-title">Bilimsel Araştırmalar</div><div class="ih-modal-links">';
-    ing.research.forEach(function(r) {
-      if (!r.url || r.url === '#') return;
-      html +=
-        '<a href="' + r.url + '" target="_blank" rel="noopener noreferrer" class="ih-modal-link">' +
-          '<div class="ih-modal-link-icon ih-icon-research">' + svgResearch + '</div>' +
-          '<div class="ih-modal-link-text"><div class="ih-modal-link-label">' + r.label + '</div><div class="ih-modal-link-source">' + r.source + '</div></div>' +
-          '<span class="ih-modal-link-arrow">' + svgExternal + '</span></a>';
-    });
-    /* If all research urls are # show a placeholder message */
-    var hasResearch = ing.research.some(function(r) { return r.url && r.url !== '#'; });
-    if (!hasResearch) {
-      html += '<div style="font-size:13px;color:var(--ih-text-muted);padding:8px 0">Araştırma linkleri yakında eklenecektir.</div>';
-    }
-    html += '</div>';
-
-    html += '<div class="ih-modal-section-title">Sertifikalar</div><div class="ih-modal-links">';
-    if (ing.cert && ing.cert.url && ing.cert.url !== '#') {
-      html +=
-        '<a href="' + ing.cert.url + '" target="_blank" rel="noopener noreferrer" class="ih-modal-link">' +
-          '<div class="ih-modal-link-icon ih-icon-cert">' + svgCert + '</div>' +
-          '<div class="ih-modal-link-text"><div class="ih-modal-link-label">' + ing.cert.label + '</div><div class="ih-modal-link-source">' + ing.cert.source + '</div></div>' +
-          '<span class="ih-modal-link-arrow">' + svgExternal + '</span></a>';
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
     } else {
-      html += '<div style="font-size:13px;color:var(--ih-text-muted);padding:8px 0">Sertifika linkleri yakında eklenecektir.</div>';
+      init();
     }
-    html += '</div>';
 
-    modalBody.innerHTML = html;
-    overlay.style.display = 'block';
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    requestAnimationFrame(function() {
-      overlay.classList.add('ih-overlay-visible');
-      modal.classList.add('ih-modal-visible');
+    document.addEventListener('shopify:section:load', function (e) {
+      var section = e.target.querySelector('.ingredient-showcase[data-section-id]');
+      if (section) {
+        section.removeAttribute('data-initialized');
+        new IngredientShowcase(section);
+        section.dataset.initialized = 'true';
+      }
     });
-    modalClose.focus();
-  }
-
-  /* ── Modal close ── */
-  function closeModal() {
-    overlay.classList.remove('ih-overlay-visible');
-    modal.classList.remove('ih-modal-visible');
-    setTimeout(function() {
-      overlay.style.display = 'none';
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-      modalBody.innerHTML = '';
-    }, 350);
-    var trigger = detailWrap.querySelector('.ih-detail.ih-active .ih-research-trigger');
-    if (trigger) trigger.focus();
-  }
-
-  detailWrap.addEventListener('click', function(e) {
-    var t = e.target.closest('.ih-research-trigger');
-    if (t) { e.preventDefault(); openModal(t.dataset.ingredient); }
-
-    var coa = e.target.closest('.ih-coa-trigger');
-    if (coa) {
-      e.preventDefault();
-      var content = coa.nextElementSibling;
-      var chevron = coa.querySelector('.ih-coa-chevron');
-      if (content) content.classList.toggle('ih-coa-expanded');
-      if (chevron) chevron.classList.toggle('ih-coa-open');
-    }
-  });
-  modalClose.addEventListener('click', closeModal);
-  overlay.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modal.style.display === 'block') closeModal();
-  });
-
-  /* ── Focus trap ── */
-  modal.addEventListener('keydown', function(e) {
-    if (e.key !== 'Tab') return;
-    var els = modal.querySelectorAll('a[href],button,[tabindex]:not([tabindex="-1"])');
-    if (!els.length) return;
-    var first = els[0], last = els[els.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  });
-
-  /* ── Drag-to-dismiss (mobile) ── */
-  var dsy = 0, dcy = 0, dragging = false;
-  modalDrag.addEventListener('touchstart', function(e) {
-    dsy = e.changedTouches[0].clientY;
-    dragging = true;
-    modal.style.transition = 'none';
-  }, { passive: true });
-  document.addEventListener('touchmove', function(e) {
-    if (!dragging) return;
-    dcy = e.changedTouches[0].clientY;
-    var d = Math.max(0, dcy - dsy);
-    var desk = window.matchMedia('(min-width:768px)').matches;
-    modal.style.transform = desk ? 'translate(-50%,-50%) translateY(' + d + 'px)' : 'translateY(' + d + 'px)';
-  }, { passive: true });
-  document.addEventListener('touchend', function() {
-    if (!dragging) return;
-    dragging = false;
-    modal.style.transition = '';
-    if (dcy - dsy > 100) { closeModal(); }
-    else { modal.style.transform = ''; }
-  }, { passive: true });
-
-  /* ── Init ── */
-  select(0, false);
-
-})();
-</script>
-
-{% endif %}
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
-  "name": "Ingredient Hub v2",
+  "name": "İçerik Vitrini v2",
   "tag": "section",
-  "class": "ingredient-hub-v2-section",
+  "class": "ingredient-showcase-v2-section",
   "settings": [
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
-      "default": "İçeriklerimizi Keşfet"
+      "label": "Başlık",
+      "default": "Bilimsel Destekli İçeriklerimiz"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "subheading",
-      "label": "Subheading",
-      "default": "Her bir bileşenin ardındaki bilimi ve faydaları keşfedin"
+      "label": "Alt başlık",
+      "default": "Her bir içerik özenle seçilmiş ve araştırmalarla desteklenmiştir"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Arka plan rengi",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Metin rengi",
+      "default": "#171717"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Vurgu rengi",
+      "default": "#FFD7BF"
+    },
+    {
+      "type": "color",
+      "id": "tag_border_color",
+      "label": "Etiket kenarlık rengi",
+      "default": "#171717"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Üst boşluk",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Alt boşluk",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
     }
   ],
   "blocks": [
     {
       "type": "ingredient",
       "name": "İçerik",
-      "limit": 12,
       "settings": [
         {
           "type": "text",
           "id": "name",
-          "label": "Kısa isim",
-          "info": "Sidebar ve pill butonlarında görünür (ör. \"MSM\")"
-        },
-        {
-          "type": "header",
-          "content": "Temel Bilgiler"
-        },
-        {
-          "type": "text",
-          "id": "full_name",
-          "label": "Tam isim",
-          "info": "Detay panelindeki başlık (ör. \"MSM (Metilsülfonilmetan)\")"
-        },
-        {
-          "type": "text",
-          "id": "subtitle",
-          "label": "Alt başlık",
-          "info": "Altın renkli küçük yazı (ör. \"Güzellik Minerali\")"
-        },
-        {
-          "type": "text",
-          "id": "dosage",
-          "label": "Miktar",
-          "info": "ör. 500 mg"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Açıklama"
-        },
-        {
-          "type": "header",
-          "content": "Görsel"
+          "label": "İçerik adı",
+          "default": "Ashwagandha Özütü"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "İçerik görseli",
-          "info": "Yüklenirse gradient dairenin üstüne yerleşir. Boş bırakılırsa harf gösterilir."
+          "label": "Görsel"
         },
         {
           "type": "text",
-          "id": "circle_letter",
-          "label": "Daire harfi",
-          "info": "Görsel yoksa dairede gösterilecek harf (ör. \"M\")",
-          "default": "?"
-        },
-        {
-          "type": "color",
-          "id": "circle_color",
-          "label": "Daire rengi",
-          "info": "Gradient dairenin temel rengi",
-          "default": "#d4a853"
-        },
-        {
-          "type": "header",
-          "content": "Etiketler"
+          "id": "benefit_1",
+          "label": "Fayda 1",
+          "default": "Stres Desteği"
         },
         {
           "type": "text",
-          "id": "tag_1",
-          "label": "Etiket 1"
+          "id": "benefit_2",
+          "label": "Fayda 2",
+          "default": "Enerji"
         },
         {
           "type": "text",
-          "id": "tag_2",
-          "label": "Etiket 2"
+          "id": "benefit_3",
+          "label": "Fayda 3",
+          "default": "Odaklanma"
         },
         {
-          "type": "text",
-          "id": "tag_3",
-          "label": "Etiket 3"
-        },
-        {
-          "type": "text",
-          "id": "tag_4",
-          "label": "Etiket 4"
-        },
-        {
-          "type": "header",
-          "content": "Araştırma Linki 1"
-        },
-        {
-          "type": "text",
-          "id": "research_1_label",
-          "label": "Başlık"
-        },
-        {
-          "type": "url",
-          "id": "research_1_url",
-          "label": "URL"
-        },
-        {
-          "type": "text",
-          "id": "research_1_source",
-          "label": "Kaynak adı",
-          "info": "ör. \"PubMed Central\""
-        },
-        {
-          "type": "header",
-          "content": "Araştırma Linki 2"
-        },
-        {
-          "type": "text",
-          "id": "research_2_label",
-          "label": "Başlık"
-        },
-        {
-          "type": "url",
-          "id": "research_2_url",
-          "label": "URL"
-        },
-        {
-          "type": "text",
-          "id": "research_2_source",
-          "label": "Kaynak adı"
-        },
-        {
-          "type": "header",
-          "content": "Araştırma Linki 3"
-        },
-        {
-          "type": "text",
-          "id": "research_3_label",
-          "label": "Başlık"
-        },
-        {
-          "type": "url",
-          "id": "research_3_url",
-          "label": "URL"
-        },
-        {
-          "type": "text",
-          "id": "research_3_source",
-          "label": "Kaynak adı"
-        },
-        {
-          "type": "header",
-          "content": "Araştırma Linki 4"
-        },
-        {
-          "type": "text",
-          "id": "research_4_label",
-          "label": "Başlık"
-        },
-        {
-          "type": "url",
-          "id": "research_4_url",
-          "label": "URL"
-        },
-        {
-          "type": "text",
-          "id": "research_4_source",
-          "label": "Kaynak adı"
-        },
-        {
-          "type": "header",
-          "content": "Sertifika"
-        },
-        {
-          "type": "text",
-          "id": "cert_label",
-          "label": "Sertifika başlığı"
-        },
-        {
-          "type": "url",
-          "id": "cert_url",
-          "label": "Sertifika URL"
+          "type": "textarea",
+          "id": "description",
+          "label": "Açıklama",
+          "default": "Adaptojenik bitki özütü ile doğal denge ve enerji desteği."
         },
         {
           "type": "header",
@@ -1535,104 +927,50 @@
         {
           "type": "text",
           "id": "cite_pmid",
-          "label": "PubMed ID (PMID)",
+          "label": "PubMed ID",
           "info": "ör. 32083522"
         },
         {
           "type": "header",
-          "content": "Analiz Sertifikası Verileri"
+          "content": "Analiz Sertifikası"
         },
         {
           "type": "text",
-          "id": "coa_highlight_1",
+          "id": "coa_1",
           "label": "CoA Veri 1",
           "info": "ör. 🔬 Saflık: %99.95 — GC analizi ile doğrulanmış"
         },
         {
           "type": "text",
-          "id": "coa_highlight_2",
+          "id": "coa_2",
           "label": "CoA Veri 2"
         },
         {
           "type": "text",
-          "id": "coa_highlight_3",
+          "id": "coa_3",
           "label": "CoA Veri 3"
         },
         {
           "type": "text",
-          "id": "coa_highlight_4",
+          "id": "coa_4",
           "label": "CoA Veri 4"
         }
       ]
     }
   ],
+  "max_blocks": 10,
   "presets": [
     {
-      "name": "Ingredient Hub v2",
-      "category": "Product Information",
-      "settings": {
-        "heading": "İçeriklerimizi Keşfet",
-        "subheading": "Her bir bileşenin ardındaki bilimi ve faydaları keşfedin"
-      },
+      "name": "İçerik Vitrini v2",
       "blocks": [
         {
           "type": "ingredient",
           "settings": {
-            "name": "MSM",
-            "full_name": "MSM (Metilsülfonilmetan)",
-            "subtitle": "Güzellik Minerali",
-            "dosage": "500 mg",
-            "circle_letter": "M",
-            "circle_color": "#d4a853",
-            "tag_1": "Kolajen Üretimi",
-            "tag_2": "Cilt Esnekliği",
-            "tag_3": "Eklem Sağlığı",
-            "description": "Doğanın güzellik minerali olarak bilinen MSM, kolajen üretimini destekleyerek cildinizin elastikiyetini ve pürüzsüzlüğünü korur. Sağlıklı saç ve tırnak büyümesine katkıda bulunur.",
-            "research_1_label": "MSM ve kolajen sentezi üzerine klinik çalışma",
-            "research_1_source": "PubMed Central",
-            "research_2_label": "MSM'in cilt sağlığı üzerindeki etkileri",
-            "research_2_source": "PubMed Central",
-            "cert_label": "MSM Analiz Sertifikası"
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Kırmızı Kore Ginsengi",
-            "full_name": "Kırmızı Kore Ginsengi",
-            "subtitle": "Enerji ve Canlılık",
-            "dosage": "100 mg",
-            "circle_letter": "K",
-            "circle_color": "#c45c4a",
-            "tag_1": "Kan Dolaşımı",
-            "tag_2": "Cilt Canlılığı",
-            "tag_3": "Enerji",
-            "description": "Kan dolaşımını destekleyerek yorgun ve soluk cilt görünümünü ele alır. Canlı ve ışıltılı bir cilt için geleneksel Kore bilgeliğinden yararlanır.",
-            "research_1_label": "Kırmızı ginseng ve cilt mikrosirkülasyonu",
-            "research_1_source": "PubMed Central",
-            "research_2_label": "Panax ginseng'in antioksidan etkileri",
-            "research_2_source": "PubMed Central",
-            "cert_label": "Kore Ginsengi Kalite Sertifikası"
-          }
-        },
-        {
-          "type": "ingredient",
-          "settings": {
-            "name": "Niasinamid",
-            "full_name": "Niasinamid (Vitamin B3)",
-            "subtitle": "Cilt Bariyeri Gücü",
-            "dosage": "250 mg",
-            "circle_letter": "N",
-            "circle_color": "#7a9e6b",
-            "tag_1": "Cilt Bariyeri",
-            "tag_2": "Nem Dengeleme",
-            "tag_3": "Aydınlık Ton",
-            "description": "Cilt bariyerini güçlendirerek nemi kilitler ve daha aydınlık bir cilt tonu sağlar. Gözle görülür sonuçlar için klinik olarak kanıtlanmış bir bileşendir.",
-            "research_1_label": "Niasinamidin cilt bariyeri onarımındaki rolü",
-            "research_1_source": "PubMed Central",
-            "research_2_label": "Vitamin B3 ve hiperpigmentasyon tedavisi",
-            "research_2_source": "Tandfonline",
-            "cert_label": "Niasinamid Saflık Sertifikası"
+            "name": "Ashwagandha Özütü",
+            "benefit_1": "Stres Desteği",
+            "benefit_2": "Enerji",
+            "benefit_3": "Odaklanma",
+            "description": "Adaptojenik bitki özütü ile doğal denge ve enerji desteği."
           }
         }
       ]
