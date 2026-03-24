@@ -104,6 +104,7 @@
               {%- endif -%}
 
               {%- if block.settings.coa_1 != blank -%}
+                {%- assign coa_style = block.settings.coa_style | default: 'bars' -%}
                 <div class="ingredient-showcase__coa">
                   <button class="ingredient-showcase__coa-trigger" data-coa-toggle>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12h6M9 16h6M13 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V9l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -111,12 +112,104 @@
                     <span class="ingredient-showcase__coa-chevron">▾</span>
                   </button>
                   <div class="ingredient-showcase__coa-body">
-                    <ul class="ingredient-showcase__coa-list">
-                      {%- if block.settings.coa_1 != blank -%}<li>{{ block.settings.coa_1 }}</li>{%- endif -%}
-                      {%- if block.settings.coa_2 != blank -%}<li>{{ block.settings.coa_2 }}</li>{%- endif -%}
-                      {%- if block.settings.coa_3 != blank -%}<li>{{ block.settings.coa_3 }}</li>{%- endif -%}
-                      {%- if block.settings.coa_4 != blank -%}<li>{{ block.settings.coa_4 }}</li>{%- endif -%}
-                    </ul>
+
+                    {%- case coa_style -%}
+
+                      {%- when 'bars' -%}
+                        {%- comment -%} A — Progress Bars {%- endcomment -%}
+                        <div class="coa-bars">
+                          {%- if block.settings.coa_1 != blank -%}
+                            <div class="coa-bars__item">
+                              <div class="coa-bars__label">{{ block.settings.coa_1 }}</div>
+                              <div class="coa-bars__track"><div class="coa-bars__fill" style="width: {{ block.settings.coa_val_1 | default: 95 }}%"></div></div>
+                            </div>
+                          {%- endif -%}
+                          {%- if block.settings.coa_2 != blank -%}
+                            <div class="coa-bars__item">
+                              <div class="coa-bars__label">{{ block.settings.coa_2 }}</div>
+                              <div class="coa-bars__track"><div class="coa-bars__fill" style="width: {{ block.settings.coa_val_2 | default: 95 }}%"></div></div>
+                            </div>
+                          {%- endif -%}
+                          {%- if block.settings.coa_3 != blank -%}
+                            <div class="coa-bars__item">
+                              <div class="coa-bars__label">{{ block.settings.coa_3 }}</div>
+                              <div class="coa-bars__track"><div class="coa-bars__fill" style="width: {{ block.settings.coa_val_3 | default: 95 }}%"></div></div>
+                            </div>
+                          {%- endif -%}
+                          {%- if block.settings.coa_4 != blank -%}
+                            <div class="coa-bars__item">
+                              <div class="coa-bars__label">{{ block.settings.coa_4 }}</div>
+                              <div class="coa-bars__track"><div class="coa-bars__fill" style="width: {{ block.settings.coa_val_4 | default: 95 }}%"></div></div>
+                            </div>
+                          {%- endif -%}
+                        </div>
+
+                      {%- when 'cards' -%}
+                        {%- comment -%} B — Card Grid {%- endcomment -%}
+                        <div class="coa-cards">
+                          {%- if block.settings.coa_1 != blank -%}<div class="coa-cards__item">{{ block.settings.coa_1 }}</div>{%- endif -%}
+                          {%- if block.settings.coa_2 != blank -%}<div class="coa-cards__item">{{ block.settings.coa_2 }}</div>{%- endif -%}
+                          {%- if block.settings.coa_3 != blank -%}<div class="coa-cards__item">{{ block.settings.coa_3 }}</div>{%- endif -%}
+                          {%- if block.settings.coa_4 != blank -%}<div class="coa-cards__item">{{ block.settings.coa_4 }}</div>{%- endif -%}
+                        </div>
+
+                      {%- when 'badge' -%}
+                        {%- comment -%} C — Badge/Rozet {%- endcomment -%}
+                        <div class="coa-badge">
+                          <div class="coa-badge__icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 15l-2 5l2-1l2 1l-2-5z" stroke="#b8976a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="9" r="6" stroke="#b8976a" stroke-width="1.5"/><path d="M9 9l1.5 1.5L15 7" stroke="#b8976a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                          </div>
+                          <div class="coa-badge__lines">
+                            {%- if block.settings.coa_1 != blank -%}<p>{{ block.settings.coa_1 }}</p>{%- endif -%}
+                            {%- if block.settings.coa_2 != blank -%}<p>{{ block.settings.coa_2 }}</p>{%- endif -%}
+                            {%- if block.settings.coa_3 != blank -%}<p>{{ block.settings.coa_3 }}</p>{%- endif -%}
+                            {%- if block.settings.coa_4 != blank -%}<p>{{ block.settings.coa_4 }}</p>{%- endif -%}
+                          </div>
+                        </div>
+
+                      {%- when 'compare' -%}
+                        {%- comment -%} D — Comparison Bars {%- endcomment -%}
+                        <div class="coa-compare">
+                          {%- if block.settings.coa_1 != blank -%}
+                            <div class="coa-compare__item">
+                              <div class="coa-compare__label">{{ block.settings.coa_1 }}</div>
+                              <div class="coa-compare__row">
+                                <span class="coa-compare__tag coa-compare__tag--sector">Sektör</span>
+                                <div class="coa-compare__track"><div class="coa-compare__fill coa-compare__fill--sector" style="width: {{ block.settings.coa_val_1 | default: 30 }}%"></div></div>
+                              </div>
+                              <div class="coa-compare__row">
+                                <span class="coa-compare__tag coa-compare__tag--cyra">Cyrasoul</span>
+                                <div class="coa-compare__track"><div class="coa-compare__fill coa-compare__fill--cyra" style="width: {{ block.settings.coa_val_2 | default: 95 }}%"></div></div>
+                              </div>
+                            </div>
+                          {%- endif -%}
+                          {%- if block.settings.coa_3 != blank -%}
+                            <div class="coa-compare__item">
+                              <div class="coa-compare__label">{{ block.settings.coa_3 }}</div>
+                              <div class="coa-compare__row">
+                                <span class="coa-compare__tag coa-compare__tag--sector">Sektör</span>
+                                <div class="coa-compare__track"><div class="coa-compare__fill coa-compare__fill--sector" style="width: {{ block.settings.coa_val_3 | default: 30 }}%"></div></div>
+                              </div>
+                              <div class="coa-compare__row">
+                                <span class="coa-compare__tag coa-compare__tag--cyra">Cyrasoul</span>
+                                <div class="coa-compare__track"><div class="coa-compare__fill coa-compare__fill--cyra" style="width: {{ block.settings.coa_val_4 | default: 95 }}%"></div></div>
+                              </div>
+                            </div>
+                          {%- endif -%}
+                        </div>
+
+                      {%- when 'list' -%}
+                        {%- comment -%} E — Icon List {%- endcomment -%}
+                        <ul class="coa-list">
+                          {%- if block.settings.coa_1 != blank -%}<li>{{ block.settings.coa_1 }}</li>{%- endif -%}
+                          {%- if block.settings.coa_2 != blank -%}<li>{{ block.settings.coa_2 }}</li>{%- endif -%}
+                          {%- if block.settings.coa_3 != blank -%}<li>{{ block.settings.coa_3 }}</li>{%- endif -%}
+                          {%- if block.settings.coa_4 != blank -%}<li>{{ block.settings.coa_4 }}</li>{%- endif -%}
+                        </ul>
+
+                    {%- endcase -%}
+
+                    <p class="ingredient-showcase__coa-footer">Daha fazla detay için <a href="mailto:info@cyrasoul.com">info@cyrasoul.com</a></p>
                   </div>
                 </div>
               {%- endif -%}
@@ -303,30 +396,31 @@
   .ingredient-showcase__cite {
     display: inline-flex;
     align-items: center;
-    font-size: 0.6875rem;
+    font-size: 10px;
     font-weight: 500;
-    padding: 3px 10px;
+    padding: 2px 7px;
     border-radius: 9999px;
     background: transparent;
-    color: var(--text-color, #171717);
-    opacity: 0.45;
-    border: 1px solid currentColor;
+    color: #7B7B7B;
+    opacity: 0.6;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     text-decoration: none;
     white-space: nowrap;
     margin-top: 10px;
-    transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease;
+    transition: all 200ms ease;
   }
   .ingredient-showcase__cite:hover {
     opacity: 1;
-    background: var(--text-color, #171717);
+    background: #108474;
     color: #ffffff;
+    border-color: #108474;
   }
 
-  /* CoA drawer */
+  /* CoA drawer (shared) */
   .ingredient-showcase__coa {
     margin-top: 14px;
     width: 100%;
-    max-width: 340px;
+    max-width: 380px;
   }
   .ingredient-showcase__coa-trigger {
     display: inline-flex;
@@ -344,12 +438,8 @@
     transition: opacity 200ms ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .ingredient-showcase__coa-trigger:hover {
-    opacity: 0.85;
-  }
-  .ingredient-showcase__coa-trigger svg {
-    opacity: 0.6;
-  }
+  .ingredient-showcase__coa-trigger:hover { opacity: 0.85; }
+  .ingredient-showcase__coa-trigger svg { opacity: 0.6; }
   .ingredient-showcase__coa-chevron {
     display: inline-block;
     transition: transform 300ms ease;
@@ -363,33 +453,69 @@
     max-height: 0;
     transition: max-height 400ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .ingredient-showcase__coa-body.is-open {
-    max-height: 300px;
-  }
-  .ingredient-showcase__coa-list {
-    list-style: none;
-    padding: 10px 0 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .ingredient-showcase__coa-list li {
-    font-size: 0.8125rem;
-    line-height: 1.5;
+  .ingredient-showcase__coa-body.is-open { max-height: 500px; }
+  .ingredient-showcase__coa-footer {
+    font-size: 0.6875rem;
     color: var(--text-color, #171717);
-    opacity: 0.65;
-    padding-left: 14px;
-    position: relative;
+    opacity: 0.35;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.06);
   }
-  .ingredient-showcase__coa-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 7px;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
+  .ingredient-showcase__coa-footer a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  /* A — Progress Bars */
+  .coa-bars { display: flex; flex-direction: column; gap: 10px; padding-top: 12px; }
+  .coa-bars__label { font-size: 0.75rem; color: var(--text-color, #171717); opacity: 0.65; margin-bottom: 4px; }
+  .coa-bars__track { height: 6px; background: rgba(0,0,0,0.06); border-radius: 3px; overflow: hidden; }
+  .coa-bars__fill { height: 100%; background: linear-gradient(90deg, #108474, #0D4F47); border-radius: 3px; transition: width 600ms ease; }
+
+  /* B — Card Grid */
+  .coa-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 12px; }
+  .coa-cards__item {
+    font-size: 0.75rem; line-height: 1.4; padding: 10px 12px;
+    background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 8px; color: var(--text-color, #171717); opacity: 0.7;
+  }
+
+  /* C — Badge/Rozet */
+  .coa-badge { display: flex; gap: 12px; align-items: flex-start; padding-top: 12px; }
+  .coa-badge__icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, #fef3e2, #fce8c8);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .coa-badge__lines { display: flex; flex-direction: column; gap: 2px; }
+  .coa-badge__lines p { font-size: 0.75rem; line-height: 1.5; color: var(--text-color, #171717); opacity: 0.65; margin: 0; }
+
+  /* D — Comparison Bars */
+  .coa-compare { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; }
+  .coa-compare__label { font-size: 0.75rem; font-weight: 600; color: var(--text-color, #171717); opacity: 0.7; margin-bottom: 4px; }
+  .coa-compare__row { display: flex; align-items: center; gap: 8px; }
+  .coa-compare__tag { font-size: 0.625rem; font-weight: 600; width: 52px; text-align: right; flex-shrink: 0; }
+  .coa-compare__tag--sector { color: #999; }
+  .coa-compare__tag--cyra { color: #108474; }
+  .coa-compare__track { flex: 1; height: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden; }
+  .coa-compare__fill { height: 100%; border-radius: 4px; transition: width 600ms ease; }
+  .coa-compare__fill--sector { background: #d4d4d4; }
+  .coa-compare__fill--cyra { background: linear-gradient(90deg, #108474, #0D4F47); }
+
+  /* E — Icon List */
+  .coa-list {
+    list-style: none; padding: 12px 0 0; margin: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .coa-list li {
+    font-size: 0.8125rem; line-height: 1.5;
+    color: var(--text-color, #171717); opacity: 0.65;
+    padding-left: 14px; position: relative;
+  }
+  .coa-list li::before {
+    content: ''; position: absolute; left: 0; top: 7px;
+    width: 5px; height: 5px; border-radius: 50%;
     background: var(--accent-color, #FFD7BF);
   }
 
@@ -935,10 +1061,33 @@
           "content": "Analiz Sertifikası"
         },
         {
+          "type": "select",
+          "id": "coa_style",
+          "label": "CoA Gösterim Stili",
+          "default": "list",
+          "options": [
+            { "value": "bars", "label": "A — Progress Bar" },
+            { "value": "cards", "label": "B — Kart Grid" },
+            { "value": "badge", "label": "C — Rozet" },
+            { "value": "compare", "label": "D — Karşılaştırma" },
+            { "value": "list", "label": "E — Liste" }
+          ]
+        },
+        {
           "type": "text",
           "id": "coa_1",
           "label": "CoA Veri 1",
-          "info": "ör. 🔬 Saflık: %99.95 — GC analizi ile doğrulanmış"
+          "info": "ör. Saflık: %99.95"
+        },
+        {
+          "type": "range",
+          "id": "coa_val_1",
+          "label": "CoA Değer 1 (%)",
+          "info": "Bar/karşılaştırma stilleri için doluluk yüzdesi",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 95
         },
         {
           "type": "text",
@@ -946,14 +1095,41 @@
           "label": "CoA Veri 2"
         },
         {
+          "type": "range",
+          "id": "coa_val_2",
+          "label": "CoA Değer 2 (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 95
+        },
+        {
           "type": "text",
           "id": "coa_3",
           "label": "CoA Veri 3"
         },
         {
+          "type": "range",
+          "id": "coa_val_3",
+          "label": "CoA Değer 3 (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 95
+        },
+        {
           "type": "text",
           "id": "coa_4",
           "label": "CoA Veri 4"
+        },
+        {
+          "type": "range",
+          "id": "coa_val_4",
+          "label": "CoA Değer 4 (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 95
         }
       ]
     }
