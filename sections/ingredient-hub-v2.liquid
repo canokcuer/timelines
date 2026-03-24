@@ -97,6 +97,12 @@
                 <p class="ingredient-showcase__description">{{ block.settings.description }}</p>
               {%- endif -%}
 
+              {%- if block.settings.cite_pmid != blank -%}
+                {%- assign cite_chip_text = block.settings.cite_label | split: ' — ' | first -%}
+                {%- if cite_chip_text == blank -%}{%- assign cite_chip_text = 'PubMed' -%}{%- endif -%}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ block.settings.cite_pmid }}/" target="_blank" rel="noopener" class="coa-panel__cite-inline">{{ cite_chip_text }}</a>
+              {%- endif -%}
+
               {%- if block.settings.hero_label != blank -%}
                 {%- assign coa_hero_val = block.settings.hero_value | default: 99 -%}
                 {%- assign coa_offset = 226 | minus: coa_hero_val | times: 226 | divided_by: 100 -%}
@@ -191,9 +197,7 @@
                     </div>
                   </div>
 
-                  <div class="coa-panel__footer">
-                    Daha fazla detay için <a href="mailto:info@cyrasoul.com">info@cyrasoul.com</a>
-                  </div>
+                  <p class="coa-panel__footer">* Analiz sertifikalarının tam versiyonuna ulaşmak için <a href="mailto:info@cyrasoul.com">info@cyrasoul.com</a> adresinden bizimle iletişime geçebilirsiniz.</p>
                 </div>
               {%- endif -%}
             </div>
@@ -376,6 +380,31 @@
   }
 
   /* ── CoA Smart Panel ── */
+
+  /* Inline citation chip (above panel, always visible) */
+  .coa-panel__cite-inline {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: transparent;
+    color: #7B7B7B;
+    opacity: 0.6;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    white-space: nowrap;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    transition: all 200ms ease;
+  }
+  .coa-panel__cite-inline:hover {
+    opacity: 1;
+    background: #108474;
+    color: #ffffff;
+    border-color: #108474;
+  }
 
   /* Trigger button */
   .coa-panel__trigger {
