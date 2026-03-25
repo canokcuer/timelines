@@ -987,17 +987,17 @@
 
     IngredientShowcase.prototype.goTo = function (index) {
       if (index < 0 || index >= this.totalSlides) return;
+      var scrollY = this.section.getBoundingClientRect().top + window.pageYOffset;
       this.closeAllCoaPanels();
       this.currentIndex = index;
       this.updateState();
+      /* Restore scroll position so page doesn't jump when slides collapse */
+      window.scrollTo({ top: scrollY - 20, behavior: 'auto' });
     };
 
     IngredientShowcase.prototype.closeAllCoaPanels = function () {
       this.section.querySelectorAll('.coa-panel__body').forEach(function (body) {
         body.classList.remove('is-open');
-        body.style.transition = 'none';
-        body.style.maxHeight = '0';
-        setTimeout(function () { body.style.transition = ''; body.style.maxHeight = ''; }, 50);
         var ring = body.querySelector('.coa-panel__ring-fg');
         if (ring) ring.style.strokeDashoffset = '226';
       });
