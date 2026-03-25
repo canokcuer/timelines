@@ -1052,6 +1052,8 @@
     };
 
     IngredientShowcase.prototype.onTouchStart = function (e) {
+      /* Don't treat CoA panel interactions as swipe */
+      if (e.target.closest('[data-coa-toggle]') || e.target.closest('.coa-panel__body')) return;
       this.showAllSlides();
       this.touchStartX = e.touches[0].clientX;
       this.touchStartY = e.touches[0].clientY;
