@@ -1019,6 +1019,18 @@
       }
 
       var self = this;
+
+      /* Collapse inactive slides so they don't affect track height */
+      this.slides.forEach(function (slide, i) {
+        if (i === self.currentIndex) {
+          slide.style.overflow = '';
+          slide.style.height = '';
+        } else {
+          slide.style.overflow = 'hidden';
+          slide.style.height = '0';
+        }
+      });
+
       this.dots.forEach(function (dot) {
         var dotIndex = parseInt(dot.getAttribute('data-dot'), 10);
         var isActive = dotIndex === self.currentIndex;
@@ -1032,7 +1044,15 @@
       });
     };
 
+    IngredientShowcase.prototype.showAllSlides = function () {
+      this.slides.forEach(function (slide) {
+        slide.style.overflow = '';
+        slide.style.height = '';
+      });
+    };
+
     IngredientShowcase.prototype.onTouchStart = function (e) {
+      this.showAllSlides();
       this.touchStartX = e.touches[0].clientX;
       this.touchStartY = e.touches[0].clientY;
       this.touchStartTime = Date.now();
