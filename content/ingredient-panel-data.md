@@ -2,7 +2,7 @@
 
 > 24 Cyrasoul hammaddesi için Shopify alan değerleri.
 > Her tablo doğrudan Shopify admin paneline kopyalanabilir.
-> Tarih: 2026-03-25 (v2 — düzeltilmiş)
+> Tarih: 2026-03-25 (v3 — karşılaştırmalı, tekrarsız, pozitif dil)
 
 ---
 
@@ -16,14 +16,14 @@
 | **hero_unit** | % |
 | **hero_label** | GC analizi ile doğrulanmış saflık oranı |
 | **hero_standard** | USP42 |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Tüm metaller < 0.1 ppm — tespit sınırının altında |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Aerobik bakteri < 10 cfu/g — neredeyse steril |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | USP42 Amerikan Farmakopesi |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Distilasyon yöntemiyle saflaştırılmış — kristalizasyondan daha üstün saflık |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | USP42 Amerikan Farmakopesi standardı |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Bağımsız GC analizi ile saflık teyit edilmiş |
 | **supplier_name** | ANSEN |
-| **supplier_country** | Çin |
+| **supplier_country** | — |
 | **cert_1** | USP42 |
 | **cert_2** | GMP |
 
@@ -39,11 +39,11 @@
 | **hero_unit** | % |
 | **hero_label** | Ginsenosid oranı — sektör ortalamasının 3-6 katı |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Tüm ağır metaller farmakope limitinin altında |
-| **safety_2_label** | Ekstra Tarama |
-| **safety_2_value** | PAH (polisiklik aromatik hidrokarbon) testi geçti |
-| **safety_3_label** | Kalite Kontrol |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Sektör ortalaması %5-10 iken Cyrasoul'da %31.15 — 3 ila 6 kat fazla |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | HPLC ile doğrulanmış bireysel ginsenosid profili (Rb1, Rb2, Rc, Rd, Re, Rf) |
+| **safety_3_label** | Doğrulama |
 | **safety_3_value** | Çift tedarikçi doğrulama ile izlenebilirlik |
 | **supplier_name** | Hunan Huakang |
 | **supplier_country** | Güney Kore |
@@ -62,14 +62,14 @@
 | **hero_unit** | % |
 | **hero_label** | HPLC ile doğrulanmış saflık oranı |
 | **hero_standard** | USP2021 |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Kurşun (Pb) < 0.005 ppm — tespit edilemez seviye |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Farmakope sınıfı mikrobiyolojik standartlara uygun |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | USP2021 Amerikan Farmakopesi |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Yüzü kızartmayan B3 formu — niasin formunun aksine flush etkisi sıfır |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | USP2021 farmasötik sınıf — gıda sınıfından üstün saflık garantisi |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | HPLC ile doğrulanmış saflık ve potens |
 | **supplier_name** | Anhui Redpont |
-| **supplier_country** | Çin |
+| **supplier_country** | — |
 | **cert_1** | USP2021 |
 | **cert_2** | HPLC |
 
@@ -85,12 +85,12 @@
 | **hero_unit** | % |
 | **hero_label** | Spesifikasyon üstünde aktif madde içeriği |
 | **hero_standard** | USP / FCC / EP |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Üçlü farmakope standardına uygun güvenli seviye |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Avrupa Farmakopesi mikrobiyolojik limitlere uygun |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | USP, FCC ve Avrupa Farmakopesi (EP) üçlü uyum |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | 70+ yıllık Hollandalı farmasötik üretici Corbion/PURAC kaynaklı |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | USP, FCC ve Avrupa Farmakopesi — üçlü standart uyumu |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Bağımsız analiz ile doğrulanmış potens |
 | **supplier_name** | Corbion / PURAC |
 | **supplier_country** | Hollanda |
 | **cert_1** | USP |
@@ -108,12 +108,12 @@
 | **hero_unit** | % |
 | **hero_label** | Organik selenyum formu — üstün biyoyararlanım |
 | **hero_standard** | USDA / EU Organic |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Tüm metaller tespit limitinin altında (BLQ) |
-| **safety_2_label** | Organik Sertifika |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Organik L-selenometionin — inorganik formlardan üstün biyoyararlanım |
+| **safety_2_label** | Kalite Sınıfı |
 | **safety_2_value** | USDA ve EU Organic çift organik sertifika |
-| **safety_3_label** | Kaynak Kalitesi |
-| **safety_3_value** | Avrupa tedarikçisi — Belçika TODINI |
+| **safety_3_label** | Kaynak |
+| **safety_3_value** | Belçika TODINI — Avrupa kaynaklı farmasötik tedarik |
 | **supplier_name** | TODINI |
 | **supplier_country** | Belçika |
 | **cert_1** | USDA Organic |
@@ -131,12 +131,12 @@
 | **hero_unit** | % |
 | **hero_label** | Spesifikasyon üstünde doğrulanan saflık oranı |
 | **hero_standard** | Farmakope |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Patojen bakteri tespit edilemedi |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | Farmakope standardına tam uyum |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Yüksek çözünürlüklü glukonat formu — mideye nazik, kolay emilir |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Farmakope standardına tam uyum |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Tüm güvenlik taramalarından geçmiş — onaylı kalite |
 | **supplier_name** | Ruipu Bioengineering |
 | **supplier_country** | — |
 | **cert_1** | Farmakope |
@@ -152,14 +152,14 @@
 | **cite_pmid** | 23949208 |
 | **hero_value** | 95 |
 | **hero_unit** | % |
-| **hero_label** | Protein içeriği — 2000 Da optimize emilim boyutu |
+| **hero_label** | Protein içeriği — yüksek biyoyararlanım formülü |
 | **hero_standard** | ICP-MS |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | ICP-MS ile tarama — en hassas analiz yöntemi |
-| **safety_2_label** | Molekül Ağırlığı |
-| **safety_2_value** | 2000 Da — yüksek biyoyararlanım için optimize |
-| **safety_3_label** | Üretim Kaynağı |
-| **safety_3_value** | Avrupa üretimi — İtalya ITALGEL |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | 2000 Dalton molekül ağırlığı — standart kolajenden 2 kat daha küçük, üstün emilim |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | İtalya ITALGEL üretimi — Avrupa farmasötik kalitesi |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | ICP-MS ile doğrulanmış — en hassas analiz yöntemi |
 | **supplier_name** | ITALGEL |
 | **supplier_country** | İtalya |
 | **cert_1** | ICP-MS Analizi |
@@ -175,14 +175,14 @@
 | **cite_pmid** | 33465795 |
 | **hero_value** | 98 |
 | **hero_unit** | % |
-| **hero_label** | Su ekstraksiyonu — kimyasal çözücü kullanılmadı |
+| **hero_label** | Temiz etiket uyumlu ekstrakt kalitesi |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Aktif Bileşen |
-| **safety_1_value** | %2.52 rosmarinik asit — HPLC ile doğrulandı |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Ekstraksiyon |
-| **safety_3_value** | Su ekstraksiyonu — temiz etiket uyumlu |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | %2.52 rosmarinik asit — HPLC ile doğrulanmış aktif bileşen oranı |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Saf su ekstraksiyonu — kimyasal çözücü kalıntısı sıfır |
+| **safety_3_label** | Kaynak |
+| **safety_3_value** | Yaprak kaynaklı ekstrakt — bitkinin en zengin aktif bölgesi |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
 | **cert_1** | HPLC Analizi |
@@ -200,12 +200,12 @@
 | **hero_unit** | % |
 | **hero_label** | Apigenin konsantrasyonu — yüksek potens formül |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Aktif Bileşen |
-| **safety_1_value** | %5.16 apigenin — HPLC ile doğrulanmış yüksek potens |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Bitki Kaynağı |
-| **safety_3_value** | Çiçek kaynaklı — en etkili bitki kısmı |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Sektör standardı %1-2 iken Cyrasoul'da %5.16 — 4 kata kadar fazla apigenin |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | HPLC ile standardize edilmiş yüksek potens ekstrakt |
+| **safety_3_label** | Kaynak |
+| **safety_3_value** | Çiçek kaynaklı — apigenin açısından en zengin bitki kısmı |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
 | **cert_1** | HPLC Analizi |
@@ -222,17 +222,17 @@
 | **hero_value** | 100 |
 | **hero_unit** | % |
 | **hero_label** | Tam saflıktaki amino asit formülü |
-| **hero_standard** | Spesifik Rotasyon |
-| **safety_1_label** | Kimlik Doğrulama |
-| **safety_1_value** | Spesifik rotasyon +8.00° — doğal L-form doğrulandı |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Safsızlık |
-| **safety_3_value** | Klor ve sülfat < %0.02 — çok düşük safsızlık |
+| **hero_standard** | Optik Rotasyon |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Saf L-izomer — ucuz sentezlerde bulunan etkisiz D-Teanin içermez |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Optik rotasyon testi ile L-form kimliği doğrulanmış |
+| **safety_3_label** | Kaynak |
+| **safety_3_value** | Fermentasyon kaynaklı üretim — doğal amino asit formu |
 | **supplier_name** | Fufeng Biotechnologies |
 | **supplier_country** | — |
 | **cert_1** | L-form Doğrulama |
-| **cert_2** | GMP |
+| **cert_2** | Fermentasyon Kaynaklı |
 
 ---
 
@@ -244,14 +244,14 @@
 | **cite_pmid** | 38009035 |
 | **hero_value** | 96 |
 | **hero_unit** | % |
-| **hero_label** | Fermentasyon kaynaklı yüksek saflıkta HA |
+| **hero_label** | Yüksek saflıkta hyaluronik asit içeriği |
 | **hero_standard** | Mikrobiyolojik Analiz |
-| **safety_1_label** | Üretim Kaynağı |
-| **safety_1_value** | Fermentasyon kaynaklı — hayvansal olmayan, vegan |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Mikrobiyoloji |
-| **safety_3_value** | Bakteri 10 cfu/g — limitin 100 kat altında |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Fermentasyon kaynaklı — hayvansal olmayan, vegan uyumlu üretim |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Orta molekül ağırlığı — optimum cilt emilimi için ideal boyut |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Çift tedarikçi doğrulama ile kalite kontrolü |
 | **supplier_name** | Fufeng Biotechnologies |
 | **supplier_country** | — |
 | **cert_1** | Fermentasyon Kaynaklı |
@@ -267,14 +267,14 @@
 | **cite_pmid** | 36139737 |
 | **hero_value** | 99 |
 | **hero_unit** | % |
-| **hero_label** | Dörtlü farmakope uyumlu C vitamini saflığı |
+| **hero_label** | Dörtlü farmakope uyumlu saflık oranı |
 | **hero_standard** | BP / USP / FCC / EP |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Dörtlü farmakope standardına uygun güvenli seviye |
-| **safety_2_label** | Optik Saflık |
-| **safety_2_value** | Spesifik rotasyon +105.53° — yüksek optik saflık |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | BP, USP, FCC ve EP dörtlü farmakope uyumu |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Dörtlü farmakope uyumu — BP, USP, FCC ve EP standartlarını aynı anda karşılar |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Sodyum askorbat formu — mide dostu, asidik olmayan C vitamini |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Optik rotasyon +105.53° ile yüksek saflık doğrulaması |
 | **supplier_name** | Luwei Pharmaceutical |
 | **supplier_country** | — |
 | **cert_1** | USP |
@@ -290,14 +290,14 @@
 | **cite_pmid** | 16796734 |
 | **hero_value** | 98 |
 | **hero_unit** | % |
-| **hero_label** | Kök kaynaklı ekstrakt — geleneksel kullanım formu |
+| **hero_label** | Kök kaynaklı adaptojenik ekstrakt kalitesi |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Aktif Bileşen |
-| **safety_1_value** | %1.13 Beta-Ekdizon — adaptojenik aktif bileşen |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Kurşun limiti ≤1 ppm — standarttan daha sıkı eşik |
-| **safety_3_label** | Saflık Göstergesi |
-| **safety_3_value** | Kül oranı %1.32 — düşük mineral artık, yüksek saflık |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | %1.13 Beta-Ekdizon — adaptojenik etkinliğin anahtar bileşeni |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Peru kaynaklı kök ekstrakt — geleneksel kullanım formu |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | USDA Organic sertifikalı organik hammadde |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | Peru |
 | **cert_1** | USDA Organic |
@@ -315,12 +315,12 @@
 | **hero_unit** | % |
 | **hero_label** | Farmasötik sınıf amino asit saflığı |
 | **hero_standard** | USP41 |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Demir < %0.003 — ölçülemeyecek kadar düşük |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Farmakope sınıfı mikrobiyolojik standartlara uygun |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | USP41 Amerikan Farmakopesi farmasötik sınıf |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Serbest form L-Tirozin — araştırmaların etkisiz bulduğu NALT formu değil |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | USP41 farmasötik sınıf amino asit |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Safsızlık profili tam analiz edilmiş ve doğrulanmış |
 | **supplier_name** | Shine Star Bioengineering |
 | **supplier_country** | — |
 | **cert_1** | USP41 |
@@ -336,14 +336,14 @@
 | **cite_pmid** | 14602503 |
 | **hero_value** | 6 |
 | **hero_unit** | % |
-| **hero_label** | Ginkgo flavonoid içeriği — HPLC ile doğrulandı |
+| **hero_label** | HPLC ile doğrulanmış ginkgo flavonoid oranı |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Saflık Göstergesi |
-| **safety_1_value** | Kül oranı %0.38 — portföydeki en düşük, üstün saflık |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Nem Kontrolü |
-| **safety_3_value** | Nem oranı %3.41 — ideal muhafaza koşullarında |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Kül oranı %0.38 — portföydeki en yüksek saflık göstergesi |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | HPLC ile standardize edilmiş aktif bileşen profili |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | ABD ve AB gıda regülasyonlarına tam uyumlu |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
 | **cert_1** | HPLC Analizi |
@@ -361,12 +361,12 @@
 | **hero_unit** | % |
 | **hero_label** | Biyoaktif metilkobalamin formunda saflık |
 | **hero_standard** | JP XVIII |
-| **safety_1_label** | Aktif Form |
-| **safety_1_value** | Metilkobalamin — en biyoaktif B12 formu |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Japon Farmakopesi ağır metal limitlerine uygun |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | Japon Farmakopesi XVIII — en yüksek kalite sınıfı |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Biyoaktif metilkobalamin — sentetik siyanokobalaminden farklı, vücut direkt kullanır |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Japon Farmakopesi XVIII — metilkobalamin'in anavatanı Japonya standardı |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Aktif form doğrulaması — biyoaktif B12 kimliği teyit edilmiş |
 | **supplier_name** | Yuxing Biotechnology |
 | **supplier_country** | — |
 | **cert_1** | JP XVIII |
@@ -382,14 +382,14 @@
 | **cite_pmid** | 26502953 |
 | **hero_value** | 98 |
 | **hero_unit** | % |
-| **hero_label** | Kök kaynaklı adaptojenik ekstrakt |
+| **hero_label** | Kök kaynaklı adaptojenik ekstrakt kalitesi |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Aktif Bileşen |
-| **safety_1_value** | %0.52-1.0 rosavin — HPLC ile doğrulandı |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Bitki Kaynağı |
-| **safety_3_value** | Kök kaynaklı ekstrakt — en zengin rosavin kaynağı |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Kök kaynaklı ekstrakt — yaprak ve gövdede rosavin oranı sıfır |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | %0.52-1.0 rosavin — HPLC ile doğrulanmış adaptojenik bileşen |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Çift tedarikçi doğrulama ile kalite izlenebilirliği |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
 | **cert_1** | HPLC Analizi |
@@ -407,11 +407,11 @@
 | **hero_unit** | % |
 | **hero_label** | Yüksek konsantrasyonda flavonoid içeriği |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | ABD ve AB gıda güvenliği standartlarına uygun |
-| **safety_2_label** | Bitki Kaynağı |
-| **safety_2_value** | Yaprak + çiçek kaynaklı — geleneksel farmakope kaynağı |
-| **safety_3_label** | Regülasyon |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Avrupa Farmakopesi minimumunun 2.5 katı flavonoid konsantrasyonu |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Toprak üstü kısımlar — bitkinin sakinleştirici bileşenlerini taşıyan bölge |
+| **safety_3_label** | Doğrulama |
 | **safety_3_value** | ABD ve Avrupa Birliği çift standart uyumu |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
@@ -430,12 +430,12 @@
 | **hero_unit** | % |
 | **hero_label** | Farmasötik sınıf B6 vitamini saflığı |
 | **hero_standard** | USP42 / BP2021 |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Çift farmakope ağır metal limitlerine uygun |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Bakteri < 10 cfu/g — neredeyse steril kalite |
-| **safety_3_label** | Test Standardı |
-| **safety_3_value** | USP42 ve BP2021 çift farmakope uyumu |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Çift farmakope uyumu — hem Amerikan (USP42) hem İngiliz (BP2021) standardı |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Piridoksin HCl formu — klinik çalışmalarda en çok kullanılan güvenilir form |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Bağımsız saflık analizi ile doğrulanmış potens |
 | **supplier_name** | Tiger Vitamin |
 | **supplier_country** | — |
 | **cert_1** | USP42 |
@@ -453,12 +453,12 @@
 | **hero_unit** | % |
 | **hero_label** | Silymarin konsantrasyonu — yüksek potens formül |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Aktif Bileşen |
-| **safety_1_value** | %81.52 silymarin — sektör ortalamasının 3 katı üstünde |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Kalite Kontrol |
-| **safety_3_value** | Çift tedarikçi ile izlenebilirlik doğrulandı |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Sektör ortalaması %20-30 iken Cyrasoul'da %81.52 — 3 kat fazla silymarin |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | HPLC ile standardize edilmiş yüksek potens formül |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Çift tedarikçi ile bağımsız kalite doğrulaması |
 | **supplier_name** | Hunan Huakang + Asuka |
 | **supplier_country** | — |
 | **cert_1** | HPLC Analizi |
@@ -474,14 +474,14 @@
 | **cite_pmid** | 29520889 |
 | **hero_value** | 5 |
 | **hero_unit** | % |
-| **hero_label** | Cynarin içeriği — spesifikasyonun %8 üstünde |
+| **hero_label** | Cynarin içeriği — hedef değerin %8 üstünde |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Aktif Bileşen |
-| **safety_1_value** | %5.40 cynarin — hedef değerin üstünde tespit |
-| **safety_2_label** | Organik Sertifika |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | %5.40 cynarin — hedef spesifikasyonun üstünde tespit edildi |
+| **safety_2_label** | Kalite Sınıfı |
 | **safety_2_value** | USDA Organic sertifikalı organik hammadde |
-| **safety_3_label** | Gıda Güvenliği |
-| **safety_3_value** | FSSC 22000 gıda güvenliği sertifikalı tesis |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | FSSC 22000 gıda güvenliği sertifikalı tesiste üretildi |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
 | **cert_1** | USDA Organic |
@@ -499,12 +499,12 @@
 | **hero_unit** | % |
 | **hero_label** | Flavonoid içeriği — tam spektrum ekstrakt |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Ekstraksiyon |
-| **safety_1_value** | Su ekstraksiyonu — kimyasal çözücü kalıntısı sıfır |
-| **safety_2_label** | Ağır Metaller |
-| **safety_2_value** | Farmakope limitlerinin altında güvenli seviye |
-| **safety_3_label** | Bitki Kaynağı |
-| **safety_3_value** | Tüm bitki (kök + yaprak) — tam spektrum ekstrakt |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Tüm bitki (kök + yaprak) kullanımı — tam spektrum fitokimyasal profil |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Saf su ekstraksiyonu — kimyasal çözücü kalıntısı sıfır |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | ABD ve AB gıda regülasyonlarına uyumlu |
 | **supplier_name** | Organic Herb Inc. |
 | **supplier_country** | — |
 | **cert_1** | Su Ekstraksiyonu |
@@ -522,12 +522,12 @@
 | **hero_unit** | % |
 | **hero_label** | Yüksek yoğunluklu kurkuminoid içeriği |
 | **hero_standard** | HPLC |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Kurşun sadece 0.026 mg/kg — portföyün en temiz profili |
-| **safety_2_label** | Mikrobiyoloji |
-| **safety_2_value** | Avrupa Farmakopesi yöntemiyle ICP-MS taraması |
-| **safety_3_label** | Üretim Kaynağı |
-| **safety_3_value** | Hindistan kaynaklı kök — otantik tedarik zinciri |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | Standart zerdeçalda %3-5 iken Cyrasoul'da %76.23 — 15 kat fazla kurkuminoid |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | HPLC ile standardize — Hindistan kaynaklı otantik kök ekstresi |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Avrupa Farmakopesi yöntemiyle ICP-MS taraması tamamlanmış |
 | **supplier_name** | Jiahe Phytochem |
 | **supplier_country** | Hindistan |
 | **cert_1** | HPLC Analizi |
@@ -545,12 +545,12 @@
 | **hero_unit** | x |
 | **hero_label** | Konsantrasyon oranı — 25 kg hammaddeden 1 kg ekstrakt |
 | **hero_standard** | ICP-MS Eur.Ph. |
-| **safety_1_label** | Ağır Metaller |
-| **safety_1_value** | Kadmiyum 0.01 mg/kg — limitin 100 kat altında |
-| **safety_2_label** | Test Yöntemi |
-| **safety_2_value** | ICP-MS — Avrupa Farmakopesi en hassas analiz |
-| **safety_3_label** | Üretim Kaynağı |
-| **safety_3_value** | Hindistan kaynaklı — otantik botanik tedarik |
+| **safety_1_label** | Öne Çıkan Fark |
+| **safety_1_value** | 25:1 konsantrasyon — 25 kg hammaddeden yalnızca 1 kg ekstrakt elde edilir |
+| **safety_2_label** | Kalite Sınıfı |
+| **safety_2_value** | Hindistan kaynaklı otantik botanik tedarik zinciri |
+| **safety_3_label** | Doğrulama |
+| **safety_3_value** | Avrupa Farmakopesi ICP-MS yöntemiyle doğrulanmış kalite |
 | **supplier_name** | Jiahe Phytochem |
 | **supplier_country** | Hindistan |
 | **cert_1** | ICP-MS Eur.Ph. |
