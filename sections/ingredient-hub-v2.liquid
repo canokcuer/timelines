@@ -991,9 +991,17 @@
 
     IngredientShowcase.prototype.goTo = function (index) {
       if (index < 0 || index >= this.totalSlides) return;
+
+      var previousScrollY = window.scrollY;
       this.closeAllCoaPanels();
       this.currentIndex = index;
       this.updateState();
+
+      requestAnimationFrame(function () {
+        if (Math.abs(window.scrollY - previousScrollY) > 2) {
+          window.scrollTo(0, previousScrollY);
+        }
+      });
     };
 
     IngredientShowcase.prototype.closeAllCoaPanels = function () {
