@@ -993,12 +993,15 @@
     };
 
     IngredientShowcase.prototype.closeAllCoaPanels = function () {
-      this.section.querySelectorAll('.coa-panel__body.is-open').forEach(function (body) {
+      this.section.querySelectorAll('.coa-panel__body').forEach(function (body) {
         body.classList.remove('is-open');
+        body.style.transition = 'none';
+        body.style.maxHeight = '0';
+        setTimeout(function () { body.style.transition = ''; body.style.maxHeight = ''; }, 50);
         var ring = body.querySelector('.coa-panel__ring-fg');
         if (ring) ring.style.strokeDashoffset = '226';
       });
-      this.section.querySelectorAll('.coa-panel__trigger.is-open').forEach(function (trigger) {
+      this.section.querySelectorAll('.coa-panel__trigger').forEach(function (trigger) {
         trigger.classList.remove('is-open');
       });
     };
