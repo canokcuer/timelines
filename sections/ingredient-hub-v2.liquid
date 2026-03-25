@@ -957,25 +957,29 @@
         var trigger = e.target.closest('[data-coa-toggle]');
         if (trigger) {
           e.preventDefault();
-          trigger.classList.toggle('is-open');
           var body = trigger.nextElementSibling;
-          if (body) {
-            body.classList.toggle('is-open');
+          if (!body) return;
+
+          var willOpen = !body.classList.contains('is-open');
+          trigger.classList.toggle('is-open', willOpen);
+          body.classList.toggle('is-open', willOpen);
+
+          if (willOpen) {
+            body.style.maxHeight = body.scrollHeight + 'px';
             /* Animate ring stroke-dashoffset when opening */
-            if (body.classList.contains('is-open')) {
-              var rings = body.querySelectorAll('.coa-panel__ring-fg');
-              rings.forEach(function(ring) {
-                var targetOffset = ring.getAttribute('data-target-offset');
-                if (targetOffset !== null) {
-                  ring.style.strokeDashoffset = targetOffset;
-                }
-              });
-            } else {
-              var rings = body.querySelectorAll('.coa-panel__ring-fg');
-              rings.forEach(function(ring) {
-                ring.style.strokeDashoffset = '226';
-              });
-            }
+            var openRings = body.querySelectorAll('.coa-panel__ring-fg');
+            openRings.forEach(function(ring) {
+              var targetOffset = ring.getAttribute('data-target-offset');
+              if (targetOffset !== null) {
+                ring.style.strokeDashoffset = targetOffset;
+              }
+            });
+          } else {
+            body.style.maxHeight = '0px';
+            var closedRings = body.querySelectorAll('.coa-panel__ring-fg');
+            closedRings.forEach(function(ring) {
+              ring.style.strokeDashoffset = '226';
+            });
           }
         }
       });
@@ -995,11 +999,10 @@
     IngredientShowcase.prototype.closeAllCoaPanels = function () {
       this.section.querySelectorAll('.coa-panel__body').forEach(function (body) {
         body.classList.remove('is-open');
-        body.style.transition = 'none';
-        body.style.maxHeight = '0';
-        setTimeout(function () { body.style.transition = ''; body.style.maxHeight = ''; }, 50);
-        var ring = body.querySelector('.coa-panel__ring-fg');
-        if (ring) ring.style.strokeDashoffset = '226';
+        body.style.maxHeight = '0px';
+        body.querySelectorAll('.coa-panel__ring-fg').forEach(function (ring) {
+          ring.style.strokeDashoffset = '226';
+        });
       });
       this.section.querySelectorAll('.coa-panel__trigger').forEach(function (trigger) {
         trigger.classList.remove('is-open');
